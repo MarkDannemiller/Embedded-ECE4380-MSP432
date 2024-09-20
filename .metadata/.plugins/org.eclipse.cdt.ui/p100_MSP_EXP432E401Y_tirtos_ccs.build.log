@@ -1,0 +1,8 @@
+
+**** Build of configuration Debug for project p100_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+gmake[1]: 'p100_MSP_EXP432E401Y_tirtos_ccs.out' is up to date.
+
+**** Build Finished ****

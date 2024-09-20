@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;uartecho_MSP_EXP432E401Y_tirtos_ccs/uartecho.c&apos; to &apos;p100.c&apos;" description="Rename resource &apos;uartecho.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="uartecho.c" name="p100.c" stamp="1724858197664" updateReferences="true"/>
+</session>
