@@ -6,13 +6,15 @@ SHELL = cmd.exe
 
 CG_TOOL_ROOT := C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS
 
-GEN_OPTS__FLAG := --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt" 
-GEN_CMDS__FLAG := -l"C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd" 
+GEN_OPTS__FLAG := --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt" 
+GEN_CMDS__FLAG := -l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd" 
 
 ORDERED_OBJS += \
-"./main_tirtos.obj" \
-"./p100.obj" \
 "./syscfg/ti_drivers_config.obj" \
+"./src/callback.obj" \
+"./src/main_tirtos.obj" \
+"./src/p100.obj" \
+"./src/tasks.obj" \
 "../MSP_EXP432E401Y_TIRTOS.cmd" \
 -l"ti/display/lib/display.aem4f" \
 -l"ti/grlib/lib/ccs/m4f/grlib.a" \
@@ -32,7 +34,9 @@ RMDIR := RMDIR /S/Q
 # All of the sources participating in the build are defined here
 -include sources.mk
 -include subdir_vars.mk
+-include src/subdir_vars.mk
 -include subdir_rules.mk
+-include src/subdir_rules.mk
 -include objects.mk
 
 ifneq ($(MAKECMDGOALS),clean)
@@ -140,10 +144,10 @@ all: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@$(MAKE) --no-print-directory -Onone "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
 
 dependents:
-	-cd C:/Users/priva/OneDrive\ -\ Texas\ Tech\ University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug && $(MAKE) all
+	-cd C:/Users/Mark\ Dannemiller/OneDrive\ -\ Texas\ Tech\ University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug && $(MAKE) all
 
 # Tool invocations
-uartecho_MSP_EXP432E401Y_tirtos_ccs.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/Users/priva/OneDrive\ -\ Texas\ Tech\ University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/tirtos_builds_MSP_EXP432E401Y_release_ccs.lib
+uartecho_MSP_EXP432E401Y_tirtos_ccs.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/Users/Mark\ Dannemiller/OneDrive\ -\ Texas\ Tech\ University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/tirtos_builds_MSP_EXP432E401Y_release_ccs.lib
 	@echo 'Building target: "$@"'
 	@echo 'Invoking: Arm Linker'
 	"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" $(ORDERED_OBJS)
@@ -153,15 +157,15 @@ uartecho_MSP_EXP432E401Y_tirtos_ccs.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/User
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main_tirtos.obj" "p100.obj" "syscfg\ti_drivers_config.obj" 
-	-$(RM) "main_tirtos.d" "p100.d" "syscfg\ti_drivers_config.d" 
+	-$(RM) "syscfg\ti_drivers_config.obj" "src\callback.obj" "src\main_tirtos.obj" "src\p100.obj" "src\tasks.obj" 
+	-$(RM) "syscfg\ti_drivers_config.d" "src\callback.d" "src\main_tirtos.d" "src\p100.d" "src\tasks.d" 
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
 	-@echo 'Finished clean'
 	-@echo ' '
 
 .PHONY: all clean dependents
 .SECONDARY:
-C:/Users/priva/OneDrive\ -\ Texas\ Tech\ University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/tirtos_builds_MSP_EXP432E401Y_release_ccs.lib:
+C:/Users/Mark\ Dannemiller/OneDrive\ -\ Texas\ Tech\ University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/tirtos_builds_MSP_EXP432E401Y_release_ccs.lib:
 
 -include ../makefile.targets
 

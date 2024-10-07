@@ -2,13 +2,46 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-I11
+ * @(#) xdc-K04
  */
 
 #include <xdc/std.h>
 
 #include <ti/sysbios/heaps/HeapMem.h>
 extern const ti_sysbios_heaps_HeapMem_Handle heap0;
+
+#include <ti/sysbios/gates/GateSwi.h>
+extern const ti_sysbios_gates_GateSwi_Handle gateSwi0;
+
+#include <ti/sysbios/knl/Task.h>
+extern const ti_sysbios_knl_Task_Handle UARTReader;
+
+#include <ti/sysbios/knl/Task.h>
+extern const ti_sysbios_knl_Task_Handle UARTWriter;
+
+#include <ti/sysbios/knl/Semaphore.h>
+extern const ti_sysbios_knl_Semaphore_Handle UARTWriteSem;
+
+#include <ti/sysbios/knl/Task.h>
+extern const ti_sysbios_knl_Task_Handle PayloadExecutor;
+
+#include <ti/sysbios/knl/Queue.h>
+extern const ti_sysbios_knl_Queue_Handle PayloadQueue;
+
+#include <ti/sysbios/knl/Queue.h>
+extern const ti_sysbios_knl_Queue_Handle OutMsgQueue;
+
+#include <ti/sysbios/knl/Semaphore.h>
+extern const ti_sysbios_knl_Semaphore_Handle PayloadSem;
+
+#include <ti/sysbios/knl/Swi.h>
+extern const ti_sysbios_knl_Swi_Handle Timer0_swi;
+
+#include <ti/sysbios/knl/Swi.h>
+extern const ti_sysbios_knl_Swi_Handle SW1_swi;
+
+#include <ti/sysbios/knl/Swi.h>
+extern const ti_sysbios_knl_Swi_Handle SW2_swi;
 
 #include <ti/sysbios/gates/GateMutex.h>
 extern const ti_sysbios_gates_GateMutex_Handle tiposix_mqGate;
