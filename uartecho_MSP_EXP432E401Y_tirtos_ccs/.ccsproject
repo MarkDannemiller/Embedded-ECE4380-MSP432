@@ -16,5 +16,4 @@
 	<templateProperties value="id=uartecho_MSP_EXP432E401Y_tirtos_ccs.projectspec.uartecho_MSP_EXP432E401Y_tirtos_ccs,buildProfile=release,isHybrid=true"/>
 	<origin value="C:\ti\simplelink_msp432e4_sdk_4_20_00_12\examples\rtos\MSP_EXP432E401Y\drivers\uartecho\tirtos\ccs\uartecho_MSP_EXP432E401Y_tirtos_ccs.projectspec"/>
 	<filesToOpen value=""/>
-	<isTargetManual value="false"/>
 </projectOptions>

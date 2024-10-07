@@ -5,11 +5,6 @@
         <connection XML_version="1.2" id="Texas Instruments XDS110 USB Debug Probe">
             <instance XML_version="1.2" href="drivers/tixds510cs_dap.xml" id="drivers" xml="tixds510cs_dap.xml" xmlpath="drivers"/>
             <instance XML_version="1.2" href="drivers/tixds510cortexM.xml" id="drivers" xml="tixds510cortexM.xml" xmlpath="drivers"/>
-            <property Type="choicelist" Value="2" id="The JTAG TCLK Frequency (MHz)">
-                <choice Name="Fixed with user selected faster value" value="SPECIFIC">
-                    <property Type="choicelist" Value="2" id="Select TCK Setting"/>
-                </choice>
-            </property>
             <property Type="choicelist" Value="2" id="SWD Mode Settings">
                 <choice Name="SWD Mode - Aux COM port is target TDO pin" value="nothing"/>
             </property>
