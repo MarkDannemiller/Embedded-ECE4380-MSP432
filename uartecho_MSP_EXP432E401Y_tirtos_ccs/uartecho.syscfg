@@ -59,8 +59,8 @@ Timer1.interruptPriority = "1";
 Timer1.$name             = "CONFIG_GPT_0";
 Timer1.timer.$assign     = "Timer3";
 
-Timer2.$name     = "CONFIG_TIMER_1";
 Timer2.timerType = "32 Bits";
+Timer2.$name     = "CONFIG_GPT_1";
 
 UART1.$name     = "CONFIG_UART_0";
 UART1.$hardware = system.deviceData.board.components.XDS110UART;

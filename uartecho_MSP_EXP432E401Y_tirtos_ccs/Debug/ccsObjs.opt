@@ -3,6 +3,7 @@
 "./src/main_tirtos.obj"
 "./src/p100.obj"
 "./src/tasks.obj"
+"./src/tickers.obj"
 "../MSP_EXP432E401Y_TIRTOS.cmd"
 -l"ti/display/lib/display.aem4f"
 -l"ti/grlib/lib/ccs/m4f/grlib.a"

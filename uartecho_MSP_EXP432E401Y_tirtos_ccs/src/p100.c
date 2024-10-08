@@ -54,6 +54,7 @@
 #include "systeminfo.h"
 #include "tasks.h"
 #include "callback.h"
+#include "tickers.h"
 
 
 #ifdef Globals
@@ -77,12 +78,14 @@ void init_globals() {
     glo.bios.UARTReader = UARTReader;
     glo.bios.UARTWriter = UARTWriter;
     glo.bios.PayloadExecutor = PayloadExecutor;
+    glo.bios.TickerProcessor = TickerProcessor;
 
     glo.bios.PayloadQueue = PayloadQueue;
     glo.bios.OutMsgQueue = OutMsgQueue;
 
     glo.bios.UARTWriteSem = UARTWriteSem;
     glo.bios.PayloadSem = PayloadSem;
+    glo.bios.TickerSem = TickerSem;
 
     glo.bios.Timer0_swi = Timer0_swi;
     glo.bios.SW1_swi = SW1_swi;
@@ -111,6 +114,9 @@ const char* errorMessages[] = {
     "Error: Invalid callback index.\r\n",                           // ERR_INVALID_CALLBACK_INDEX
     "Error: Missing count parameter.\r\n",                          // ERR_MISSING_COUNT_PARAMETER
     "Error: Missing payload.\r\n",                                  // ERR_MISSING_PAYLOAD
+    "Error: Invalid ticker index.\r\n",
+    "Error: Missing initial delay parameter.\r\n",
+    "Error: Missing period parameter.\r\n",
     "Error: Payload Queue Overflow.\r\n",                           // ERR_PAYLOAD_QUEUE_OF
     "Error: Out Messsage Queue Overflow.\r\n"                       // ERR_OUTMSG_QUEUE_OF
 };
@@ -130,6 +136,9 @@ const char* errorNames[] = {
     "ERR_INVALID_CALLBACK_INDEX",   // ERR_INVALID_CALLBACK_INDEX
     "ERR_MISSING_COUNT_PARAMETER",  // ERR_MISSING_COUNT_PARAMETER
     "ERR_MISSING_PAYLOAD",          // ERR_MISSING_PAYLOAD
+    "ERR_INVALID_TICKER_INDEX",
+    "ERR_MISSING_DELAY_PARAMETER",
+    "ERR_MISSING_PERIOD_PARAMETER",
     "ERR_PAYLOAD_QUEUE_OF",         // ERR_PAYLOAD_QUEUE_OF
     "ERR_OUTMSG_QUEUE_OF"           // ERR_OUTMSG_QUEUE_OF
 };
@@ -553,6 +562,10 @@ void execute_payload(char *msg) {
         CMD_about();
         commandRecognized = true;
     }
+    else if (strcmp(token,      "-callback") == 0) {
+        CMD_callback();
+        commandRecognized = true;
+    }
     else if (strcmp(token,      "-error") == 0) {
         CMD_error();
         commandRecognized = true;
@@ -573,12 +586,12 @@ void execute_payload(char *msg) {
         CMD_print();
         commandRecognized = true;
     }
-    else if (strcmp(token,      "-timer") == 0) {
-        CMD_timer();
+    else if (strcmp(token,      "-ticker") == 0) {
+        CMD_ticker();
         commandRecognized = true;
     }
-    else if (strcmp(token,      "-callback") == 0) {
-        CMD_callback();
+    else if (strcmp(token,      "-timer") == 0) {
+        CMD_timer();
         commandRecognized = true;
     }
 
@@ -608,6 +621,123 @@ void CMD_about() {
 
     //UART_write_safe(aboutMessage, strlen(aboutMessage));
     AddOutMessage(aboutMessage);
+}
+
+void CMD_callback() {
+    // Parse index
+    char *index_token = strtok(NULL, " \t\r\n");
+    int index = -1;
+    if (index_token) {
+        index = atoi(index_token);
+    }
+    if (index < 0 || index >= MAX_CALLBACKS) {
+        AddOutMessage(raiseError(ERR_INVALID_CALLBACK_INDEX));
+        return;
+    }
+
+    // Parse count
+    char *count_token = strtok(NULL, " \t\r\n");
+    int count = -1;
+    if (count_token) {
+        count = atoi(count_token);
+    } else {
+        AddOutMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
+        return;
+    }
+
+    // The rest is the payload
+    char *payload_start = strtok(NULL, "\r\n");
+    if (!payload_start) {
+        AddOutMessage(raiseError(ERR_MISSING_PAYLOAD));
+        return;
+    }
+
+    // Copy the payload
+    strncpy(callbacks[index].payload, payload_start, BUFFER_SIZE);
+    callbacks[index].payload[BUFFER_SIZE - 1] = '\0';  // Ensure null-terminated
+
+    // Set the count
+    callbacks[index].count = count;
+
+    // Acknowledge
+    char msg[BUFFER_SIZE];
+    sprintf(msg, "Callback %d set with count %d and payload: %s\r\n", index, count, callbacks[index].payload);
+    AddOutMessage(msg);
+}
+
+void CMD_error() {
+    char str[BUFFER_SIZE];
+    int i;
+
+    //UART_write_safe_strlen("Error Count:\r\n");
+    AddOutMessage("Error Count:\r\n");
+    for(i = 0; i < ERROR_COUNT; i++) {
+        sprintf(str, "|  %s: %d\r\n", getErrorName(i), errorCounters[i]);
+        //UART_write_safe_strlen(str);
+        AddOutMessage(str);
+    }
+}
+
+void CMD_gpio() {
+
+    // Next parameter should be the pin number
+    char *pin_token = strtok(NULL, " \t\r\n");
+    char *p; // For lowercase operation
+    char *pin_ptr;
+    uint32_t pin_num;
+    char output_msg[BUFFER_SIZE];
+
+    if(!pin_token)
+            pin_num = 0;
+        else
+            pin_num = strtoul(pin_token, &pin_ptr, 10);
+
+    // Catch out of bounds case
+    if(pin_num >= pin_count) {
+        //UART_write_safe_strlen(raiseError(ERR_GPIO_OUT_OF_RANGE));
+        AddOutMessage(raiseError(ERR_GPIO_OUT_OF_RANGE));
+        return;
+    }
+
+    // Next parameter should be the pin operation
+    char *op_token = strtok(NULL, " \t\r\n");
+
+    // Convert token to lowercase for case-insensitive comparison
+    for (p = op_token; *p; ++p) {
+        *p = tolower(*p);
+    }
+
+    // "w" = write and needs to collect the state
+    if(strcmp(op_token,         "w") == 0) {
+        char *state_token = strtok(NULL, " \t\r\n");
+        // Convert token to lowercase for case-insensitive comparison
+        for (p = state_token; *p; ++p) {
+            *p = tolower(*p);
+        }
+
+        // Determine if writing high or low (default low)
+        if(strcmp(state_token, "1") == 0 || strcmp(state_token, "high") == 0 || strcmp(state_token, "true") == 0) {
+            sprintf(output_msg, "Wrote => Pin: %d  State: 1\r\n", pin_num);
+            digitalWrite(pin_num, HIGH);
+        }
+        else {
+            sprintf(output_msg, "Wrote => Pin: %d  State: 0\r\n", pin_num);
+            digitalWrite(pin_num, LOW);
+        }
+    }
+    // Toggle pin operation
+    else if(strcmp(op_token,    "t") == 0) {
+        togglePin(pin_num);
+        pinState read_state = digitalRead(pin_num);
+        sprintf(output_msg, "Toggled => Pin: %d State: %d\r\n", pin_num, read_state);
+    }
+    else {  // Otherwise assume read
+        pinState read_state = digitalRead(pin_num);
+        sprintf(output_msg, "Read => Pin: %d  State: %d\r\n", pin_num, read_state);
+    }
+
+    //UART_write_safe_strlen(output_msg);
+    AddOutMessage(output_msg);
 }
 
 // Function to print help information
@@ -700,9 +830,24 @@ void CMD_help() {
                 "| args:\n\r"
                 "| | period_us: The period of Timer0 in microseconds. Minimum value is 100 us\r\n"
                 "| Description: Sets the period of Timer0 to the specified period in microseconds.\r\n"
-                "|              If no period is specified, no change is made to Timer0.\r\n"
+                "| |            If no period is specified, no change is made to Timer0.\r\n"
                 "| Example usage: \"-timer 100000\" -> Sets Timer0 period to 100,000 us (100 ms).\r\n";
-        }
+    }
+    else if (strcmp(cmd_arg_token,      "ticker") == 0 || strcmp(cmd_arg_token,           "-ticker") == 0) {
+            helpMessage =
+               //================================================================================ <-80 characters
+                "Command: -ticker [index] [initialDelay] [period] [count] [payload]\n\r"
+                "| args:\n\r"
+                "| | index: Ticker index (0 to 15).\r\n"
+                "| | initialDelay: Initial delay before first execution in 10 ms units.\r\n"
+                "| | period: Period between executions in 10 ms units.\r\n"
+                "| | count: Number of times to repeat (-1 for infinite).\r\n"
+                "| | payload: Command to execute when the ticker triggers.\r\n"
+                "| Description: Configures a ticker to execute a payload after a delay and\r\n"
+                "| |            repeat it.\r\n"
+                "| Example usage: \"-ticker 3 100 100 5 -gpio 2 t\" -> Uses ticker 3, waits 1000\r\n"
+                "| |              ms, then toggles GPIO 2 every 1000 ms, repeating 5 times.\r\n";
+    }
     else {
         helpMessage =
               //================================================================================ <-80 characters
@@ -722,25 +867,16 @@ void CMD_help() {
                 "|                                        address.\r\n"
                 "| -print     [string]                 :  Display inputted string.\r\n"
                 "|                                        I.E \"-print abc\"\r\n"
+                "| -ticker    [index][initialDelay]    :  Configures a ticker to execute a payload\r\n"
+                "|            [period][count][payload]    after a delay and repeat it.\r\n"
                 "| -timer     [period_us]              :  Sets the period of Timer0 in\r\n"
                 "|                                        microseconds.\r\n";
     }
-
 
     //UART_write_safe(helpMessage, strlen(helpMessage));
     AddOutMessage(helpMessage);
 }
 
-// Prints the message after the first token, which should be "-print"
-void CMD_print() {
-    //get first content after "> -print"
-    char *msg_token = strtok(NULL, "\r\n");
-
-    if(msg_token) {
-        //UART_write_safe(msg_token, strlen(msg_token));
-        AddOutMessage(msg_token);
-    }
-}
 
 // Prints the contents of a given memory address
 void CMD_memr() {
@@ -804,79 +940,81 @@ ERROR38:
     AddOutMessage(raiseError(ERR_ADDR_OUT_OF_RANGE));
 }
 
-void CMD_error() {
-    char str[BUFFER_SIZE];
-    int i;
+// Prints the message after the first token, which should be "-print"
+void CMD_print() {
+    //get first content after "> -print"
+    char *msg_token = strtok(NULL, "\r\n");
 
-    //UART_write_safe_strlen("Error Count:\r\n");
-    AddOutMessage("Error Count:\r\n");
-    for(i = 0; i < ERROR_COUNT; i++) {
-        sprintf(str, "|  %s: %d\r\n", getErrorName(i), errorCounters[i]);
-        //UART_write_safe_strlen(str);
-        AddOutMessage(str);
+    if(msg_token) {
+        //UART_write_safe(msg_token, strlen(msg_token));
+        AddOutMessage(msg_token);
     }
 }
 
-void CMD_gpio() {
-
-    // Next parameter should be the pin number
-    char *pin_token = strtok(NULL, " \t\r\n");
-    char *p; // For lowercase operation
-    char *pin_ptr;
-    uint32_t pin_num;
-    char output_msg[BUFFER_SIZE];
-
-    if(!pin_token)
-            pin_num = 0;
-        else
-            pin_num = strtoul(pin_token, &pin_ptr, 10);
-
-    // Catch out of bounds case
-    if(pin_num >= pin_count) {
-        //UART_write_safe_strlen(raiseError(ERR_GPIO_OUT_OF_RANGE));
-        AddOutMessage(raiseError(ERR_GPIO_OUT_OF_RANGE));
+// Command function to parse and set up a ticker
+void CMD_ticker() {
+    // Parse index
+    char *index_token = strtok(NULL, " \t\r\n");
+    int index = -1;
+    if (index_token) {
+        index = atoi(index_token);
+    }
+    if (index < 0 || index >= MAX_TICKERS) {
+        AddOutMessage(raiseError(ERR_INVALID_TICKER_INDEX));
         return;
     }
 
-    // Next parameter should be the pin operation
-    char *op_token = strtok(NULL, " \t\r\n");
-
-    // Convert token to lowercase for case-insensitive comparison
-    for (p = op_token; *p; ++p) {
-        *p = tolower(*p);
+    // Parse initial delay
+    char *delay_token = strtok(NULL, " \t\r\n");
+    uint32_t initialDelay = 0;
+    if (delay_token) {
+        initialDelay = strtoul(delay_token, NULL, 10);
+    } else {
+        AddOutMessage(raiseError(ERR_MISSING_DELAY_PARAMETER));
+        return;
     }
 
-    // "w" = write and needs to collect the state
-    if(strcmp(op_token,         "w") == 0) {
-        char *state_token = strtok(NULL, " \t\r\n");
-        // Convert token to lowercase for case-insensitive comparison
-        for (p = state_token; *p; ++p) {
-            *p = tolower(*p);
-        }
-
-        // Determine if writing high or low (default low)
-        if(strcmp(state_token, "1") == 0 || strcmp(state_token, "high") == 0 || strcmp(state_token, "true") == 0) {
-            sprintf(output_msg, "Wrote => Pin: %d  State: 1\r\n", pin_num);
-            digitalWrite(pin_num, HIGH);
-        }
-        else {
-            sprintf(output_msg, "Wrote => Pin: %d  State: 0\r\n", pin_num);
-            digitalWrite(pin_num, LOW);
-        }
-    }
-    // Toggle pin operation
-    else if(strcmp(op_token,    "t") == 0) {
-        togglePin(pin_num);
-        pinState read_state = digitalRead(pin_num);
-        sprintf(output_msg, "Toggled => Pin: %d State: %d\r\n", pin_num, read_state);
-    }
-    else {  // Otherwise assume read
-        pinState read_state = digitalRead(pin_num);
-        sprintf(output_msg, "Read => Pin: %d  State: %d\r\n", pin_num, read_state);
+    // Parse period
+    char *period_token = strtok(NULL, " \t\r\n");
+    uint32_t period = 0;
+    if (period_token) {
+        period = strtoul(period_token, NULL, 10);
+    } else {
+        AddOutMessage(raiseError(ERR_MISSING_PERIOD_PARAMETER));
+        return;
     }
 
-    //UART_write_safe_strlen(output_msg);
-    AddOutMessage(output_msg);
+    // Parse count
+    char *count_token = strtok(NULL, " \t\r\n");
+    int32_t count = -1;
+    if (count_token) {
+        count = atoi(count_token);
+    } else {
+        AddOutMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
+        return;
+    }
+
+    // The rest is the payload
+    char *payload_start = strtok(NULL, "\r\n");
+    if (!payload_start) {
+        AddOutMessage(raiseError(ERR_MISSING_PAYLOAD));
+        return;
+    }
+
+    // Configure the ticker
+    tickers[index].active = true;
+    tickers[index].initialDelay = initialDelay;
+    tickers[index].period = period;
+    tickers[index].count = count;
+    tickers[index].currentDelay = initialDelay;
+    strncpy(tickers[index].payload, payload_start, BUFFER_SIZE);
+    tickers[index].payload[BUFFER_SIZE - 1] = '\0';  // Ensure null-terminated
+
+    // Acknowledge
+    char msg[BUFFER_SIZE];
+    sprintf(msg, "Ticker %d set with delay %u, period %u, count %d, payload: %s\r\n",
+            index, initialDelay, period, count, tickers[index].payload);
+    AddOutMessage(msg);
 }
 
 void CMD_timer() {
@@ -918,48 +1056,6 @@ void CMD_timer() {
         //UART_write_safe_strlen(output_msg);
         AddOutMessage(output_msg);
     }
-}
-
-void CMD_callback() {
-    // Parse index
-    char *index_token = strtok(NULL, " \t\r\n");
-    int index = -1;
-    if (index_token) {
-        index = atoi(index_token);
-    }
-    if (index < 0 || index >= MAX_CALLBACKS) {
-        AddOutMessage(raiseError(ERR_INVALID_CALLBACK_INDEX));
-        return;
-    }
-
-    // Parse count
-    char *count_token = strtok(NULL, " \t\r\n");
-    int count = -1;
-    if (count_token) {
-        count = atoi(count_token);
-    } else {
-        AddOutMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
-        return;
-    }
-
-    // The rest is the payload
-    char *payload_start = strtok(NULL, "\r\n");
-    if (!payload_start) {
-        AddOutMessage(raiseError(ERR_MISSING_PAYLOAD));
-        return;
-    }
-
-    // Copy the payload
-    strncpy(callbacks[index].payload, payload_start, BUFFER_SIZE);
-    callbacks[index].payload[BUFFER_SIZE - 1] = '\0';  // Ensure null-terminated
-
-    // Set the count
-    callbacks[index].count = count;
-
-    // Acknowledge
-    char msg[BUFFER_SIZE];
-    sprintf(msg, "Callback %d set with count %d and payload: %s\r\n", index, count, callbacks[index].payload);
-    AddOutMessage(msg);
 }
 
 

@@ -15,6 +15,7 @@ ORDERED_OBJS += \
 "./src/main_tirtos.obj" \
 "./src/p100.obj" \
 "./src/tasks.obj" \
+"./src/tickers.obj" \
 "../MSP_EXP432E401Y_TIRTOS.cmd" \
 -l"ti/display/lib/display.aem4f" \
 -l"ti/grlib/lib/ccs/m4f/grlib.a" \
@@ -157,8 +158,8 @@ uartecho_MSP_EXP432E401Y_tirtos_ccs.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS) C:/User
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "syscfg\ti_drivers_config.obj" "src\callback.obj" "src\main_tirtos.obj" "src\p100.obj" "src\tasks.obj" 
-	-$(RM) "syscfg\ti_drivers_config.d" "src\callback.d" "src\main_tirtos.d" "src\p100.d" "src\tasks.d" 
+	-$(RM) "syscfg\ti_drivers_config.obj" "src\callback.obj" "src\main_tirtos.obj" "src\p100.obj" "src\tasks.obj" "src\tickers.obj" 
+	-$(RM) "syscfg\ti_drivers_config.d" "src\callback.d" "src\main_tirtos.d" "src\p100.d" "src\tasks.d" "src\tickers.d" 
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
 	-@echo 'Finished clean'
 	-@echo ' '

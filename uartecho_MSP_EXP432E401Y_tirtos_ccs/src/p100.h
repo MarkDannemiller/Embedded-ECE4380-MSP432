@@ -32,9 +32,11 @@
 extern Task_Handle UARTReader;
 extern Task_Handle UARTWriter;
 extern Task_Handle PayloadExecutor;
+extern Task_Handle TickerProcessor;
 
 extern Semaphore_Handle UARTWriteSem;
 extern Semaphore_Handle PayloadSem;
+extern Semaphore_Handle TickerSem;
 
 extern Queue_Handle PayloadQueue;
 extern Queue_Handle OutMsgQueue;
@@ -43,15 +45,6 @@ extern Swi_Handle Timer0_swi;
 extern Swi_Handle SW1_swi;
 extern Swi_Handle SW2_swi;
 
-//================================================
-// TODO List
-//================================================
-//
-// Make function to lowercase incoming buffer
-// Rewrite print functions to take in a copy of the string, not the string itself (or at least make sure that the string is not destroyed).  We want these functions to run multiple times
-// Save commands and get history using arrow keys
-//
-//================================================
 
 typedef struct PayloadMessage {
     Queue_Elem elem;
@@ -65,12 +58,15 @@ typedef struct {
     Task_Handle UARTWriter;                 // Created statically in release.cfg
     Task_Handle UARTReader;                 // Created statically in release.cfg
     Task_Handle PayloadExecutor;            // Created statically in release.cfg
+    Task_Handle TickerProcessor;
 
     Queue_Handle PayloadQueue;
     Semaphore_Handle PayloadSem;
 
     Queue_Handle OutMsgQueue;
     Semaphore_Handle UARTWriteSem;           // Created statically in release.cfg
+
+    Semaphore_Handle TickerSem;
 
     Swi_Handle Timer0_swi;
     Swi_Handle SW1_swi;
@@ -121,6 +117,9 @@ typedef enum {
     ERR_INVALID_CALLBACK_INDEX,
     ERR_MISSING_COUNT_PARAMETER,
     ERR_MISSING_PAYLOAD,
+    ERR_INVALID_TICKER_INDEX,
+    ERR_MISSING_DELAY_PARAMETER,
+    ERR_MISSING_PERIOD_PARAMETER,
     ERR_PAYLOAD_QUEUE_OF,
     ERR_OUTMSG_QUEUE_OF,
     ERROR_COUNT // Keeps track of the number of error types
@@ -175,13 +174,19 @@ void AddPayload(char *payload);  // Should this use gates to block swi? Nuter do
 void execute_payload(char *msg);
 
 void CMD_about();       // Print about / system info
-void CMD_help();        // Print help info about all/specific command(s)
-void CMD_print();       // Print inputed string
-void CMD_memr();        // Display contents of memory address
+void CMD_callback();    // Configure a callback for timer or GPIO events
 void CMD_error();       // Display count of each error type
 void CMD_gpio();        // Read/Write/Toggle inputed GPIO pin
+void CMD_help();        // Print help info about all/specific command(s)
+void CMD_memr();        // Display contents of memory address
+void CMD_print();       // Print inputed string
 void CMD_timer();       // Sets the periodic timer0 period
-void CMD_callback();    // Configure a callback for timer or GPIO events
+void CMD_ticker();      // Configures ticker and payload
+
+// TODO these prints and tie into commands when no args are given
+void print_timer_info();
+void print_ticker_info();
+void print_callback_info();
 
 
 #endif  // End of include guard

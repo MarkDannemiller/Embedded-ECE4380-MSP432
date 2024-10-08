@@ -76,8 +76,8 @@ extern const uint_least8_t          CONFIG_GPIO_SWITCH_7_CONST;
 
 extern const uint_least8_t          CONFIG_GPT_0_CONST;
 #define CONFIG_GPT_0                0
-extern const uint_least8_t          CONFIG_TIMER_1_CONST;
-#define CONFIG_TIMER_1              1
+extern const uint_least8_t          CONFIG_GPT_1_CONST;
+#define CONFIG_GPT_1                1
 
 /*
  *  ======== UART ========

@@ -141,7 +141,7 @@ const TimerMSP432E4_HWAttrs timerMSP432E4HWAttrs[CONFIG_TIMER_COUNT] = {
         .intNum      = INT_TIMER3A,
         .intPriority = 0x20
     },
-    /* CONFIG_TIMER_1 */
+    /* CONFIG_GPT_1 */
     {
         .baseAddress = TIMER1_BASE,
         .subTimer    = TimerMSP432E4_timer32,
@@ -160,16 +160,16 @@ const Timer_Config Timer_config[CONFIG_TIMER_COUNT] = {
         .object      = &timerMSP432E4Objects[CONFIG_GPT_0],
         .hwAttrs     = &timerMSP432E4HWAttrs[CONFIG_GPT_0]
     },
-    /* CONFIG_TIMER_1 */
+    /* CONFIG_GPT_1 */
     {
         .fxnTablePtr = &TimerMSP432E4_fxnTable,
-        .object      = &timerMSP432E4Objects[CONFIG_TIMER_1],
-        .hwAttrs     = &timerMSP432E4HWAttrs[CONFIG_TIMER_1]
+        .object      = &timerMSP432E4Objects[CONFIG_GPT_1],
+        .hwAttrs     = &timerMSP432E4HWAttrs[CONFIG_GPT_1]
     },
 };
 
 const uint_least8_t CONFIG_GPT_0_CONST = CONFIG_GPT_0;
-const uint_least8_t CONFIG_TIMER_1_CONST = CONFIG_TIMER_1;
+const uint_least8_t CONFIG_GPT_1_CONST = CONFIG_GPT_1;
 const uint_least8_t Timer_count = CONFIG_TIMER_COUNT;
 
 

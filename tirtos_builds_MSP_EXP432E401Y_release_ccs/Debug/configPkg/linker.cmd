@@ -9,11 +9,11 @@
  */
 
 
--l"C:\Users\Mark Dannemiller\OneDrive - Texas Tech University\Documents\ccs_workspace\tirtos_builds_MSP_EXP432E401Y_release_ccs\Debug\configPkg\package\cfg\release_pem4f.oem4f"
--l"C:\Users\Mark Dannemiller\OneDrive - Texas Tech University\Documents\ccs_workspace\tirtos_builds_MSP_EXP432E401Y_release_ccs\src\sysbios\sysbios.aem4f"
+-l"C:\Users\priva\OneDrive - Texas Tech University\Documents\ccs_workspace\tirtos_builds_MSP_EXP432E401Y_release_ccs\Debug\configPkg\package\cfg\release_pem4f.oem4f"
+-l"C:\Users\priva\OneDrive - Texas Tech University\Documents\ccs_workspace\tirtos_builds_MSP_EXP432E401Y_release_ccs\src\sysbios\sysbios.aem4f"
 -l"C:\ti\simplelink_msp432e4_sdk_4_20_00_12\kernel\tirtos\packages\ti\targets\arm\rtsarm\lib\boot.aem4f"
 -l"C:\ti\simplelink_msp432e4_sdk_4_20_00_12\kernel\tirtos\packages\ti\targets\arm\rtsarm\lib\auto_init.aem4f"
--l"C:\ti\ccs1280\xdctools_3_62_01_16_core\packages\xdc\rov\runtime\lib\xdc.rov.runtime.aem4f"
+-l"C:\ti\xdctools_3_61_01_25_core\packages\xdc\rov\runtime\lib\xdc.rov.runtime.aem4f"
 
 --retain="*(xdc.meta)"
 
@@ -39,6 +39,8 @@
 /* Content from xdc.rov (null): */
 
 /* Content from xdc.runtime (null): */
+
+/* Content from xdc.rov.support (null): */
 
 /* Content from xdc.rov.runtime (null): */
 

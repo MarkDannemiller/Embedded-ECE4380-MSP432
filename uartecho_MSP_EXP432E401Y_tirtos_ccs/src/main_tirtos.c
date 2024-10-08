@@ -96,6 +96,7 @@ int main(void)
 
     init_globals();
     init_drivers();
+    init_tickers();
 
     if (glo.uart == NULL) {
         /* UART_open() failed */

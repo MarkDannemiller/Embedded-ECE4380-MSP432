@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-K04
+ * @(#) xdc-I11
  */
 
 #include <xdc/std.h>
@@ -42,6 +42,12 @@ extern const ti_sysbios_knl_Swi_Handle SW1_swi;
 
 #include <ti/sysbios/knl/Swi.h>
 extern const ti_sysbios_knl_Swi_Handle SW2_swi;
+
+#include <ti/sysbios/knl/Semaphore.h>
+extern const ti_sysbios_knl_Semaphore_Handle TickerSem;
+
+#include <ti/sysbios/knl/Task.h>
+extern const ti_sysbios_knl_Task_Handle TickerProcessor;
 
 #include <ti/sysbios/gates/GateMutex.h>
 extern const ti_sysbios_gates_GateMutex_Handle tiposix_mqGate;

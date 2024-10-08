@@ -235,6 +235,7 @@ src/p100.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/std
 src/p100.obj: ../src/systeminfo.h
 src/p100.obj: ../src/tasks.h
 src/p100.obj: ../src/callback.h
+src/p100.obj: ../src/tickers.h
 
 ../src/p100.c:
 
@@ -705,4 +706,6 @@ C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h:
 ../src/tasks.h:
 
 ../src/callback.h:
+
+../src/tickers.h:
 

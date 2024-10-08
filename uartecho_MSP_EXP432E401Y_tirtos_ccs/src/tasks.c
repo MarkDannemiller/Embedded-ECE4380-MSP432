@@ -72,3 +72,14 @@ void payloadExecute(UArg arg0, UArg arg1) {
         Memory_free(NULL, exec_payload, sizeof(PayloadMessage));
     }
 }
+
+// Ticker processing task
+void tickerProcessingTask(UArg arg0, UArg arg1) {
+    while (1) {
+        // Wait for the semaphore to be posted by the ticker timer
+        Semaphore_pend(glo.bios.TickerSem, BIOS_WAIT_FOREVER);
+
+        // Process tickers
+        process_tickers();
+    }
+}
