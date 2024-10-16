@@ -1,10 +1,8 @@
 [
   {
     "name": "simplelink_msp432e4_sdk",
-    "displayName": "SimpleLink MSP432E4 SDK",
     "version": "4.20.00.12",
     "path": "C:\\ti\\simplelink_msp432e4_sdk_4_20_00_12\\.metadata\\product.json",
-    "referenceDesigns": [],
-    "documentationPath": "../docs"
+    "displayName": "SimpleLink MSP432E4 SDK"
   }
 ]

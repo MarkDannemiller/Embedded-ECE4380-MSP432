@@ -12,6 +12,8 @@ typedef struct {
 
 extern CommandCallback callbacks[MAX_CALLBACKS];
 
+void print_all_callbacks();
+
 void timer0Callback_fxn(Timer_Handle handle, int_fast16_t status);
 void timer0SWI(UArg arg0, UArg arg1);
 

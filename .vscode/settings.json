@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.ino": "cpp",
+        "register.h": "c"
+    },
+    "cSpell.diagnosticLevel": "Hint"
+}

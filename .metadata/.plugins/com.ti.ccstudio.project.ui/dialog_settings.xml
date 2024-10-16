@@ -5,9 +5,20 @@
 	<section name="com.ti.ccstudio.project.ui.internal.properties.DynamicPropertiesPageManager">
 	</section>
 	<section name="com.ti.ccstudio.project.ui.internal.wizards.importexport.ProjectImportPage">
+		<item key="CCS.BROWSE_DIRS_FILTER" value="C:\Users\priva\Downloads\temp"/>
+		<item key="CCS.COPY_INTO_WORKSPACE" value="true"/>
+		<item key="CCS.IMPORT_REFERENCED_PROJECTS" value="false"/>
+		<item key="CCS.IMPORT_FROM_ARCHIVE" value="false"/>
 	</section>
 	<section name="com.ti.ccstudio.project.ui.internal.wizards.project.ProjectSettingsPage">
 		<section name="1">
 		</section>
+	</section>
+	<section name="CCS.ImportLegacyProjectWizard">
+		<item key="AdvancedOptionsPage.USE_COMMON_ROOT" value="false"/>
+		<item key="AdvancedOptionsPage.COMMON_ROOT_VAR_NAME" value=""/>
+		<item key="AdvancedOptionsPage.COMMON_ROOT_PATH" value=""/>
+		<item key="LegacyProjectSelectionPage.SELECT_DIRECTORY" value="true"/>
+		<item key="LegacyProjectSelectionPage.BROWSE_DIR_FILTER" value="C:\Users\priva\Downloads\temp"/>
 	</section>
 </section>

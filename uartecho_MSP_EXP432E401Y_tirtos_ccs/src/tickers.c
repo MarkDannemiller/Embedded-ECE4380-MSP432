@@ -40,6 +40,26 @@ void init_tickers() {
     }
 }
 
+void print_all_tickers() {
+    char msg[BUFFER_SIZE];
+
+    AddOutMessage("Ticker Configurations:\r\n");
+    for (int i = 0; i < MAX_TICKERS; i++) {
+        if (tickers[i].active) {
+            sprintf(msg, "Ticker %d:\r\n", i);
+            AddOutMessage(msg);
+            sprintf(msg, "  Initial Delay: %u\r\n", tickers[i].initialDelay);
+            AddOutMessage(msg);
+            sprintf(msg, "  Period: %u\r\n", tickers[i].period);
+            AddOutMessage(msg);
+            sprintf(msg, "  Count: %d\r\n", tickers[i].count);
+            AddOutMessage(msg);
+            sprintf(msg, "  Payload: %s\r\n", tickers[i].payload);
+            AddOutMessage(msg);
+        }
+    }
+}
+
 // Timer callback function called every 10 ms
 void ticker_timer_callback(Timer_Handle myHandle, int_fast16_t status) {
     // Post a semaphore to process tickers in a task context

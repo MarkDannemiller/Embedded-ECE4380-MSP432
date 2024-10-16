@@ -31,6 +31,10 @@ test_cases = [
         'description': 'Missing hyphen in -about command',
         'expected': 'Error: Unknown command',  # Expected error message
     },
+
+
+
+    
     # -callback command test cases
     {
         'command': '-callback 1 2 -gpio 3 t',
@@ -44,8 +48,8 @@ test_cases = [
     },
     {
         'command': '-callback',
-        'description': 'Missing index parameter',
-        'expected': 'Error: Invalid callback index',
+        'description': 'Display active callbacks',
+        'expected': 'Callback Configurations:',
     },
     {
         'command': '-callback 1',
@@ -57,6 +61,10 @@ test_cases = [
         'description': 'Missing payload',
         'expected': 'Error: Missing payload',
     },
+
+
+
+
     # -error command test cases
     {
         'command': '-error',
@@ -68,6 +76,10 @@ test_cases = [
         'description': 'Extra arguments with -error command',
         'expected': 'Error Count:',  # Or an error message
     },
+
+
+
+
     # -gpio command test cases
     {
         'command': '-gpio 3 w 1',
@@ -109,6 +121,10 @@ test_cases = [
         'description': 'Missing value for write function',
         'expected': 'Wrote => Pin: 3  State: 0',
     },
+
+
+
+
     # -help command test cases
     {
         'command': '-help',
@@ -125,6 +141,10 @@ test_cases = [
         'description': 'Help for an unknown command',
         'expected': 'Supported Command [arg1][arg2]...',  # Just respond with default help
     },
+
+
+
+
     # -memr command test cases
     {
         'command': '-memr 0x1000',
@@ -141,6 +161,10 @@ test_cases = [
         'description': 'Missing address parameter',
         'expected': 'MEMR',  # According to code, defaults to address 0
     },
+
+
+
+
     # -print command test cases
     {
         'command': '-print Hello World',
@@ -152,6 +176,10 @@ test_cases = [
         'description': 'Missing message to print',
         'expected': '',  # No output or error, depending on implementation
     },
+
+
+
+
     # -timer command test cases
     {
         'command': '-timer 100000',
@@ -165,9 +193,13 @@ test_cases = [
     },
     {
         'command': '-timer',
-        'description': 'No period value provided',
-        'expected': 'Warning: No period value detected',
+        'description': 'Display current timer period',
+        'expected': 'Current Timer0 period is',
     },
+
+
+
+
     # Invalid command test case
     {
         'command': '-unknown',
@@ -273,6 +305,435 @@ test_cases = [
         'command': '-callback 1 1 ' + '-print ' + 'A' * 500,
         'description': 'Callback with long payload',
         'expected': 'Error: Buffer Overflow',  # Payload may be truncated
+    },
+        
+        
+        
+        
+    # -reg command test cases
+    {
+        'command': '-reg',
+        'description': 'Display all registers when no arguments are provided',
+        'expected': 'Register Values:',
+    },
+    {
+        'command': '-reg mov r0 #10',
+        'description': 'Move immediate value 10 into register R0',
+        'expected': 'R0 = 10',
+    },
+    {
+        'command': '-reg inc r0',
+        'description': 'Increment register R0',
+        'expected': 'R0 = 11',  # Assuming R0 was 10 from previous test
+    },
+    {
+        'command': '-reg add r0 r1',
+        'description': 'Add R1 to R0',
+        'expected': 'R0 =',  # Depends on R1's value
+    },
+    {
+        'command': '-reg mov r1 #5',
+        'description': 'Move immediate value 5 into register R1',
+        'expected': 'R1 = 5',
+    },
+    {
+        'command': '-reg add r0 r1',
+        'description': 'Add R1 to R0 (R0 += R1)',
+        'expected': 'R0 = 16',  # Assuming R0 was 11 and R1 is 5
+    },
+    {
+        'command': '-reg sub r0 #1',
+        'description': 'Subtract immediate value 1 from R0',
+        'expected': 'R0 = 15',
+    },
+    {
+        'command': '-reg mul r0 #2',
+        'description': 'Multiply R0 by 2',
+        'expected': 'R0 = 30',
+    },
+    {
+        'command': '-reg div r0 #3',
+        'description': 'Divide R0 by 3',
+        'expected': 'R0 = 10',
+    },
+    {
+        'command': '-reg rem r0 #3',
+        'description': 'Remainder of R0 divided by 3',
+        'expected': 'R0 = 1',
+    },
+    {
+        'command': '-reg neg r1',
+        'description': 'Negate register R1',
+        'expected': 'R1 = -5',
+    },
+    {
+        'command': '-reg not r1',
+        'description': 'Bitwise NOT of register R1',
+        'expected': 'R1 =',  # Expected value depends on two's complement representation
+    },
+    {
+        'command': '-reg and r0 #0x0F',
+        'description': 'Bitwise AND R0 with immediate value 0x0F',
+        'expected': 'R0 =',  # Expected value depends on R0's value
+    },
+    {
+        'command': '-reg or r0 r1',
+        'description': 'Bitwise OR R0 with R1',
+        'expected': 'R0 =',  # Expected value depends on R0 and R1
+    },
+    {
+        'command': '-reg xor r0 #0xFF',
+        'description': 'Bitwise XOR R0 with immediate value 0xFF',
+        'expected': 'R0 =',  # Expected value depends on R0's value
+    },
+    {
+        'command': '-reg max r0 #20',
+        'description': 'Set R0 to max of R0 and 20',
+        'expected': 'R0 =',  # Expected value depends on R0's value
+    },
+    {
+        'command': '-reg min r0 #5',
+        'description': 'Set R0 to min of R0 and 5',
+        'expected': 'R0 = 5',  # If R0 was greater than 5
+    },
+    {
+        'command': '-reg xchg r0 r1',
+        'description': 'Exchange values of R0 and R1',
+        'expected': 'R0 =',  # Values of R0 and R1 swapped
+    },
+    {
+        'command': '-reg mov r31 #123456',
+        'description': 'Move a large immediate value into R31',
+        'expected': 'R31 = 123456',
+    },
+    {
+        'command': '-reg mov r32 #1',
+        'description': 'Invalid register index (R32 does not exist)',
+        'expected': 'Error: Invalid destination register.',
+    },
+    {
+        'command': '-reg mov r0 #xFF',
+        'description': 'Move hexadecimal immediate value into R0',
+        'expected': 'R0 = 255',
+    },
+    {
+        'command': '-reg mov r0 @0x20000000',
+        'description': 'Move value from memory address into R0 (if permitted)',
+        'expected': 'R0 =',  # Value at address 0x20000000
+    },
+    {
+        'command': '-reg div r0 #0',
+        'description': 'Division by zero error',
+        'expected': 'Error: Division by zero.',
+    },
+    {
+        'command': '-reg rem r0 #0',
+        'description': 'Remainder by zero error',
+        'expected': 'Error: Division by zero.',
+    },
+    {
+        'command': '-reg unknown r0 r1',
+        'description': 'Unknown operation',
+        'expected': 'Error: Unknown operation.',
+    },
+    {
+        'command': '-reg inc',
+        'description': 'Missing operand for inc operation',
+        'expected': 'Error: Missing operand.',
+    },
+    {
+        'command': '-reg mov r0',
+        'description': 'Missing source operand for mov operation',
+        'expected': 'Error: Missing operands.',
+    },
+    {
+        'command': '-reg mov r0 invalid',
+        'description': 'Invalid source operand',
+        'expected': 'Error: Invalid source operand.',
+    },
+    {
+        'command': '-reg mov invalid r0',
+        'description': 'Invalid destination register',
+        'expected': 'Error: Invalid destination register.',
+    },
+    {
+        'command': '-reg inc r33',
+        'description': 'Increment non-existent register',
+        'expected': 'Error: Invalid register.',
+    },
+    {
+        'command': '-reg mov r0 #xZZ',
+        'description': 'Invalid hexadecimal immediate value',
+        'expected': 'Error: Invalid source operand.',
+    },
+    {
+        'command': '-reg mov r0 #999999999999',
+        'description': 'Immediate value out of range',
+        'expected': 'R0 =',  # May cause overflow or error
+    },
+    {
+        'command': '-reg mov r0 @0xFFFFFFFF',
+        'description': 'Invalid memory address',
+        'expected': 'Error: Invalid memory address.',
+    },
+    {
+        'command': '-reg mov r0 #',
+        'description': 'Incomplete immediate value',
+        'expected': 'Error: Invalid source operand.',
+    },
+    {
+        'command': '-reg xchg r0 r0',
+        'description': 'Exchange register with itself',
+        'expected': 'R0 =',  # Value should remain the same
+    },
+    {
+        'command': '-reg neg r0',
+        'description': 'Negate R0',
+        'expected': 'R0 =',  # Negative of current R0
+    },
+    {
+        'command': '-reg not r0',
+        'description': 'Bitwise NOT of R0',
+        'expected': 'R0 =',  # Bitwise complement of R0
+    },
+    {
+        'command': '-reg add r0 #2147483647',
+        'description': 'Add large positive number to R0',
+        'expected': 'R0 =',  # May cause integer overflow
+    },
+    {
+        'command': '-reg sub r0 #-2147483648',
+        'description': 'Subtract large negative number from R0',
+        'expected': 'R0 =',  # May cause integer underflow
+    },
+    {
+        'command': '-reg mov r0 #abc',
+        'description': 'Invalid immediate value (non-numeric)',
+        'expected': 'Error: Invalid source operand.',
+    },
+    {
+        'command': '-reg mov r0 #x',
+        'description': 'Invalid hexadecimal immediate value',
+        'expected': 'Error: Invalid source operand.',
+    },
+    {
+        'command': '-reg mul r0 #0',
+        'description': 'Multiply R0 by zero',
+        'expected': 'R0 = 0',
+    },
+    {
+        'command': '-reg div r0 #1',
+        'description': 'Divide R0 by one',
+        'expected': 'R0 =',  # Should remain the same
+    },
+    {
+        'command': '-reg mov r0 @invalid',
+        'description': 'Invalid memory address format',
+        'expected': 'Error: Invalid source operand.',
+    },
+    {
+        'command': '-reg mov r0 @0x20000000',
+        'description': 'Read from valid memory address',
+        'expected': 'R0 =',  # Value at address 0x20000000
+    },
+    '''{ TODO - Determine if unaligned memory access is supported
+        'command': '-reg mov r0 @0x20000001',
+        'description': 'Read from unaligned memory address',
+        'expected': 'Error: Unaligned memory access.',
+    },'''
+    {
+        'command': '-reg',
+        'description': 'Display all registers after operations',
+        'expected': 'Register Values:',
+    },
+
+
+
+
+    # -ticker command test cases
+    {
+        'command': '-ticker',
+        'description': 'Display all tickers when no arguments are provided',
+        'expected': 'Ticker Configurations:',
+    },
+    {
+        'command': '-ticker 0 100 200 5 -gpio 2 t',
+        'description': 'Set ticker 0 with delay 100, period 200, count 5, payload to toggle GPIO 2',
+        'expected': 'Ticker 0 set with delay 100, period 200, count 5, payload: -gpio 2 t',
+    },
+    {
+        'command': '-ticker',
+        'description': 'Display tickers after setting ticker 0',
+        'expected': 'Ticker 0:',
+    },
+    {
+        'command': '-ticker 1 50 100 -1 -print Hello',
+        'description': 'Set ticker 1 with infinite count and payload to print "Hello"',
+        'expected': 'Ticker 1 set with delay 50, period 100, count -1, payload: -print Hello',
+    },
+    {
+        'command': '-ticker 0',
+        'description': 'Missing parameters for ticker 0 (should raise error)',
+        'expected': 'Error: Missing initial delay parameter.',
+    },
+    {
+        'command': '-ticker 16 100 200 5 -gpio 2 t',
+        'description': 'Invalid ticker index (out of range)',
+        'expected': 'Error: Invalid ticker index.',
+    },
+    {
+        'command': '-ticker 0 -100 200 5 -gpio 2 t',
+        'description': 'Negative initial delay (should be accepted or handled)',
+        'expected': 'Ticker 0 set with delay -100, period 200, count 5, payload: -gpio 2 t',
+    },
+    {
+        'command': '-ticker 0 100 -200 5 -gpio 2 t',
+        'description': 'Negative period (should be accepted or handled)',
+        'expected': 'Ticker 0 set with delay 100, period -200, count 5, payload: -gpio 2 t',
+    },
+    {
+        'command': '-ticker 0 100 200 abc -gpio 2 t',
+        'description': 'Non-integer count value',
+        'expected': 'Error: Missing count parameter.',
+    },
+    {
+        'command': '-ticker 0 100 200 5',
+        'description': 'Missing payload (should raise error)',
+        'expected': 'Error: Missing payload.',
+    },
+    {
+        'command': '-ticker 0 abc 200 5 -gpio 2 t',
+        'description': 'Non-integer initial delay',
+        'expected': 'Error: Missing initial delay parameter.',
+    },
+    {
+        'command': '-ticker 0 100 abc 5 -gpio 2 t',
+        'description': 'Non-integer period',
+        'expected': 'Error: Missing period parameter.',
+    },
+    {
+        'command': '-ticker 0 100 200 5 ' + 'A' * 1024,
+        'description': 'Payload exceeding buffer size',
+        'expected': 'Error: Buffer Overflow',  # Or appropriate error message
+    },
+    {
+        'command': '-ticker 0 0 0 0 -print Immediate',
+        'description': 'Ticker with zero initial delay and period',
+        'expected': 'Ticker 0 set with delay 0, period 0, count 0, payload: -print Immediate',
+    },
+    {
+        'command': '-ticker 0 100 200 5 -gpio 2 t',
+        'description': 'Resetting ticker 0 with new parameters',
+        'expected': 'Ticker 0 set with delay 100, period 200, count 5, payload: -gpio 2 t',
+    },
+    {
+        'command': '-ticker',
+        'description': 'Display tickers after resetting ticker 0',
+        'expected': 'Ticker 0:',
+    },
+    {
+        'command': '-ticker -1 100 200 5 -gpio 2 t',
+        'description': 'Invalid ticker index (negative)',
+        'expected': 'Error: Invalid ticker index.',
+    },
+    {
+        'command': '-ticker 0 100 200 5 -gpio 9 t',
+        'description': 'Payload with invalid GPIO pin (should be accepted, error occurs during execution)',
+        'expected': 'Ticker 0 set with delay 100, period 200, count 5, payload: -gpio 9 t',
+    },
+    {
+        'command': '-ticker 0 100 200 5',
+        'description': 'Missing payload with correct parameters',
+        'expected': 'Error: Missing payload.',
+    },
+    {
+        'command': '-ticker abc 100 200 5 -gpio 2 t',
+        'description': 'Non-integer ticker index',
+        'expected': 'Error: Invalid ticker index.',
+    },
+    {
+        'command': '-ticker',
+        'description': 'Display all tickers after several operations',
+        'expected': 'Ticker Configurations:',
+    },
+    {
+        'command': '-ticker 0 100 200 -1 -print TickerTest',
+        'description': 'Set ticker 0 with infinite count and print payload',
+        'expected': 'Ticker 0 set with delay 100, period 200, count -1, payload: -print TickerTest',
+    },
+    {
+        'command': '-ticker 0 100 200 5 -print TickerTest',
+        'description': 'Set ticker 0 with finite count and print payload',
+        'expected': 'Ticker 0 set with delay 100, period 200, count 5, payload: -print TickerTest',
+    },
+    {
+        'command': '-ticker',
+        'description': 'Display tickers to confirm ticker 0 settings',
+        'expected': 'Ticker 0:',
+    },
+    {
+        'command': '-ticker 15 100 200 5 -print EdgeCase',
+        'description': 'Set ticker at maximum valid index',
+        'expected': 'Ticker 15 set with delay 100, period 200, count 5, payload: -print EdgeCase',
+    },
+    {
+        'command': '-ticker',
+        'description': 'Display all tickers to confirm ticker 15 settings',
+        'expected': 'Ticker 15:',
+    },
+    # Testing the display of inactive tickers
+    {
+        'command': '-ticker',
+        'description': 'Display all tickers including inactive ones',
+        'expected': 'Ticker Configurations:',
+    },
+    # Command with extra whitespace
+    {
+        'command': '-ticker   0   100   200   5   -gpio   2   t',
+        'description': 'Ticker command with extra spaces',
+        'expected': 'Ticker 0 set with delay 100, period 200, count 5, payload: -gpio   2   t',
+    },
+    # Edge case with large values
+    {
+        'command': '-ticker 0 4294967295 4294967295 2147483647 -print LargeValues',
+        'description': 'Set ticker with maximum unsigned and signed integer values',
+        'expected': 'Ticker 0 set with delay 4294967295, period 4294967295, count 2147483647, payload: -print LargeValues',
+    },
+    # Negative count
+    {
+        'command': '-ticker 0 100 200 -5 -print NegativeCount',
+        'description': 'Set ticker with negative count (other than -1)',
+        'expected': 'Ticker 0 set with delay 100, period 200, count -5, payload: -print NegativeCount',
+    },
+    # Ticker with zero count
+    {
+        'command': '-ticker 0 100 200 0 -print ZeroCount',
+        'description': 'Set ticker with zero count (should not execute)',
+        'expected': 'Ticker 0 set with delay 100, period 200, count 0, payload: -print ZeroCount',
+    },
+    # Ticker with zero period
+    {
+        'command': '-ticker 0 100 0 5 -print ZeroPeriod',
+        'description': 'Set ticker with zero period',
+        'expected': 'Ticker 0 set with delay 100, period 0, count 5, payload: -print ZeroPeriod',
+    },
+    # Ticker with non-existent command in payload
+    {
+        'command': '-ticker 0 100 200 5 -nonexistentcommand',
+        'description': 'Set ticker with invalid payload command',
+        'expected': 'Ticker 0 set with delay 100, period 200, count 5, payload: -nonexistentcommand',
+    },
+    # Attempt to inject multiple commands
+    {
+        'command': '-ticker 0 100 200 5 -print FirstCommand; -gpio 2 t',
+        'description': 'Payload containing multiple commands (should be treated as a single payload)',
+        'expected': 'Ticker 0 set with delay 100, period 200, count 5, payload: -print FirstCommand; -gpio 2 t',
+    },
+    # Empty payload
+    {
+        'command': '-ticker 0 100 200 5 ',
+        'description': 'Ticker command with empty payload',
+        'expected': 'Error: Missing payload.',
     },
 ]
 

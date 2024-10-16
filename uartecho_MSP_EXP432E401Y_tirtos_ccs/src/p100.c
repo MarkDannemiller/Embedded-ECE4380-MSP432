@@ -368,7 +368,6 @@ bool UART_write_safe(const char *message, int size) {
     }
 
     // Write the message and check if the write operation is successful
-    // TODO handle collision when UART_write is not finished
     if (UART_write(glo.uart, message, size) == UART_STATUS_ERROR) {
         raiseError(ERR_MSG_WRITE_FAILED);
         return false;
@@ -407,7 +406,6 @@ void handle_UART() {
         //TODO see if this is best for handling no command
         if(glo.cursor_pos > 0) {
             // Process the completed input
-            //UART_write_safe("\r\n", 2);  // Move to a new line to display output
             AddOutMessage("\r\n");
             //execute_payload(glo.msgBuffer);
             AddPayload(glo.msgBuffer);
@@ -454,7 +452,6 @@ void reset_buffer() {
     glo.cursor_pos = 0;
     glo.msg_size = -1;
     int i;
-    //TODO dont do this -> clear buffer in better way?
     for(i=3; i<BUFFER_SIZE; i++){
         glo.msgBuffer[i] = 0;
     }
@@ -586,6 +583,10 @@ void execute_payload(char *msg) {
         CMD_print();
         commandRecognized = true;
     }
+    else if (strcmp(token,      "-reg") == 0) {
+        CMD_reg();
+        commandRecognized = true;
+    }
     else if (strcmp(token,      "-ticker") == 0) {
         CMD_ticker();
         commandRecognized = true;
@@ -626,10 +627,14 @@ void CMD_about() {
 void CMD_callback() {
     // Parse index
     char *index_token = strtok(NULL, " \t\r\n");
-    int index = -1;
-    if (index_token) {
-        index = atoi(index_token);
+
+    if (!index_token) {
+        // No index provided, display all callbacks
+        print_all_callbacks();
+        return;
     }
+
+    int index = atoi(index_token);
     if (index < 0 || index >= MAX_CALLBACKS) {
         AddOutMessage(raiseError(ERR_INVALID_CALLBACK_INDEX));
         return;
@@ -758,13 +763,16 @@ void CMD_help() {
     }
     else if (strcmp(cmd_arg_token,      "callback") == 0 || strcmp(cmd_arg_token,        "-callback") == 0) {
         helpMessage =
+               //================================================================================ <-80 characters
                 "Command: -callback [index] [count] [payload]\n\r"
                 "| args:\n\r"
                 "| | index: Callback index (0 for timer, 1 for SW1, 2 for SW2).\r\n"
                 "| | count: Number of times to execute the payload (-1 for infinite).\r\n"
                 "| | payload: Command to execute when the event occurs.\r\n"
                 "| Description: Configures a callback to execute a payload when an event occurs.\r\n"
-                "| Example usage: \"-callback 1 2 -gpio 3 t\" -> On SW1 press, toggle GPIO 3 twice.\r\n";
+                "|              If no arguments are provided, displays all callbacks.\r\n"
+                "| Example usage: \"-callback 1 2 -gpio 3 t\" -> On SW1 press, toggle GPIO 3 twice.\r\n"
+                "| Example usage: \"-callback\" -> Displays all callbacks, counts, and  payloads.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "error") == 0 || strcmp(cmd_arg_token,           "-error") == 0) {
@@ -823,6 +831,35 @@ void CMD_help() {
                 "| Example usage: \"-print abc\" -> Displays the contents of address 0x1000.\r\n";
 
     }
+    else if (strcmp(cmd_arg_token, "reg") == 0 || strcmp(cmd_arg_token, "-reg") == 0) {
+        helpMessage =
+               //================================================================================ <-80 characters
+                "Command: -reg [operation] [operands]\n\r"
+                "| Operations:\n\r"
+                "| | mov dest src        : Move src to dest.\r\n"
+                "| | xchg reg1 reg2      : Exchange values of reg1 and reg2.\r\n"
+                "| | inc reg             : Increment reg by 1.\r\n"
+                "| | dec reg             : Decrement reg by 1.\r\n"
+                "| | add dest src        : Add src to dest.\r\n"
+                "| | sub dest src        : Subtract src from dest.\r\n"
+                "| | neg reg             : Negate reg.\r\n"
+                "| | and dest src        : Bitwise AND of dest and src.\r\n"
+                "| | ior dest src        : Bitwise OR of dest and src.\r\n"
+                "| | xor dest src        : Bitwise XOR of dest and src.\r\n"
+                "| | mul dest src        : Multiply dest by src.\r\n"
+                "| | div dest src        : Divide dest by src.\r\n"
+                "| | rem dest src        : Remainder of dest divided by src.\r\n"
+                "| | max dest src        : Set dest to max of dest and src.\r\n"
+                "| | min dest src        : Set dest to min of dest and src.\r\n"
+                "| Operands:\r\n"
+                "| | Registers: r0 to r31\r\n"
+                "| | Immediate: #value or #xvalue\r\n"
+                "| | Memory Address: @address\r\n"
+                "| Examples:\r\n"
+                "| | -reg mov r0 #10     : Set R0 to 10.\r\n"
+                "| | -reg add r0 r1      : Add R1 to R0.\r\n"
+                "| | -reg inc r0         : Increment R0.\r\n";
+    }
     else if (strcmp(cmd_arg_token,      "timer") == 0 || strcmp(cmd_arg_token,           "-timer") == 0) {
             helpMessage =
                //================================================================================ <-80 characters
@@ -830,8 +867,10 @@ void CMD_help() {
                 "| args:\n\r"
                 "| | period_us: The period of Timer0 in microseconds. Minimum value is 100 us\r\n"
                 "| Description: Sets the period of Timer0 to the specified period in microseconds.\r\n"
-                "| |            If no period is specified, no change is made to Timer0.\r\n"
-                "| Example usage: \"-timer 100000\" -> Sets Timer0 period to 100,000 us (100 ms).\r\n";
+                "| |            If no period is specified, displays the current Timer0 period.\r\n"
+                "| Example usage: \"-timer 100000\" -> Sets Timer0 period to 100,000 us (100 ms).\r\n"
+                "| Example usage: \"-timer\" -> Displays the current Timer0 period.\r\n";
+
     }
     else if (strcmp(cmd_arg_token,      "ticker") == 0 || strcmp(cmd_arg_token,           "-ticker") == 0) {
             helpMessage =
@@ -844,9 +883,11 @@ void CMD_help() {
                 "| | count: Number of times to repeat (-1 for infinite).\r\n"
                 "| | payload: Command to execute when the ticker triggers.\r\n"
                 "| Description: Configures a ticker to execute a payload after a delay and\r\n"
-                "| |            repeat it.\r\n"
+                "| |            repeat it. If no arguments are given, displays all tickers.\r\n"
                 "| Example usage: \"-ticker 3 100 100 5 -gpio 2 t\" -> Uses ticker 3, waits 1000\r\n"
-                "| |              ms, then toggles GPIO 2 every 1000 ms, repeating 5 times.\r\n";
+                "| |              ms, then toggles GPIO 2 every 1000 ms, repeating 5 times.\r\n"
+                "| Example usage: \"-ticker\" -> Displays all tickers and payloads.\r\n";
+
     }
     else {
         helpMessage =
@@ -867,6 +908,8 @@ void CMD_help() {
                 "|                                        address.\r\n"
                 "| -print     [string]                 :  Display inputted string.\r\n"
                 "|                                        I.E \"-print abc\"\r\n"
+                "| -reg       [operation][operands]    :  Perform operation on specified\r\n"
+                "|                                        register.\r\n"
                 "| -ticker    [index][initialDelay]    :  Configures a ticker to execute a payload\r\n"
                 "|            [period][count][payload]    after a delay and repeat it.\r\n"
                 "| -timer     [period_us]              :  Sets the period of Timer0 in\r\n"
@@ -897,6 +940,7 @@ void CMD_memr() {
 
     // Getting memaddr of the "region/row" that memorig lies within
     memaddr = 0xFFFFFFF0 & memorig;                     // Mask 15 bits to 0 (base 16), with eventual intent to print 16 bytes
+    // TODO replace with a check for valid memory address range using is_valid_memory_address() in register.c
     if(memaddr >= 0x100000 && memaddr < 0x20000000)     // Too high for FLASH too low for SRAM
         goto ERROR38;
     if(memaddr >= 0x20040000)  // Too high for SRAM
@@ -940,7 +984,7 @@ ERROR38:
     AddOutMessage(raiseError(ERR_ADDR_OUT_OF_RANGE));
 }
 
-// Prints the message after the first token, which should be "-print"
+/// @brief Prints the message after the first token, which should be "-print"
 void CMD_print() {
     //get first content after "> -print"
     char *msg_token = strtok(NULL, "\r\n");
@@ -951,14 +995,115 @@ void CMD_print() {
     }
 }
 
-// Command function to parse and set up a ticker
+/// @brief Function to perform operation of specified register
+void CMD_reg() {
+    // Get the operation token
+    char *op_token = strtok(NULL, " \t\r\n");
+
+    // If no operation token is provided, print all registers
+    if (!op_token) {
+        print_all_registers();
+        return;
+    }
+
+    // Convert operation token to lowercase for case-insensitive comparison
+    char *p;
+    for (p = op_token; *p; ++p) {
+        *p = tolower(*p);
+    }
+
+    // Initialize argument tokens
+    char *arg1_token = strtok(NULL, " \t\r\n");
+    char *arg2_token = strtok(NULL, " \t\r\n");
+
+    // Handle operations that require one operand
+    if (strcmp(op_token, "inc") == 0 ||
+        strcmp(op_token, "dec") == 0 ||
+        strcmp(op_token, "neg") == 0 ||
+        strcmp(op_token, "not") == 0) {
+
+        if (!arg1_token) {
+            AddOutMessage("Error: Missing operand.\r\n");
+            return;
+        }
+
+        if (strcmp(op_token, "inc") == 0) {
+            reg_inc(arg1_token);
+        } else if (strcmp(op_token, "dec") == 0) {
+            reg_dec(arg1_token);
+        } else if (strcmp(op_token, "neg") == 0) {
+            reg_neg(arg1_token);
+        } else if (strcmp(op_token, "not") == 0) {
+            reg_not(arg1_token);
+        }
+
+    }
+    // Handle operations that require two operands
+    else if (strcmp(op_token, "mov") == 0 ||
+             strcmp(op_token, "xchg") == 0 ||
+             strcmp(op_token, "add") == 0 ||
+             strcmp(op_token, "sub") == 0 ||
+             strcmp(op_token, "and") == 0 ||
+             strcmp(op_token, "ior") == 0 ||
+             strcmp(op_token, "xor") == 0 ||
+             strcmp(op_token, "mul") == 0 ||
+             strcmp(op_token, "div") == 0 ||
+             strcmp(op_token, "rem") == 0 ||
+             strcmp(op_token, "max") == 0 ||
+             strcmp(op_token, "min") == 0) {
+
+        if (!arg1_token || !arg2_token) {
+            AddOutMessage("Error: Missing operands.\r\n");
+            return;
+        }
+
+        if (strcmp(op_token, "mov") == 0) {
+            reg_mov(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "xchg") == 0) {
+            reg_xchg(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "add") == 0) {
+            reg_add(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "sub") == 0) {
+            reg_sub(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "and") == 0) {
+            reg_and(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "ior") == 0) {
+            reg_ior(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "xor") == 0) {
+            reg_xor(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "mul") == 0) {
+            reg_mul(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "div") == 0) {
+            reg_div(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "rem") == 0) {
+            reg_rem(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "max") == 0) {
+            reg_max(arg1_token, arg2_token);
+        } else if (strcmp(op_token, "min") == 0) {
+            reg_min(arg1_token, arg2_token);
+        }
+
+    }
+    // Unknown operation
+    else {
+        AddOutMessage("Error: Unknown operation.\r\n");
+    }
+}
+
+
+
+/// @brief Command function to parse and set up a ticker
 void CMD_ticker() {
     // Parse index
     char *index_token = strtok(NULL, " \t\r\n");
-    int index = -1;
-    if (index_token) {
-        index = atoi(index_token);
+
+    if (!index_token) {
+        // No index provided, display all tickers
+        print_all_tickers();
+        return;
     }
+
+    int index = atoi(index_token);
     if (index < 0 || index >= MAX_TICKERS) {
         AddOutMessage(raiseError(ERR_INVALID_TICKER_INDEX));
         return;
@@ -1017,20 +1162,22 @@ void CMD_ticker() {
     AddOutMessage(msg);
 }
 
+/// @brief Command function to parse and set up a timer
 void CMD_timer() {
 
     // Next parameter should be the period in microseconds
     char *val_token = strtok(NULL, " \t\r\n");
-    char *val_ptr;
-    uint32_t val_us;  // Value of timer period in us
+    char output_msg[BUFFER_SIZE];
 
     if(!val_token) {
-        //UART_write_safe_strlen("Warning: No period value detected and no change made to Timer0.\r\n");
-        AddOutMessage("Warning: No period value detected and no change made to Timer0.\r\n");
-        return; // Do nothing if there is no input (Or do we need to throw an error?)
+        // No period provided, display current Timer0 period
+        sprintf(output_msg, "Current Timer0 period is %u us\r\n", glo.timer0_params.period);
+        AddOutMessage(output_msg);
+        return;
     }
-    else
-        val_us = strtoul(val_token, &val_ptr, 10);
+
+    char *val_ptr;
+    uint32_t val_us = strtoul(val_token, &val_ptr, 10);
 
     // Throw error if value is too low
     if(val_us < MIN_TIMER_PERIOD_US) {
@@ -1051,12 +1198,8 @@ void CMD_timer() {
         AddOutMessage(raiseError(ERR_TIMER_STATUS_ERROR));
     }
     else {
-        char output_msg[BUFFER_SIZE];
         sprintf(output_msg, "Set Timer0 period to %d us\r\n", val_us);
         //UART_write_safe_strlen(output_msg);
         AddOutMessage(output_msg);
     }
 }
-
-
-

@@ -3,6 +3,20 @@
 
 CommandCallback callbacks[MAX_CALLBACKS];  // Array of callbacks
 
+void print_all_callbacks() {
+    char msg[BUFFER_SIZE];
+
+    AddOutMessage("Callback Configurations:\r\n");
+    for (int i = 0; i < MAX_CALLBACKS; i++) {
+        sprintf(msg, "Callback %d:\r\n", i);
+        AddOutMessage(msg);
+        sprintf(msg, "  Count: %d\r\n", callbacks[i].count);
+        AddOutMessage(msg);
+        sprintf(msg, "  Payload: %s\r\n", callbacks[i].payload);
+        AddOutMessage(msg);
+    }
+}
+
 // Timer0 Callback Function
 void timer0Callback_fxn(Timer_Handle handle, int_fast16_t status) {
     Swi_post(glo.bios.Timer0_swi);
