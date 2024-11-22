@@ -18,7 +18,8 @@
 
 #include <stdbool.h>  // Include this header to use bool, true, and false
 
-#define BUFFER_SIZE 80          // Maximum input buffer by user
+#define BUFFER_SIZE 80          // Maximum input buffer by user (check whether to increase?)
+#define MAX_LINE_LENGTH 80      // Maximum line length before wrapping
 #define MAX_MESSAGE_SIZE 2000   // Maximum output message size
 #define MAX_QUEUE_SIZE 500      // Maximum number of messages in queue
 
@@ -49,6 +50,7 @@ extern Swi_Handle SW2_swi;
 typedef struct PayloadMessage {
     Queue_Elem elem;
     char *data;
+    bool isProgramOutput;
 } PayloadMessage, *PMsg;
 
 
@@ -79,9 +81,12 @@ typedef struct {
 struct Globals {
     uint32_t integrityHead;
     uint32_t byteSize;  // Size of Globals
-    char msgBuffer[BUFFER_SIZE];
-    int cursor_pos;
-    int msg_size;
+    char inputMessageBuffer[BUFFER_SIZE];
+    int cursor_pos;                 // Cursor position of cursor in the input buffer
+    int input_msg_size;             // Size of the incoming message buffer
+    int progOutputCol;          // Program output column position
+    int progOutputLines;        // Number of lines program output occupies
+
     UART_Handle uart;
     UART_Params uartParams;
 
@@ -145,7 +150,7 @@ extern int errorCounters[ERROR_COUNT];
 //================================================
 
 char *memory_strdup(const char *src);
-
+int isPrintable(char ch);  // ASCII printable characters
 
 //================================================
 // Drivers
@@ -172,6 +177,16 @@ void refresh_user_input();
 void handle_UART();
 void reset_buffer();
 void clear_console();
+
+// TODO console output
+// - [ ] implement new uartWriter task
+// - [ ] define methods below
+// - [ ] fix moving up or down multiple lines
+// - [ ] ensure thread safety
+void refreshUserInputLine();
+void moveCursorToColumn(int col);
+void moveCursorUp(int lines);
+void moveCursorDown(int lines);
 
 
 // Outward Messages (Called by UARTWriter)

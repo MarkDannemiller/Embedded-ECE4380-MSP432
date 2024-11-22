@@ -70,10 +70,13 @@ void init_globals() {
     glo.integrityTail = 0xa5a5a5a5;
     glo.byteSize = sizeof(glo);
     glo.cursor_pos = 0;
-    glo.msg_size = 0;
+    glo.input_msg_size = 0;
+    glo.progOutputCol = 0;
+    glo.progOutputLines = 1;
+
     int i;
     for(i=3; i<BUFFER_SIZE; i++){
-            glo.msgBuffer[i] = 0;
+            glo.inputMessageBuffer[i] = 0;
     }
 
     // Assign the handles to the BiosList struct
@@ -124,7 +127,7 @@ const char* errorMessages[] = {
     "Error: Missing period parameter.\r\n",
 
     "Error: Payload Queue Overflow.\r\n",                           // ERR_PAYLOAD_QUEUE_OF
-    "Error: Out Messsage Queue Overflow.\r\n"                       // ERR_OUTMSG_QUEUE_OF
+    "Error: Out Messsage Queue Overflow.\r\n",                      // ERR_OUTMSG_QUEUE_OF
 
     "Error: Invalid script line number.",                           // ERR_INVALID_SCRIPT_LINE
     "Error: Missing command to write to script line.",              // ERR_MISSING_SCRIPT_COMMAND
@@ -154,10 +157,10 @@ const char* errorNames[] = {
     "ERR_MISSING_PERIOD_PARAMETER",
 
     "ERR_PAYLOAD_QUEUE_OF",         // ERR_PAYLOAD_QUEUE_OF
-    "ERR_OUTMSG_QUEUE_OF"           // ERR_OUTMSG_QUEUE_OF
+    "ERR_OUTMSG_QUEUE_OF",          // ERR_OUTMSG_QUEUE_OF
 
-    "ERR_INVALID_SCRIPT_LINE"       // ERR_INVALID_SCRIPT_LINE
-    "ERR_MISSING_SCRIPT_COMMAND"    // ERR_MISSING_SCRIPT_COMMAND
+    "ERR_INVALID_SCRIPT_LINE",      // ERR_INVALID_SCRIPT_LINE
+    "ERR_MISSING_SCRIPT_COMMAND",   // ERR_MISSING_SCRIPT_COMMAND
     "ERR_UNKNOWN_SCRIPT_OP"         // ERR_UNKNOWN_SCRIPT_OPS
 };
 
@@ -330,6 +333,8 @@ char *memory_strdup(const char *src) {
     return dst;
 }
 
+int isPrintable(char ch) { return (ch >= 32 && ch <= 126); }  // ASCII printable characters
+
 
 //================================================
 // UART Writer
@@ -356,6 +361,32 @@ void AddProgramMessage(char *data) {
     }
 
     message->data = memory_strdup(data);
+    message->isProgramOutput = true;
+
+    if (message->data == NULL) {
+        Memory_free(NULL, message, sizeof(PayloadMessage));
+        System_abort("Failed to allocate memory for message data");
+    }
+
+    Queue_put(glo.bios.OutMsgQueue, &(message->elem));
+    Semaphore_post(glo.bios.UARTWriteSem);
+}
+
+
+void AddOutMessage(const char *data) {
+    if(Semaphore_getCount(glo.bios.UARTWriteSem) >= MAX_QUEUE_SIZE) {
+        raiseError(ERR_PAYLOAD_QUEUE_OF); // Can't display error if queue is full!
+        return;  // Do not add message in case of overflow
+    }
+
+    PayloadMessage *message = (PayloadMessage *)Memory_alloc(NULL, sizeof(PayloadMessage), 0, NULL);
+    if (message == NULL) {
+        System_abort("Failed to allocate memory for message");
+    }
+
+    message->data = memory_strdup(data);
+    message->isProgramOutput = false;
+
     if (message->data == NULL) {
         Memory_free(NULL, message, sizeof(PayloadMessage));
         System_abort("Failed to allocate memory for message data");
@@ -433,84 +464,101 @@ void handle_UART() {
     }
 
     UART_read(glo.uart, &key_in, 1);
-    glo.msgBuffer[glo.cursor_pos] = key_in;
-
 
     if (key_in == '\r' || key_in == '\n') {  // Enter key
-
-        //TODO see if this is best for handling no command
         if(glo.cursor_pos > 0) {
             // Process the completed input
-            AddProgramMessage("\r\n");
-            //execute_payload(glo.msgBuffer);
-            AddPayload(glo.msgBuffer);
+            AddOutMessage("\r\n");  // Use AddOutMessage to move cursor to new line
+            AddPayload(glo.inputMessageBuffer);
         }
         reset_buffer();
         return;
     } else if (key_in == '\b' || key_in == 0x7F) {  // Backspace key
         if (glo.cursor_pos > 0) {
             // Remove the last character
-            glo.msgBuffer[--glo.cursor_pos] = '\0';
+            glo.inputMessageBuffer[--glo.cursor_pos] = '\0';
         }
-    } else if (key_in == '\033') {  // Escape character for arrow keys
-        // Implement handling of arrow keys if needed
-    // Normal Operation
     } else {
-        // First, if this is start of message, get a new line
-        if(glo.msg_size == -1) {
-            AddProgramMessage("\r\n");
-        }
-
         // Add the character to the buffer if it's not full
         if (glo.cursor_pos < BUFFER_SIZE - 1) {
-            glo.msgBuffer[glo.cursor_pos++] = key_in;
-            glo.msgBuffer[glo.cursor_pos] = '\0';
-        }
-        else {
-            //UART_write_safe("\n\r", 2);  // Move to a new line to display output
-            AddProgramMessage("\r\n");
-            AddProgramMessage(raiseError(ERR_BUFFER_OF));
-            //UART_write_safe_strlen(raiseError(ERR_BUFFER_OF));
-            //UART_write_safe("Error: Buffer Overflow.\r\n", 25);  // Move to a new line to display output
+            glo.inputMessageBuffer[glo.cursor_pos++] = key_in;
+            glo.inputMessageBuffer[glo.cursor_pos] = '\0';
+        } else {
+            AddOutMessage("\r\n");  // Move to a new line
             reset_buffer();
+            AddProgramMessage(raiseError(ERR_BUFFER_OF));  // Use AddProgramMessage for error
         }
     }
 
-    glo.msg_size = glo.cursor_pos;//= glo.cursor_pos > glo.msg_size ? glo.cursor_pos : glo.msg_size;
-    refresh_user_input();
-
-    // Increment cursor only if in bounds of buffer
+    glo.input_msg_size = glo.cursor_pos;
+    refresh_user_input();  // This will use AddOutMessage()
 }
+
 
 void reset_buffer() {
-
     glo.cursor_pos = 0;
-    glo.msg_size = -1;
-    int i;
-    for(i=3; i<BUFFER_SIZE; i++){
-        glo.msgBuffer[i] = 0;
-    }
-
-    //UART_write(glo.uart, NEW_LINE_RETURN, sizeof(NEW_LINE_RETURN) - 1);
-    AddProgramMessage(NEW_LINE_RETURN);
+    glo.input_msg_size = -1;
+    memset(glo.inputMessageBuffer, 0, BUFFER_SIZE);
+    AddProgramMessage(NEW_LINE_RETURN);  // Use AddOutMessage to move to a new line
 }
 
 
+// Clears the entire console window
 void clear_console() {
     //UART_write_safe(CLEAR_CONSOLE, strlen(CLEAR_CONSOLE));
-    AddProgramMessage(CLEAR_CONSOLE);
+    AddOutMessage(CLEAR_CONSOLE);
 }
 
 
 void refresh_user_input() {
-    //UART_write_safe(CLEAR_LINE_RESET, sizeof(CLEAR_LINE_RESET) - 1);
-    //UART_write_safe(glo.msgBuffer, glo.msg_size+1);
-
-    AddProgramMessage(CLEAR_LINE_RESET);
-    AddProgramMessage("> ");
-    if(glo.msg_size > 0)
-        AddProgramMessage(glo.msgBuffer);
+    AddOutMessage(CLEAR_LINE_RESET);  // Clear the input line
+    AddOutMessage("> ");              // Display the prompt
+    if(glo.input_msg_size > 0)
+        AddOutMessage(glo.inputMessageBuffer); // Display the current input buffer
 }
+
+
+//=============================================================================
+// UART Console Functions (Called by UARTWriter)
+//=============================================================================
+
+void moveCursorUp(int lines) {
+    if (lines <= 0) return;
+    char buf[16];
+    snprintf(buf, sizeof(buf), "\033[%dA", lines);
+    UART_write_safe(buf, strlen(buf));
+}
+
+void moveCursorDown(int lines) {
+    if (lines <= 0) return;
+    // char buf[16];
+    // snprintf(buf, sizeof(buf), "\033[%dB", lines);
+    // UART_write_safe(buf, strlen(buf));
+    int i;
+    for(i = 0; i < lines; i++) {
+        UART_write_safe("\r\n", 2);
+    }
+}
+
+void moveCursorToColumn(int col) {
+    char buf[16];
+    snprintf(buf, sizeof(buf), "\033[%dG", col + 1);  // Columns start at 1
+    UART_write_safe(buf, strlen(buf));
+}
+
+void refreshUserInputLine() {
+    // Move cursor to the beginning of the line
+    UART_write_safe("\r", 1);
+
+    // Clear the line
+    UART_write_safe("\033[K", 3);  // Clear from cursor to end of line
+
+    // Write the input prompt and current buffer
+    UART_write_safe("> ", 2);
+    if(glo.input_msg_size > 0)
+        UART_write_safe(glo.inputMessageBuffer, glo.input_msg_size);
+}
+
 
 
 
@@ -959,8 +1007,8 @@ void CMD_help() {
             "| -rem       [remark]                 :  Add comments or remarks in scripts.\r\n" 
             "| -script    [line_number][operation] :  Manage and execute scripts of\r\n"
             "|                                        commands.\r\n"
-            "| -ticker    [index][initialDelay]    :  Configures a ticker to execute a payload\r\n"
-            "|            [period][count][payload]    after a delay and repeat it.\r\n"
+            "| -ticker    [index][initialDelay]    :  Configures a ticker to execute a\r\n"
+            "|            [period][count][payload]    payload after a delay and repeat it.\r\n"
             "| -timer     [period_us]              :  Sets the period of Timer0 in\r\n"
             "|                                        microseconds.\r\n";
     }

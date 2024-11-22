@@ -37,19 +37,62 @@ void uartRead(UArg arg0, UArg arg1) {
 void uartWrite(UArg arg0, UArg arg1) {
     PayloadMessage *out_message;
 
-    digitalWrite(1, LOW);
-
     while (1) {
-        Semaphore_pend(glo.bios.UARTWriteSem, BIOS_WAIT_FOREVER);  // Wait for object on Queue
+        Semaphore_pend(glo.bios.UARTWriteSem, BIOS_WAIT_FOREVER);
         out_message = (PayloadMessage *)Queue_get(glo.bios.OutMsgQueue);
-        UART_write_safe_strlen(out_message->data);
 
-        // Free the duplicated string
+        if (out_message->isProgramOutput) {
+            // Move cursor up to program output line
+            //moveCursorUp(progOutputLines);
+            moveCursorUp(1);
+
+            // Move cursor to the last known program output column position
+            moveCursorToColumn(glo.progOutputCol);
+
+            // Process the message character by character
+            char *data = out_message->data;
+            int len = strlen(data);
+
+            int i;
+            for (i = 0; i < len; i++) {
+                char ch = data[i];
+
+                if (ch == '\n') {
+                    // Newline or carriage return resets the column position
+                    // Move to the beginning of next line
+                    UART_write_safe("\r\n", 2);
+                    glo.progOutputCol = 0;
+                } else if (isPrintable(ch) && ch != '\r') {
+                    // Printable character
+                    UART_write_safe(&ch, 1);
+                    glo.progOutputCol++;
+
+                    if (glo.progOutputCol > MAX_LINE_LENGTH) {
+                        // Move to the beginning of next line
+                        UART_write_safe("\r\n", 2);
+                        glo.progOutputCol = 0;
+                    }
+                }
+                // Handle other characters if needed
+            }
+
+            // After writing, move cursor down to user input line
+            //moveCursorDown(progOutputLines);
+            moveCursorDown(1);
+
+            // Refresh user input line
+            refreshUserInputLine();
+        } else {
+            // Handle user input updates
+            UART_write_safe_strlen(out_message->data);
+        }
+
+        // Free allocated memory
         Memory_free(NULL, out_message->data, strlen(out_message->data) + 1);
-        // Free the message structure
         Memory_free(NULL, out_message, sizeof(PayloadMessage));
     }
 }
+
 
 
 // Execute Payloads on PayloadQueue

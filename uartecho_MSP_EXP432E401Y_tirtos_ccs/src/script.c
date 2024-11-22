@@ -24,7 +24,7 @@ void print_all_script_lines() {
 
 void print_script_line(int line_number) {
     AddProgramMessage("================================= Script Line ==================================\r\n");
-    AddProgramMessage("| Line | Script Contents                             | Memory Range            |\r\n");
+    AddProgramMessage("| Line | Script Contents                             | Memory Range            \r\n");
     AddProgramMessage("|------|---------------------------------------------|-------------------------|\r\n");
     char msg[500];
     if (scriptLines[line_number][0] != '\0') {
@@ -43,7 +43,7 @@ void execute_script_from_line(int line_number) {
             // Stop execution when an empty line is encountered
             break;
         }
-        // Queue the script line as a payload
-        AddPayload(scriptLines[i]);
+        
+        execute_payload(scriptLines[i]);
     }
 }
