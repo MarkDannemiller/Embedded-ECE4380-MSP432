@@ -55,6 +55,8 @@
 #include "tasks.h"
 #include "callback.h"
 #include "tickers.h"
+#include "register.h"
+#include "script.h"
 
 
 #ifdef Globals
@@ -100,25 +102,33 @@ void init_globals() {
 
 // Define the corresponding error messages
 const char* errorMessages[] = {
-    "Error: Unknown command. Try -help for list of commands.\r\n", // ERR_UNKNOWN_COMMAND
+    "Error: Unknown command. Try -help for list of commands.\r\n",  // ERR_UNKNOWN_COMMAND
     "Error: Buffer Overflow\r\n",                                   // ERR_BUFFER_OF
     "Error: Invalid message size\r\n",                              // ERR_INVALID_MSG_SIZE
     "Error: Null message pointer\r\n",                              // ERR_NULL_MSG_PTR
     "Error: Empty message\r\n",                                     // ERR_EMPTY_MSG
     "Error: Failed to write message\r\n",                           // ERR_MSG_WRITE_FAILED
+
     "Error: Address out of range\r\n",                              // ERR_ADDR_OUT_OF_RANGE
     "Error: GPIO out of range\r\n",                                 // ERR_GPIO_OUT_OF_RANGE
+
     "Error: Timer period out of range\r\n",                         // ERR_INVALID_TIMER_PERIOD
     "Error: Timer control function was unsuccessful\r\n",           // ERR_TIMER_STATUS_ERROR
     "Error: UART write was called but did not finish\r\n",          // ERR_UART_COLLISION
     "Error: Invalid callback index.\r\n",                           // ERR_INVALID_CALLBACK_INDEX
+
     "Error: Missing count parameter.\r\n",                          // ERR_MISSING_COUNT_PARAMETER
     "Error: Missing payload.\r\n",                                  // ERR_MISSING_PAYLOAD
     "Error: Invalid ticker index.\r\n",
     "Error: Missing initial delay parameter.\r\n",
     "Error: Missing period parameter.\r\n",
+
     "Error: Payload Queue Overflow.\r\n",                           // ERR_PAYLOAD_QUEUE_OF
     "Error: Out Messsage Queue Overflow.\r\n"                       // ERR_OUTMSG_QUEUE_OF
+
+    "Error: Invalid script line number.",                           // ERR_INVALID_SCRIPT_LINE
+    "Error: Missing command to write to script line.",              // ERR_MISSING_SCRIPT_COMMAND
+    "Error: Unknown operation for script command."                  // ERR_UNKNOWN_SCRIPT_OP
 };
 
 const char* errorNames[] = {
@@ -128,19 +138,27 @@ const char* errorNames[] = {
     "ERR_NULL_MSG_PTR",             // ERR_NULL_MSG_PTR
     "ERR_EMPTY_MSG",                // ERR_EMPTY_MSG
     "ERR_MSG_WRITE_FAILED",         // ERR_MSG_WRITE_FAILED
+
     "ERR_ADDR_OUT_OF_RANGE",        // ERR_ADDR_OUT_OF_RANGE
     "ERR_GPIO_OUT_OF_RANGE",        // ERR_GPIO_OUT_OF_RANGE
+
     "ERR_INVALID_TIMER_PERIOD",     // ERR_INVALID_TIMER_PERIOD
     "ERR_TIMER_STATUS_ERROR",       // ERR_TIMER_STATUS_ERROR
     "ERR_UART_COLLISION",           // ERR_UART_COLLISION
     "ERR_INVALID_CALLBACK_INDEX",   // ERR_INVALID_CALLBACK_INDEX
+
     "ERR_MISSING_COUNT_PARAMETER",  // ERR_MISSING_COUNT_PARAMETER
     "ERR_MISSING_PAYLOAD",          // ERR_MISSING_PAYLOAD
     "ERR_INVALID_TICKER_INDEX",
     "ERR_MISSING_DELAY_PARAMETER",
     "ERR_MISSING_PERIOD_PARAMETER",
+
     "ERR_PAYLOAD_QUEUE_OF",         // ERR_PAYLOAD_QUEUE_OF
     "ERR_OUTMSG_QUEUE_OF"           // ERR_OUTMSG_QUEUE_OF
+
+    "ERR_INVALID_SCRIPT_LINE"       // ERR_INVALID_SCRIPT_LINE
+    "ERR_MISSING_SCRIPT_COMMAND"    // ERR_MISSING_SCRIPT_COMMAND
+    "ERR_UNKNOWN_SCRIPT_OP"         // ERR_UNKNOWN_SCRIPT_OPS
 };
 
 // Array to store the error counters
@@ -290,10 +308,27 @@ void *mainThread(void *arg0)
     UART_write_safe(compileTimeMsg, strlen(compileTimeMsg));
     reset_buffer();
     refresh_user_input();*/
+    return;
 }
 
 
+//================================================
+// Utility
+//================================================
 
+// Custom string duplication function using Memory_alloc
+char *memory_strdup(const char *src) {
+    if (src == NULL) {
+        return NULL;
+    }
+
+    size_t len = strlen(src) + 1; // +1 for the null terminator
+    char *dst = (char *)Memory_alloc(NULL, len, 0, NULL);
+    if (dst != NULL) {
+        strcpy(dst, src);
+    }
+    return dst;
+}
 
 
 //================================================
@@ -308,7 +343,7 @@ void *mainThread(void *arg0)
     Semaphore_post(glo.bios.UARTWriteSem);  // Post to Semaphore ready to execute
 }*/
 
-void AddOutMessage(char *data) {
+void AddProgramMessage(char *data) {
 
     if(Semaphore_getCount(glo.bios.UARTWriteSem) >= MAX_QUEUE_SIZE) {
         raiseError(ERR_PAYLOAD_QUEUE_OF); // Can't display error if queue is full!
@@ -406,7 +441,7 @@ void handle_UART() {
         //TODO see if this is best for handling no command
         if(glo.cursor_pos > 0) {
             // Process the completed input
-            AddOutMessage("\r\n");
+            AddProgramMessage("\r\n");
             //execute_payload(glo.msgBuffer);
             AddPayload(glo.msgBuffer);
         }
@@ -423,7 +458,7 @@ void handle_UART() {
     } else {
         // First, if this is start of message, get a new line
         if(glo.msg_size == -1) {
-            AddOutMessage("\r\n");
+            AddProgramMessage("\r\n");
         }
 
         // Add the character to the buffer if it's not full
@@ -433,8 +468,8 @@ void handle_UART() {
         }
         else {
             //UART_write_safe("\n\r", 2);  // Move to a new line to display output
-            AddOutMessage("\r\n");
-            AddOutMessage(raiseError(ERR_BUFFER_OF));
+            AddProgramMessage("\r\n");
+            AddProgramMessage(raiseError(ERR_BUFFER_OF));
             //UART_write_safe_strlen(raiseError(ERR_BUFFER_OF));
             //UART_write_safe("Error: Buffer Overflow.\r\n", 25);  // Move to a new line to display output
             reset_buffer();
@@ -457,13 +492,13 @@ void reset_buffer() {
     }
 
     //UART_write(glo.uart, NEW_LINE_RETURN, sizeof(NEW_LINE_RETURN) - 1);
-    AddOutMessage(NEW_LINE_RETURN);
+    AddProgramMessage(NEW_LINE_RETURN);
 }
 
 
 void clear_console() {
     //UART_write_safe(CLEAR_CONSOLE, strlen(CLEAR_CONSOLE));
-    AddOutMessage(CLEAR_CONSOLE);
+    AddProgramMessage(CLEAR_CONSOLE);
 }
 
 
@@ -471,10 +506,10 @@ void refresh_user_input() {
     //UART_write_safe(CLEAR_LINE_RESET, sizeof(CLEAR_LINE_RESET) - 1);
     //UART_write_safe(glo.msgBuffer, glo.msg_size+1);
 
-    AddOutMessage(CLEAR_LINE_RESET);
-    AddOutMessage("> ");
+    AddProgramMessage(CLEAR_LINE_RESET);
+    AddProgramMessage("> ");
     if(glo.msg_size > 0)
-        AddOutMessage(glo.msgBuffer);
+        AddProgramMessage(glo.msgBuffer);
 }
 
 
@@ -483,21 +518,6 @@ void refresh_user_input() {
 //================================================
 // Payload Management
 //================================================
-
-// Custom string duplication function using Memory_alloc
-char *memory_strdup(const char *src) {
-    if (src == NULL) {
-        return NULL;
-    }
-
-    size_t len = strlen(src) + 1; // +1 for the null terminator
-    char *dst = (char *)Memory_alloc(NULL, len, 0, NULL);
-    if (dst != NULL) {
-        strcpy(dst, src);
-    }
-    return dst;
-}
-
 
 // Add a payload string to the payload queue
 /*void AddPayload(char *payload) {
@@ -510,7 +530,7 @@ char *memory_strdup(const char *src) {
 void AddPayload(char *payload) {
 
     if(Semaphore_getCount(glo.bios.PayloadSem) >= MAX_QUEUE_SIZE) {
-        AddOutMessage(raiseError(ERR_PAYLOAD_QUEUE_OF));
+        AddProgramMessage(raiseError(ERR_PAYLOAD_QUEUE_OF));
         return;  // Do not add payload in case of overflow
     }
 
@@ -544,10 +564,6 @@ void execute_payload(char *msg) {
     char *token = strtok(msgBufferCopy, " \t\r\n");
     char *p;  // Declare p at the beginning of the block
 
-    bool commandRecognized = false;  // To track if any valid command is recognized
-
-    //token = strtok(NULL, " \t\r\n");
-
     // Convert token to lowercase for case-insensitive comparison
     for (p = token; *p; ++p) {
         *p = tolower(*p);
@@ -557,52 +573,45 @@ void execute_payload(char *msg) {
     // Check for commmand
     if (strcmp(token,           "-about") == 0) {
         CMD_about();
-        commandRecognized = true;
     }
     else if (strcmp(token,      "-callback") == 0) {
         CMD_callback();
-        commandRecognized = true;
     }
     else if (strcmp(token,      "-error") == 0) {
         CMD_error();
-        commandRecognized = true;
     }
     else if (strcmp(token,      "-gpio") == 0) {
         CMD_gpio();
-        commandRecognized = true;
     }
     else if (strcmp(token,      "-help") == 0) {
         CMD_help();
-        commandRecognized = true;
     }
     else if (strcmp(token,      "-memr") == 0) {
         CMD_memr();
-        commandRecognized = true;
     }
     else if (strcmp(token,      "-print") == 0) {
         CMD_print();
-        commandRecognized = true;
     }
     else if (strcmp(token,      "-reg") == 0) {
         CMD_reg();
-        commandRecognized = true;
+    }
+    else if (strcmp(token,      "-rem") == 0) {
+        CMD_rem();
+    }
+    else if (strcmp(token,      "-script") == 0) {
+        CMD_script();
     }
     else if (strcmp(token,      "-ticker") == 0) {
         CMD_ticker();
-        commandRecognized = true;
     }
     else if (strcmp(token,      "-timer") == 0) {
         CMD_timer();
-        commandRecognized = true;
     }
+    else {
+        AddProgramMessage(raiseError(ERR_UNKNOWN_COMMAND));
 
+    }
     //=========================================================================
-
-    if (!commandRecognized) {  // Only send error if no valid command has been found yet
-        //UART_write_safe_strlen(raiseError(ERR_UNKNOWN_COMMAND));
-        AddOutMessage(raiseError(ERR_UNKNOWN_COMMAND));
-        //UART_write_safe("Error: Unknown command. Try -help for list of commands.\n\r", strlen("Error: Unknown command. Try -help for list of commands.\r\n"));
-    }
 }
 
 
@@ -614,14 +623,15 @@ void execute_payload(char *msg) {
 void CMD_about() {
     static char aboutMessage[MAX_MESSAGE_SIZE];  // Adjust size as needed
     sprintf(aboutMessage,
+            "==================================== About =====================================\r\n"
             "Student Name: Mark Dannemiller\r\n"
             "Assignment: %s\r\n"
             "Version: v%d.%d\r\n"
             "Compiled on: %s\r\n",
-             ASSIGNMENT, VERSION, SUBVERSION, __DATE__ " " __TIME__);
+            ASSIGNMENT, VERSION, SUBVERSION, __DATE__ " " __TIME__);
 
     //UART_write_safe(aboutMessage, strlen(aboutMessage));
-    AddOutMessage(aboutMessage);
+    AddProgramMessage(aboutMessage);
 }
 
 void CMD_callback() {
@@ -636,7 +646,7 @@ void CMD_callback() {
 
     int index = atoi(index_token);
     if (index < 0 || index >= MAX_CALLBACKS) {
-        AddOutMessage(raiseError(ERR_INVALID_CALLBACK_INDEX));
+        AddProgramMessage(raiseError(ERR_INVALID_CALLBACK_INDEX));
         return;
     }
 
@@ -646,14 +656,14 @@ void CMD_callback() {
     if (count_token) {
         count = atoi(count_token);
     } else {
-        AddOutMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
+        AddProgramMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
         return;
     }
 
     // The rest is the payload
     char *payload_start = strtok(NULL, "\r\n");
     if (!payload_start) {
-        AddOutMessage(raiseError(ERR_MISSING_PAYLOAD));
+        AddProgramMessage(raiseError(ERR_MISSING_PAYLOAD));
         return;
     }
 
@@ -667,7 +677,7 @@ void CMD_callback() {
     // Acknowledge
     char msg[BUFFER_SIZE];
     sprintf(msg, "Callback %d set with count %d and payload: %s\r\n", index, count, callbacks[index].payload);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 void CMD_error() {
@@ -675,11 +685,11 @@ void CMD_error() {
     int i;
 
     //UART_write_safe_strlen("Error Count:\r\n");
-    AddOutMessage("Error Count:\r\n");
+    AddProgramMessage("Error Count:\r\n");
     for(i = 0; i < ERROR_COUNT; i++) {
         sprintf(str, "|  %s: %d\r\n", getErrorName(i), errorCounters[i]);
         //UART_write_safe_strlen(str);
-        AddOutMessage(str);
+        AddProgramMessage(str);
     }
 }
 
@@ -692,15 +702,22 @@ void CMD_gpio() {
     uint32_t pin_num;
     char output_msg[BUFFER_SIZE];
 
-    if(!pin_token)
-            pin_num = 0;
-        else
-            pin_num = strtoul(pin_token, &pin_ptr, 10);
+    if(!pin_token) {
+        AddProgramMessage("===================================== GPIO =====================================\r\n");
+        // If no pin number is provided, read all pins
+        for (pin_num = 0; pin_num < pin_count; pin_num++) {
+            pinState read_state = digitalRead(pin_num);
+            sprintf(output_msg, "Read => Pin: %d  State: %d\r\n", pin_num, read_state);
+            AddProgramMessage(output_msg);
+        }
+        return;
+    } else {
+        pin_num = strtoul(pin_token, &pin_ptr, 10);
+    }
 
     // Catch out of bounds case
     if(pin_num >= pin_count) {
-        //UART_write_safe_strlen(raiseError(ERR_GPIO_OUT_OF_RANGE));
-        AddOutMessage(raiseError(ERR_GPIO_OUT_OF_RANGE));
+        AddProgramMessage(raiseError(ERR_GPIO_OUT_OF_RANGE));
         return;
     }
 
@@ -713,7 +730,7 @@ void CMD_gpio() {
     }
 
     // "w" = write and needs to collect the state
-    if(strcmp(op_token,         "w") == 0) {
+    if(strcmp(op_token, "w") == 0) {
         char *state_token = strtok(NULL, " \t\r\n");
         // Convert token to lowercase for case-insensitive comparison
         for (p = state_token; *p; ++p) {
@@ -731,7 +748,7 @@ void CMD_gpio() {
         }
     }
     // Toggle pin operation
-    else if(strcmp(op_token,    "t") == 0) {
+    else if(strcmp(op_token, "t") == 0) {
         togglePin(pin_num);
         pinState read_state = digitalRead(pin_num);
         sprintf(output_msg, "Toggled => Pin: %d State: %d\r\n", pin_num, read_state);
@@ -741,8 +758,7 @@ void CMD_gpio() {
         sprintf(output_msg, "Read => Pin: %d  State: %d\r\n", pin_num, read_state);
     }
 
-    //UART_write_safe_strlen(output_msg);
-    AddOutMessage(output_msg);
+    AddProgramMessage(output_msg);
 }
 
 // Function to print help information
@@ -751,173 +767,207 @@ void CMD_help() {
     // If second token exists, then check for a custom help message
     char *cmd_arg_token = strtok(NULL, " \t\r\n");
 
+    const char *help_prefix = "===================================== Help =====================================\r\n";
+
     // Check for commmand
     if (strcmp(cmd_arg_token,           "about") == 0 || strcmp(cmd_arg_token,           "-about") == 0) {
         helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -about\n\r"
-                "| args: none\n\r"
-                "| Description: Displays system information.\r\n"
-                "| Example usage: \"-about\" -> Displays info about the system.\r\n";
+           //================================================================================ <-80 characters
+            "Command: -about\n\r"
+            "| args: none\n\r"
+            "| Description: Displays system information.\r\n"
+            "| Example usage: \"-about\" -> Displays info about the system.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "callback") == 0 || strcmp(cmd_arg_token,        "-callback") == 0) {
         helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -callback [index] [count] [payload]\n\r"
-                "| args:\n\r"
-                "| | index: Callback index (0 for timer, 1 for SW1, 2 for SW2).\r\n"
-                "| | count: Number of times to execute the payload (-1 for infinite).\r\n"
-                "| | payload: Command to execute when the event occurs.\r\n"
-                "| Description: Configures a callback to execute a payload when an event occurs.\r\n"
-                "|              If no arguments are provided, displays all callbacks.\r\n"
-                "| Example usage: \"-callback 1 2 -gpio 3 t\" -> On SW1 press, toggle GPIO 3 twice.\r\n"
-                "| Example usage: \"-callback\" -> Displays all callbacks, counts, and  payloads.\r\n";
+           //================================================================================ <-80 characters
+            "Command: -callback [index] [count] [payload]\n\r"
+            "| args:\n\r"
+            "| | index: Callback index (0 for timer, 1 for SW1, 2 for SW2).\r\n"
+            "| | count: Number of times to execute the payload (-1 for infinite).\r\n"
+            "| | payload: Command to execute when the event occurs.\r\n"
+            "| Description: Configures a callback to execute a payload when an event occurs.\r\n"
+            "|              If no arguments are provided, displays all callbacks.\r\n"
+            "| Example usage: \"-callback 1 2 -gpio 3 t\" -> On SW1 press, toggle GPIO 3 twice.\r\n"
+            "| Example usage: \"-callback\" -> Displays all callbacks, counts, and  payloads.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "error") == 0 || strcmp(cmd_arg_token,           "-error") == 0) {
         helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -error\n\r"
-                "| args: none\n\r"
-                "| Description: Displays number of times that each error type has triggered.\r\n"
-                "| Example usage: \"-error\" -> Displays error count by type.\r\n";
+           //================================================================================ <-80 characters
+            "Command: -error\n\r"
+            "| args: none\n\r"
+            "| Description: Displays number of times that each error type has triggered.\r\n"
+            "| Example usage: \"-error\" -> Displays error count by type.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "gpio") == 0  || strcmp(cmd_arg_token,           "-gpio") == 0) {
         helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -gpio [pin][function][val]\n\r"
-                "| args:\n\r"
-                "| | pin: GPIO Pin within range [0,7].\r\n"
-                "| | function: [r]ead [w]rite [t]oggle operation on pin.\r\n"
-                "| | val: Used only in write mode 1=HIGH 0=LOW.\r\n"
-                "| Description: Performs pin function on selected GPIO.\r\n"
-                "| Example usage: \"-gpio 1 w 1\" -> Writes HIGH on GPIO 1\r\n";
-                "| Example usage: \"-gpio 6 r\" -> Reads input on GPIO 6\r\n";
-                "| Example usage: \"-gpio 2 t\" -> Toggles output of GPIO 2\r\n";
+           //================================================================================ <-80 characters
+            "Command: -gpio [pin][function][val]\n\r"
+            "| args:\n\r"
+            "| | pin: GPIO Pin within range [0,7].\r\n"
+            "| | function: [r]ead [w]rite [t]oggle operation on pin.\r\n"
+            "| | val: Used only in write mode 1=HIGH 0=LOW.\r\n"
+            "| Description: Performs pin function on selected GPIO.\r\n"
+            "| Example usage: \"-gpio 1 w 1\" -> Writes HIGH on GPIO 1\r\n";
+            "| Example usage: \"-gpio 6 r\" -> Reads input on GPIO 6\r\n";
+            "| Example usage: \"-gpio 2 t\" -> Toggles output of GPIO 2\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "help") == 0  || strcmp(cmd_arg_token,           "-help") == 0) {
         helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -help [command]\n\r"
-                "| args:\n\r"
-                "| | command: One of the acceptable command entries. Default none displays all\r\n"
-                "| |          available commands to the console.\r\n"
-                "| Description: Displays helpful information about one or all commands.\r\n"
-                "| Example usage: \"-help\" -> Displays all available commands.\r\n"
-                "| Example usage: \"-help print\" -> Displays information about print command.\r\n";
+           //================================================================================ <-80 characters
+            "Command: -help [command]\n\r"
+            "| args:\n\r"
+            "| | command: One of the acceptable command entries. Default none displays all\r\n"
+            "| |          available commands to the console.\r\n"
+            "| Description: Displays helpful information about one or all commands.\r\n"
+            "| Example usage: \"-help\" -> Displays all available commands.\r\n"
+            "| Example usage: \"-help print\" -> Displays information about print command.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "memr") == 0  || strcmp(cmd_arg_token,           "-memr") == 0) {
         helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -memr [addresss]\n\r"
-                "| args:\n\r"
-                "| | address: The hexadecimal address to display the contents of. Acceptable\r\n"
-                "| |          ranges are from (0x00->0xFFFFF) and (0x20000000->0x2003FFFF)\r\n"
-                "| Description: Displays the contents of the inputted memory address.\r\n"
-                "| Example usage: \"-memr 1000\" -> Displays the contents of address 0x1000.\r\n";
+           //================================================================================ <-80 characters
+            "Command: -memr [addresss]\n\r"
+            "| args:\n\r"
+            "| | address: The hexadecimal address to display the contents of. Acceptable\r\n"
+            "| |          ranges are from (0x00->0xFFFFF) and (0x20000000->0x2003FFFF)\r\n"
+            "| Description: Displays the contents of the inputted memory address.\r\n"
+            "| Example usage: \"-memr 1000\" -> Displays the contents of address 0x1000.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "print") == 0  || strcmp(cmd_arg_token,          "-print") == 0) {
         helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -print [message]\n\r"
-                "| args:\n\r"
-                "| | messsage: The contents to print. Displays the entire line after \"-print \".\r\n"
-                "| Description: Displays the message inputted after command statement.\r\n"
-                "| Example usage: \"-print abc\" -> Displays the contents of address 0x1000.\r\n";
+           //================================================================================ <-80 characters
+            "Command: -print [message]\n\r"
+            "| args:\n\r"
+            "| | messsage: The contents to print. Displays the entire line after \"-print \".\r\n"
+            "| Description: Displays the message inputted after command statement.\r\n"
+            "| Example usage: \"-print abc\" -> Displays the contents of address 0x1000.\r\n";
 
     }
     else if (strcmp(cmd_arg_token, "reg") == 0 || strcmp(cmd_arg_token, "-reg") == 0) {
         helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -reg [operation] [operands]\n\r"
-                "| Operations:\n\r"
-                "| | mov dest src        : Move src to dest.\r\n"
-                "| | xchg reg1 reg2      : Exchange values of reg1 and reg2.\r\n"
-                "| | inc reg             : Increment reg by 1.\r\n"
-                "| | dec reg             : Decrement reg by 1.\r\n"
-                "| | add dest src        : Add src to dest.\r\n"
-                "| | sub dest src        : Subtract src from dest.\r\n"
-                "| | neg reg             : Negate reg.\r\n"
-                "| | and dest src        : Bitwise AND of dest and src.\r\n"
-                "| | ior dest src        : Bitwise OR of dest and src.\r\n"
-                "| | xor dest src        : Bitwise XOR of dest and src.\r\n"
-                "| | mul dest src        : Multiply dest by src.\r\n"
-                "| | div dest src        : Divide dest by src.\r\n"
-                "| | rem dest src        : Remainder of dest divided by src.\r\n"
-                "| | max dest src        : Set dest to max of dest and src.\r\n"
-                "| | min dest src        : Set dest to min of dest and src.\r\n"
-                "| Operands:\r\n"
-                "| | Registers: r0 to r31\r\n"
-                "| | Immediate: #value or #xvalue\r\n"
-                "| | Memory Address: @address\r\n"
-                "| Examples:\r\n"
-                "| | -reg mov r0 #10     : Set R0 to 10.\r\n"
-                "| | -reg add r0 r1      : Add R1 to R0.\r\n"
-                "| | -reg inc r0         : Increment R0.\r\n";
+           //================================================================================ <-80 characters
+            "Command: -reg [operation] [operands]\n\r"
+            "| Operations:\n\r"
+            "| | mov dest src        : Move src to dest.\r\n"
+            "| | xchg reg1 reg2      : Exchange values of reg1 and reg2.\r\n"
+            "| | inc reg             : Increment reg by 1.\r\n"
+            "| | dec reg             : Decrement reg by 1.\r\n"
+            "| | add dest src        : Add src to dest.\r\n"
+            "| | sub dest src        : Subtract src from dest.\r\n"
+            "| | neg reg             : Negate reg.\r\n"
+            "| | and dest src        : Bitwise AND of dest and src.\r\n"
+            "| | ior dest src        : Bitwise OR of dest and src.\r\n"
+            "| | xor dest src        : Bitwise XOR of dest and src.\r\n"
+            "| | mul dest src        : Multiply dest by src.\r\n"
+            "| | div dest src        : Divide dest by src.\r\n"
+            "| | rem dest src        : Remainder of dest divided by src.\r\n"
+            "| | max dest src        : Set dest to max of dest and src.\r\n"
+            "| | min dest src        : Set dest to min of dest and src.\r\n"
+            "| Operands:\r\n"
+            "| | Registers: r0 to r31\r\n"
+            "| | Immediate: #value or #xvalue\r\n"
+            "| | Memory Address: @address\r\n"
+            "| Examples:\r\n"
+            "| | -reg mov r0 #10     : Set R0 to 10.\r\n"
+            "| | -reg add r0 r1      : Add R1 to R0.\r\n"
+            "| | -reg inc r0         : Increment R0.\r\n";
+    }
+    else if (strcmp(cmd_arg_token, "rem") == 0 || strcmp(cmd_arg_token, "-rem") == 0) {
+        helpMessage =
+           //================================================================================ <-80 characters
+            "Command: -rem [remark]\n\r"
+            "| args:\n\r"
+            "| | remark: Any text to be ignored by the interpreter.\r\n"
+            "| Description: Used for adding comments or remarks in scripts.\r\n"
+            "| Examples:\r\n"
+            "| | -rem This is a comment line.\r\n";
+    }
+    else if (strcmp(cmd_arg_token,      "script") == 0 || strcmp(cmd_arg_token,         "-script") == 0) {
+        helpMessage =
+           //================================================================================ <-80 characters
+            "Command: -script [line_number] [operation] [command]\n\r"
+            "| args:\n\r"
+            "| | line_number: Script line number (0 to 63).\r\n"
+            "| | operation:\r\n"
+            "| | | w [command]: Write a command to the script line.\r\n"
+            "| | | x: Execute the script starting from the line.\r\n"
+            "| | | c: Clear the script line.\r\n"
+            "| Description: Manages and executes scripts of commands.\r\n"
+            "| Examples:\r\n"
+            "| | -script                : Display all script lines.\r\n"
+            "| | -script 3              : Display script line 3.\r\n"
+            "| | -script 17 w -gpio 0 t : Write '-gpio 0 t' to script line 17.\r\n"
+            "| | -script 17 x           : Execute script starting from line 17.\r\n"
+            "| | -script 17 c           : Clear script line 17.\r\n";
     }
     else if (strcmp(cmd_arg_token,      "timer") == 0 || strcmp(cmd_arg_token,           "-timer") == 0) {
-            helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -timer [period_us]\n\r"
-                "| args:\n\r"
-                "| | period_us: The period of Timer0 in microseconds. Minimum value is 100 us\r\n"
-                "| Description: Sets the period of Timer0 to the specified period in microseconds.\r\n"
-                "| |            If no period is specified, displays the current Timer0 period.\r\n"
-                "| Example usage: \"-timer 100000\" -> Sets Timer0 period to 100,000 us (100 ms).\r\n"
-                "| Example usage: \"-timer\" -> Displays the current Timer0 period.\r\n";
+        helpMessage =
+           //================================================================================ <-80 characters
+            "Command: -timer [period_us]\n\r"
+            "| args:\n\r"
+            "| | period_us: The period of Timer0 in microseconds. Minimum value is 100 us\r\n"
+            "| Description: Sets the period of Timer0 to the specified period in microseconds.\r\n"
+            "| |            If no period is specified, displays the current Timer0 period.\r\n"
+            "| Example usage: \"-timer 100000\" -> Sets Timer0 period to 100,000 us (100 ms).\r\n"
+            "| Example usage: \"-timer\" -> Displays the current Timer0 period.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "ticker") == 0 || strcmp(cmd_arg_token,           "-ticker") == 0) {
-            helpMessage =
-               //================================================================================ <-80 characters
-                "Command: -ticker [index] [initialDelay] [period] [count] [payload]\n\r"
-                "| args:\n\r"
-                "| | index: Ticker index (0 to 15).\r\n"
-                "| | initialDelay: Initial delay before first execution in 10 ms units.\r\n"
-                "| | period: Period between executions in 10 ms units.\r\n"
-                "| | count: Number of times to repeat (-1 for infinite).\r\n"
-                "| | payload: Command to execute when the ticker triggers.\r\n"
-                "| Description: Configures a ticker to execute a payload after a delay and\r\n"
-                "| |            repeat it. If no arguments are given, displays all tickers.\r\n"
-                "| Example usage: \"-ticker 3 100 100 5 -gpio 2 t\" -> Uses ticker 3, waits 1000\r\n"
-                "| |              ms, then toggles GPIO 2 every 1000 ms, repeating 5 times.\r\n"
-                "| Example usage: \"-ticker\" -> Displays all tickers and payloads.\r\n";
+        helpMessage =
+           //================================================================================ <-80 characters
+            "Command: -ticker [index] [initialDelay] [period] [count] [payload]\n\r"
+            "| args:\n\r"
+            "| | index: Ticker index (0 to 15).\r\n"
+            "| | initialDelay: Initial delay before first execution in 10 ms units.\r\n"
+            "| | period: Period between executions in 10 ms units.\r\n"
+            "| | count: Number of times to repeat (-1 for infinite).\r\n"
+            "| | payload: Command to execute when the ticker triggers.\r\n"
+            "| Description: Configures a ticker to execute a payload after a delay and\r\n"
+            "| |            repeat it. If no arguments are given, displays all tickers.\r\n"
+            "| Example usage: \"-ticker 3 100 100 5 -gpio 2 t\" -> Uses ticker 3, waits 1000\r\n"
+            "| |              ms, then toggles GPIO 2 every 1000 ms, repeating 5 times.\r\n"
+            "| Example usage: \"-ticker\" -> Displays all tickers and payloads.\r\n";
 
     }
     else {
         helpMessage =
-              //================================================================================ <-80 characters
-                "| Supported Command [arg1][arg2]...   |  Command Description\r\n"
-                "-------------------------------------------------------------------------------\r\n"
-                "| -about                              :  Display program information.\r\n"
-                "| -callback  [index][count][payload]  :  Configures a callback to execute a\r\n"
-                "|                                        payload when an event occurs.\r\n"
-                "| -error                              :  Displays number of times that each\r\n"
-                "|                                        error type has triggered.\r\n"
-                "| -gpio      [pin][function][val]     :  Performs pin function on selected"
-                "|                                        GPIO.\r\n"
-                "| -help      [command]                :  Display this help message or a\r\n"
-                "|                                        specific message based on command\r\n"
-                "|                                     :  to a command. I.E \"-help print\"\r\n"
-                "| -memr      [address]                :  Display contents of given memory\r\n"
-                "|                                        address.\r\n"
-                "| -print     [string]                 :  Display inputted string.\r\n"
-                "|                                        I.E \"-print abc\"\r\n"
-                "| -reg       [operation][operands]    :  Perform operation on specified\r\n"
-                "|                                        register.\r\n"
-                "| -ticker    [index][initialDelay]    :  Configures a ticker to execute a payload\r\n"
-                "|            [period][count][payload]    after a delay and repeat it.\r\n"
-                "| -timer     [period_us]              :  Sets the period of Timer0 in\r\n"
-                "|                                        microseconds.\r\n";
+           //================================================================================ <-80 characters
+            "| Supported Command [arg1][arg2]...   |  Command Description\r\n"
+            "-------------------------------------------------------------------------------\r\n"
+            "| -about                              :  Display program information.\r\n"
+            "| -callback  [index][count][payload]  :  Configures a callback to execute a\r\n"
+            "|                                        payload when an event occurs.\r\n"
+            "| -error                              :  Displays number of times that each\r\n"
+            "|                                        error type has triggered.\r\n"
+            "| -gpio      [pin][function][val]     :  Performs pin function on selected\r\n"
+            "|                                        GPIO.\r\n"
+            "| -help      [command]                :  Display this help message or a\r\n"
+            "|                                        specific message based on command\r\n"
+            "|                                     :  to a command. I.E \"-help print\"\r\n"
+            "| -memr      [address]                :  Display contents of given memory\r\n"
+            "|                                        address.\r\n"
+            "| -print     [string]                 :  Display inputted string.\r\n"
+            "|                                        I.E \"-print abc\"\r\n"
+            "| -reg       [operation][operands]    :  Perform operation on specified\r\n"
+            "|                                        register.\r\n"
+            "| -rem       [remark]                 :  Add comments or remarks in scripts.\r\n" 
+            "| -script    [line_number][operation] :  Manage and execute scripts of\r\n"
+            "|                                        commands.\r\n"
+            "| -ticker    [index][initialDelay]    :  Configures a ticker to execute a payload\r\n"
+            "|            [period][count][payload]    after a delay and repeat it.\r\n"
+            "| -timer     [period_us]              :  Sets the period of Timer0 in\r\n"
+            "|                                        microseconds.\r\n";
     }
 
     //UART_write_safe(helpMessage, strlen(helpMessage));
-    AddOutMessage(helpMessage);
+    AddProgramMessage(help_prefix);
+    AddProgramMessage(helpMessage);
 }
 
 
@@ -949,39 +999,39 @@ void CMD_memr() {
     // Header and Surrounding Addresses
     sprintf(msg, "MEMR\r\n");
     //UART_write_safe(msg, strlen(msg));
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
     sprintf(msg, "%#010x %#010x %#010x %#010x\r\n", memaddr+0xC, memaddr+0x8, memaddr+0x4, memaddr);
     //UART_write_safe(msg, strlen(msg));
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 
     // Content of Surrounding Addresses
     val = *(int32_t *) (memaddr + 0xC);
     sprintf(msg, "%#010x ", val);
     //UART_write_safe(msg, strlen(msg));
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
     val = *(int32_t *) (memaddr + 0x8);
     sprintf(msg, "%#010x ", val);
     //UART_write_safe(msg, strlen(msg));
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
     val = *(int32_t *) (memaddr + 0x4);
     sprintf(msg, "%#010x ", val);
     //UART_write_safe(msg, strlen(msg));
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
     val = *(int32_t *) (memaddr + 0x0);
     sprintf(msg, "%#010x\r\n", val);
     //UART_write_safe(msg, strlen(msg));
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 
     // Display last byte (8 bits) of memorig address
     uint8_t last_byte = *(uint8_t *) memorig;
     sprintf(msg, "%#04x\n\r", last_byte);  // Display the last byte in hexadecimal
     //UART_write_safe(msg, strlen(msg));
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
     return;
 
 ERROR38:
     //UART_write_safe_strlen(raiseError(ERR_ADDR_OUT_OF_RANGE));
-    AddOutMessage(raiseError(ERR_ADDR_OUT_OF_RANGE));
+    AddProgramMessage(raiseError(ERR_ADDR_OUT_OF_RANGE));
 }
 
 /// @brief Prints the message after the first token, which should be "-print"
@@ -991,7 +1041,7 @@ void CMD_print() {
 
     if(msg_token) {
         //UART_write_safe(msg_token, strlen(msg_token));
-        AddOutMessage(msg_token);
+        AddProgramMessage(msg_token);
     }
 }
 
@@ -1023,7 +1073,7 @@ void CMD_reg() {
         strcmp(op_token, "not") == 0) {
 
         if (!arg1_token) {
-            AddOutMessage("Error: Missing operand.\r\n");
+            AddProgramMessage("Error: Missing operand.\r\n");
             return;
         }
 
@@ -1053,7 +1103,7 @@ void CMD_reg() {
              strcmp(op_token, "min") == 0) {
 
         if (!arg1_token || !arg2_token) {
-            AddOutMessage("Error: Missing operands.\r\n");
+            AddProgramMessage("Error: Missing operands.\r\n");
             return;
         }
 
@@ -1086,10 +1136,62 @@ void CMD_reg() {
     }
     // Unknown operation
     else {
-        AddOutMessage("Error: Unknown operation.\r\n");
+        AddProgramMessage("Error: Unknown operation.\r\n");
     }
 }
 
+void CMD_rem() {
+    // Do nothing or provide acknowledgment
+    // For now, we can do nothing
+}
+
+void CMD_script() {
+    char *arg1 = strtok(NULL, " \t\r\n");       // Line number or NULL
+    char *arg2 = strtok(NULL, " \t\r\n");       // 'w', 'x', 'c', or NULL
+    char *rest_of_line = strtok(NULL, "\r\n");  // The rest of the command
+
+    if (!arg1) {
+        // No arguments: Display all script lines
+        print_all_script_lines();
+        return;
+    }
+
+    int line_number = atoi(arg1);
+    if (line_number < 0 || line_number >= SCRIPT_LINE_COUNT) {
+        AddProgramMessage(raiseError(ERR_INVALID_SCRIPT_LINE));
+        return;
+    }
+
+    if (!arg2) {
+        // Single argument: Display the specified script line
+        print_script_line(line_number);
+        return;
+    }
+
+    if (strcmp(arg2, "w") == 0) {
+        // Write command to script line
+        if (!rest_of_line) {
+            AddProgramMessage(raiseError(ERR_MISSING_SCRIPT_COMMAND));
+            return;
+        }
+        strncpy(scriptLines[line_number], rest_of_line, SCRIPT_LINE_SIZE - 1);
+        scriptLines[line_number][SCRIPT_LINE_SIZE - 1] = '\0';  // Ensure null-terminated
+        char msg[SCRIPT_LINE_SIZE];
+        sprintf(msg, "Script line %d set to: %s\r\n", line_number, scriptLines[line_number]);
+        AddProgramMessage(msg);
+    } else if (strcmp(arg2, "x") == 0) {
+        // Execute script starting from line_number
+        execute_script_from_line(line_number);
+    } else if (strcmp(arg2, "c") == 0) {
+        // Clear script line
+        scriptLines[line_number][0] = '\0';
+        char msg[BUFFER_SIZE];
+        sprintf(msg, "Script line %d cleared.\r\n", line_number);
+        AddProgramMessage(msg);
+    } else {
+        AddProgramMessage(raiseError(ERR_UNKNOWN_SCRIPT_OP));
+    }
+}
 
 
 /// @brief Command function to parse and set up a ticker
@@ -1105,7 +1207,7 @@ void CMD_ticker() {
 
     int index = atoi(index_token);
     if (index < 0 || index >= MAX_TICKERS) {
-        AddOutMessage(raiseError(ERR_INVALID_TICKER_INDEX));
+        AddProgramMessage(raiseError(ERR_INVALID_TICKER_INDEX));
         return;
     }
 
@@ -1115,7 +1217,7 @@ void CMD_ticker() {
     if (delay_token) {
         initialDelay = strtoul(delay_token, NULL, 10);
     } else {
-        AddOutMessage(raiseError(ERR_MISSING_DELAY_PARAMETER));
+        AddProgramMessage(raiseError(ERR_MISSING_DELAY_PARAMETER));
         return;
     }
 
@@ -1125,7 +1227,7 @@ void CMD_ticker() {
     if (period_token) {
         period = strtoul(period_token, NULL, 10);
     } else {
-        AddOutMessage(raiseError(ERR_MISSING_PERIOD_PARAMETER));
+        AddProgramMessage(raiseError(ERR_MISSING_PERIOD_PARAMETER));
         return;
     }
 
@@ -1135,14 +1237,14 @@ void CMD_ticker() {
     if (count_token) {
         count = atoi(count_token);
     } else {
-        AddOutMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
+        AddProgramMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
         return;
     }
 
     // The rest is the payload
     char *payload_start = strtok(NULL, "\r\n");
     if (!payload_start) {
-        AddOutMessage(raiseError(ERR_MISSING_PAYLOAD));
+        AddProgramMessage(raiseError(ERR_MISSING_PAYLOAD));
         return;
     }
 
@@ -1159,7 +1261,7 @@ void CMD_ticker() {
     char msg[BUFFER_SIZE];
     sprintf(msg, "Ticker %d set with delay %u, period %u, count %d, payload: %s\r\n",
             index, initialDelay, period, count, tickers[index].payload);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Command function to parse and set up a timer
@@ -1172,7 +1274,7 @@ void CMD_timer() {
     if(!val_token) {
         // No period provided, display current Timer0 period
         sprintf(output_msg, "Current Timer0 period is %u us\r\n", glo.timer0_params.period);
-        AddOutMessage(output_msg);
+        AddProgramMessage(output_msg);
         return;
     }
 
@@ -1182,24 +1284,25 @@ void CMD_timer() {
     // Throw error if value is too low
     if(val_us < MIN_TIMER_PERIOD_US) {
         //UART_write_safe_strlen(raiseError(ERR_INVALID_TIMER_PERIOD));
-        AddOutMessage(raiseError(ERR_INVALID_TIMER_PERIOD));
+        AddProgramMessage(raiseError(ERR_INVALID_TIMER_PERIOD));
         return; // No change
     }
     //UART_write_safe_strlen("Time to write...\r\n");
-    AddOutMessage("Time to write...\r\n");
+    AddProgramMessage("Time to write...\r\n");
 
     Timer_stop(glo.Timer0);
-    glo.Timer0Period = val_us;
+    //glo.Timer0Period = val_us;
+    //glo.timer0_params.period = val_us;
     Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, val_us);
     int32_t status = Timer_start(glo.Timer0);
 
     if(status == Timer_STATUS_ERROR) {
         //UART_write_safe_strlen(raiseError(ERR_TIMER_STATUS_ERROR));
-        AddOutMessage(raiseError(ERR_TIMER_STATUS_ERROR));
+        AddProgramMessage(raiseError(ERR_TIMER_STATUS_ERROR));
     }
     else {
         sprintf(output_msg, "Set Timer0 period to %d us\r\n", val_us);
         //UART_write_safe_strlen(output_msg);
-        AddOutMessage(output_msg);
+        AddProgramMessage(output_msg);
     }
 }

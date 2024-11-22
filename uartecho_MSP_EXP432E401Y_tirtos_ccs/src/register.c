@@ -20,7 +20,8 @@ int32_t registers[NUM_REGISTERS] = {0};
 
 /// @brief Initialize registers to 0
 void init_registers() {
-    for (int i = 0; i < NUM_REGISTERS; i++) {
+    int i;
+    for (i = 0; i < NUM_REGISTERS; i++) {
         registers[i] = 0;
     }
 }
@@ -30,10 +31,11 @@ void print_all_registers() {
     char msg[BUFFER_SIZE];
     char line[BUFFER_SIZE];
 
-    AddOutMessage("Register Values:\r\n");
-    for (int i = 0; i < NUM_REGISTERS; i++) {
+    AddProgramMessage("Register Values:\r\n");
+    int i;
+    for (i = 0; i < NUM_REGISTERS; i++) {
         sprintf(line, "R%d = %d\r\n", i, registers[i]);
-        AddOutMessage(line);
+        AddProgramMessage(line);
     }
 }
 
@@ -116,7 +118,7 @@ void reg_mov(char *dest_token, char *src_token) {
     uint32_t address;
 
     if (dest_reg == -1) {
-        AddOutMessage("Error: Invalid destination register.\r\n");
+        AddProgramMessage("Error: Invalid destination register.\r\n");
         return;
     }
 
@@ -130,14 +132,14 @@ void reg_mov(char *dest_token, char *src_token) {
     }
     else if (parse_memory_address(src_token,  &address)) {
         if (!is_valid_memory_address(address)) {
-            AddOutMessage("Error: Invalid memory address.\r\n");
+            AddProgramMessage("Error: Invalid memory address.\r\n");
             return false;
         }
         // Source is a memory address (for grad students)
         src_value = *(int32_t *)address;
     }
     else {
-        AddOutMessage("Error: Invalid source operand.\r\n");
+        AddProgramMessage("Error: Invalid source operand.\r\n");
         return;
     }
 
@@ -145,7 +147,7 @@ void reg_mov(char *dest_token, char *src_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, src_value);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Exchange the values of two registers
@@ -156,7 +158,7 @@ void reg_xchg(char *reg1_token, char *reg2_token) {
     int reg2 = parse_register(reg2_token);
 
     if (reg1 == -1 || reg2 == -1) {
-        AddOutMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");
         return;
     }
 
@@ -166,7 +168,7 @@ void reg_xchg(char *reg1_token, char *reg2_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d, R%d = %d\r\n", reg1, registers[reg1], reg2, registers[reg2]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Increment the value in a register
@@ -175,7 +177,7 @@ void reg_inc(char *reg_token) {
     int reg = parse_register(reg_token);
 
     if (reg == -1) {
-        AddOutMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");
         return;
     }
 
@@ -183,7 +185,7 @@ void reg_inc(char *reg_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", reg, registers[reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Decrement the value in a register
@@ -192,7 +194,7 @@ void reg_dec(char *reg_token) {
     int reg = parse_register(reg_token);
 
     if (reg == -1) {
-        AddOutMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");
         return;
     }
 
@@ -200,7 +202,7 @@ void reg_dec(char *reg_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", reg, registers[reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 
@@ -214,7 +216,7 @@ void reg_not(char *reg_token) {
     int reg = parse_register(reg_token);
 
     if (reg == -1) {
-        AddOutMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");
         return;
     }
 
@@ -222,7 +224,7 @@ void reg_not(char *reg_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", reg, registers[reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Perform bitwise AND operation on two values and store the result in the destination register
@@ -243,7 +245,7 @@ void reg_and(char *dest_token, char *src_token) {
     // Output the result
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Perform bitwise OR operation on two values and store the result in the destination register
@@ -264,7 +266,7 @@ void reg_ior(char *dest_token, char *src_token) {
     // Output the result
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Perform bitwise XOR operation on two values and store the result in the destination register
@@ -285,7 +287,7 @@ void reg_xor(char *dest_token, char *src_token) {
     // Output the result
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 
@@ -304,28 +306,31 @@ bool parse_operands(char *dest_token, char *src_token, int *dest_reg, int32_t *s
     uint32_t address;
     *dest_reg = parse_register(dest_token);
     if (*dest_reg == -1) {
-        AddOutMessage("Error: Invalid destination register.\r\n");
+        AddProgramMessage("Error: Invalid destination register.\r\n");
         return false;
     }
 
     int src_reg = parse_register(src_token);
     if (src_reg != -1) {
         // Source is a register
-        src_value = registers[src_reg];
+        *src_value = registers[src_reg];
+        AddProgramMessage("Register.\r\n");
     }
     else if (parse_immediate(src_token, src_value)) {
         // Immediate value
+        AddProgramMessage("Immediate.\r\n");
     }
     else if (parse_memory_address(src_token, &address)) {
         if (!is_valid_memory_address(address)) {
-            AddOutMessage("Error: Invalid memory address.\r\n");
+            AddProgramMessage("Error: Invalid memory address.\r\n");
             return false;
         }
         // Memory address (grad students)
         *src_value = *(int32_t *)address;
+        AddProgramMessage("Memory Address.\r\n");
     }
     else {
-        AddOutMessage("Error: Invalid source operand.\r\n");
+        AddProgramMessage("Error: Invalid source operand.\r\n");
         return false;
     }
 
@@ -347,7 +352,7 @@ void reg_add(char *dest_token, char *src_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Subtract two values and store the result in the destination register
@@ -365,7 +370,7 @@ void reg_sub(char *dest_token, char *src_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Multiply two values and store the result in the destination register
@@ -383,7 +388,7 @@ void reg_mul(char *dest_token, char *src_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Divide two values and store the result in the destination register
@@ -398,7 +403,7 @@ void reg_div(char *dest_token, char *src_token) {
     }
 
     if (src_value == 0) {
-        AddOutMessage("Error: Division by zero.\r\n");
+        AddProgramMessage("Error: Division by zero.\r\n");
         return;
     }
 
@@ -406,7 +411,7 @@ void reg_div(char *dest_token, char *src_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Take the remainder of two values and store the result in the destination register
@@ -421,7 +426,7 @@ void reg_rem(char *dest_token, char *src_token) {
     }
 
     if (src_value == 0) {
-        AddOutMessage("Error: Division by zero.\r\n");
+        AddProgramMessage("Error: Division by zero.\r\n");
         return;
     }
 
@@ -429,7 +434,7 @@ void reg_rem(char *dest_token, char *src_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Negate the value in a register
@@ -438,7 +443,7 @@ void reg_neg(char *reg_token) {
     int reg = parse_register(reg_token);
 
     if (reg == -1) {
-        AddOutMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");
         return;
     }
 
@@ -446,7 +451,7 @@ void reg_neg(char *reg_token) {
 
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", reg, registers[reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 
@@ -474,7 +479,7 @@ void reg_max(char *dest_token, char *src_token) {
     // Output the result
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }
 
 /// @brief Store the minimum of two values in the destination register
@@ -497,5 +502,5 @@ void reg_min(char *dest_token, char *src_token) {
     // Output the result
     char msg[BUFFER_SIZE];
     sprintf(msg, "R%d = %d\r\n", dest_reg, registers[dest_reg]);
-    AddOutMessage(msg);
+    AddProgramMessage(msg);
 }

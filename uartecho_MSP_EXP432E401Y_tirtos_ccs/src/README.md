@@ -2,7 +2,11 @@
 - [ ] Console Command history with arrow key traversing
 
 
-## P600 TODO
+## P700 TODO
+- [ ]
+
+
+## P600 Changelog
 
 - [x] **Create `register.h` and `register.c`**: Implemented new source and header files to encapsulate register operations. This modularization improves code maintainability and readability.
 - [x] **Modify `execute_payload()`**: Updated the command parser to recognize and handle the `-reg` command, enabling users to perform register operations via the command interface.
@@ -16,7 +20,7 @@
 - [ ] **Update Python Test Script**: Added new test cases for the `-reg` command to the Python test script, covering various register operations and error conditions. Expanded test cases for the `-ticker` command to include scenarios with and without arguments, enhancing automated testing coverage.
 
 
-
+---
 
 # Changelog
 

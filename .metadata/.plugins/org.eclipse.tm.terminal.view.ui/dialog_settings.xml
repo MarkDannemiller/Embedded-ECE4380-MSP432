@@ -9,6 +9,9 @@
 				<list key="hosts">
 				</list>
 			</section>
+			<section name="Local Terminal">
+				<item key="encoding" value="UTF-8"/>
+			</section>
 		</section>
 	</section>
 </section>

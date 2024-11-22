@@ -536,11 +536,6 @@ test_cases = [
         'description': 'Read from valid memory address',
         'expected': 'R0 =',  # Value at address 0x20000000
     },
-    '''{ TODO - Determine if unaligned memory access is supported
-        'command': '-reg mov r0 @0x20000001',
-        'description': 'Read from unaligned memory address',
-        'expected': 'Error: Unaligned memory access.',
-    },'''
     {
         'command': '-reg',
         'description': 'Display all registers after operations',

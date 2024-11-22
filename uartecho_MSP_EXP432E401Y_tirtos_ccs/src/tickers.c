@@ -43,20 +43,13 @@ void init_tickers() {
 void print_all_tickers() {
     char msg[BUFFER_SIZE];
 
-    AddOutMessage("Ticker Configurations:\r\n");
-    for (int i = 0; i < MAX_TICKERS; i++) {
-        if (tickers[i].active) {
-            sprintf(msg, "Ticker %d:\r\n", i);
-            AddOutMessage(msg);
-            sprintf(msg, "  Initial Delay: %u\r\n", tickers[i].initialDelay);
-            AddOutMessage(msg);
-            sprintf(msg, "  Period: %u\r\n", tickers[i].period);
-            AddOutMessage(msg);
-            sprintf(msg, "  Count: %d\r\n", tickers[i].count);
-            AddOutMessage(msg);
-            sprintf(msg, "  Payload: %s\r\n", tickers[i].payload);
-            AddOutMessage(msg);
-        }
+    AddProgramMessage("============================ Ticker Configurations =============================\r\n");
+    int i;
+    AddProgramMessage("Idx | InitDelay | Period | Count | Payload\r\n");
+    AddProgramMessage("----|-----------|--------|-------|--------\r\n");
+    for (i = 0; i < MAX_TICKERS; i++) {
+        sprintf(msg, "%3d | %9u | %6u | %5d | %s\r\n", i, tickers[i].initialDelay, tickers[i].period, tickers[i].count, tickers[i].payload);
+        AddProgramMessage(msg);
     }
 }
 

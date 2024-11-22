@@ -2,6 +2,8 @@
 "./src/callback.obj"
 "./src/main_tirtos.obj"
 "./src/p100.obj"
+"./src/register.obj"
+"./src/script.obj"
 "./src/tasks.obj"
 "./src/tickers.obj"
 "../MSP_EXP432E401Y_TIRTOS.cmd"
@@ -11,6 +13,6 @@
 -l"ti/drivers/lib/drivers_msp432e4.aem4f"
 -l"third_party/fatfs/lib/ccs/m4f/fatfs.a"
 -l"ti/dpl/lib/dpl_msp432e4.aem4f"
--l"C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"
+-l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"
 -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a"
 -llibc.a

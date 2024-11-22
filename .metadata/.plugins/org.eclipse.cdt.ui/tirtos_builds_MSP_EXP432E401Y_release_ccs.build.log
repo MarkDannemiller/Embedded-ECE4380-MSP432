@@ -1,7 +1,7 @@
 
 **** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
 
-"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
  
 making ../src/sysbios/sysbios.aem4f ...
 gmake[1]: Nothing to be done for 'all'.

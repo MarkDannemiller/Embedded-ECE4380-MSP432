@@ -16,8 +16,8 @@ void uartRead(UArg arg0, UArg arg1) {
 
     //UART_write_safe(initMsg, strlen(initMsg));
     //UART_write_safe(compileTimeMsg, strlen(compileTimeMsg));
-    AddOutMessage(initMsg);
-    AddOutMessage(compileTimeMsg);
+    AddProgramMessage(initMsg);
+    AddProgramMessage(compileTimeMsg);
     refresh_user_input();
 
     digitalWrite(0, LOW);

@@ -87,7 +87,7 @@ struct Globals {
 
     Timer_Handle Timer0;
     Timer_Params timer0_params;
-    int32_t Timer0Period;
+    //int32_t Timer0Period;
 
     BiosList bios;
     uint32_t integrityTail;
@@ -109,19 +109,28 @@ typedef enum {
     ERR_NULL_MSG_PTR,
     ERR_EMPTY_MSG,
     ERR_MSG_WRITE_FAILED,
+
     ERR_ADDR_OUT_OF_RANGE,
     ERR_GPIO_OUT_OF_RANGE,
+
     ERR_INVALID_TIMER_PERIOD,
     ERR_TIMER_STATUS_ERROR,
     ERR_UART_COLLISION,
     ERR_INVALID_CALLBACK_INDEX,
+
     ERR_MISSING_COUNT_PARAMETER,
     ERR_MISSING_PAYLOAD,
     ERR_INVALID_TICKER_INDEX,
     ERR_MISSING_DELAY_PARAMETER,
     ERR_MISSING_PERIOD_PARAMETER,
+
     ERR_PAYLOAD_QUEUE_OF,
     ERR_OUTMSG_QUEUE_OF,
+
+    ERR_INVALID_SCRIPT_LINE,
+    ERR_MISSING_SCRIPT_COMMAND,
+    ERR_UNKNOWN_SCRIPT_OP,
+
     ERROR_COUNT // Keeps track of the number of error types
 } Errors;
 
@@ -129,6 +138,13 @@ typedef enum {
 extern const char* errorMessages[];
 extern const char* errorNames[];
 extern int errorCounters[ERROR_COUNT];
+
+
+//================================================
+// Utility
+//================================================
+
+char *memory_strdup(const char *src);
 
 
 //================================================
@@ -147,7 +163,6 @@ pinState digitalRead(int pin_num);
 const char* getErrorName(Errors error);
 
 
-
 //================================================
 // UART Comms
 //================================================
@@ -160,7 +175,7 @@ void clear_console();
 
 
 // Outward Messages (Called by UARTWriter)
-void AddOutMessage(char *data);
+void AddProgramMessage(char *data);
 bool UART_write_safe(const char *message, int size);
 bool UART_write_safe_strlen(const char *message);
 
@@ -180,13 +195,16 @@ void CMD_gpio();        // Read/Write/Toggle inputed GPIO pin
 void CMD_help();        // Print help info about all/specific command(s)
 void CMD_memr();        // Display contents of memory address
 void CMD_print();       // Print inputed string
+void CMD_reg();         // Perform register operations
+void CMD_rem();         // Add comments or remarks in scripts
+void CMD_script();      // Handle operations related to loading and executing scripts
 void CMD_timer();       // Sets the periodic timer0 period
 void CMD_ticker();      // Configures ticker and payload
 
 // TODO these prints and tie into commands when no args are given
-void print_timer_info();
-void print_ticker_info();
-void print_callback_info();
+// void print_timer_info();
+// void print_ticker_info();
+// void print_callback_info();
 
 
 #endif  // End of include guard

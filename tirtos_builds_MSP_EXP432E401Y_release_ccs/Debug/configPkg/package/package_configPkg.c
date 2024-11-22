@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-I11
+ * @(#) xdc-K04
  */
 
 #include <xdc/std.h>

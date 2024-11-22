@@ -1,0 +1,14 @@
+## Python Testing
+
+The file in this directory, `tirtos_serial_test.py`, is designed to run a testing protocol over serial to the TI-MSP432 board running the firmware contained in `uartecho_MSP_EXP432E401Y_tirtos_ccs/src`
+
+Make sure that you have python and the pyserial library installed.  Also make sure that your device either has this repository's firmware deployed or that you have updated the python script to match your output messages and errors.
+
+## Running the Script
+
+Use one of the two lines below to run the test, replacing `--port` with the COM port connected to the MSP432.  You can check this using Device Manager.
+
+```bash
+python tirtos_serial_test.py --port COM11 --baud 115200
+python tirtos_serial_test.py --port COM3 --baud 115200
+```

@@ -3,6 +3,7 @@
 #define REG_H
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define NUM_REGISTERS 32
 

@@ -5,15 +5,13 @@ CommandCallback callbacks[MAX_CALLBACKS];  // Array of callbacks
 
 void print_all_callbacks() {
     char msg[BUFFER_SIZE];
-
-    AddOutMessage("Callback Configurations:\r\n");
-    for (int i = 0; i < MAX_CALLBACKS; i++) {
-        sprintf(msg, "Callback %d:\r\n", i);
-        AddOutMessage(msg);
-        sprintf(msg, "  Count: %d\r\n", callbacks[i].count);
-        AddOutMessage(msg);
-        sprintf(msg, "  Payload: %s\r\n", callbacks[i].payload);
-        AddOutMessage(msg);
+    int i;
+    AddProgramMessage("=========================== Callback Configurations ============================\r\n");
+    AddProgramMessage("Index | Count | Payload\r\n");
+    AddProgramMessage("------------------------\r\n");
+    for (i = 0; i < MAX_CALLBACKS; i++) {
+        sprintf(msg, "%5d | %5d | %s\r\n", i, callbacks[i].count, callbacks[i].payload);
+        AddProgramMessage(msg);
     }
 }
 

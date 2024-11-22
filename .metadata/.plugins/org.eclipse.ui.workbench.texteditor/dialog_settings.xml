@@ -9,6 +9,7 @@
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
 			<item value="TODO"/>
+			<item value="CMD_timer"/>
 			<item value="MAX_MESSAGE_SIZE"/>
 			<item value="ERR_INVALID_MSG_SIZE"/>
 			<item value="nvalid message"/>
@@ -24,10 +25,10 @@
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
-		<item key="DIALOG_X_ORIGIN" value="922"/>
-		<item key="DIALOG_Y_ORIGIN" value="388"/>
-		<item key="DIALOG_WIDTH" value="364"/>
-		<item key="DIALOG_HEIGHT" value="370"/>
-		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-24|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+		<item key="DIALOG_X_ORIGIN" value="1139"/>
+		<item key="DIALOG_Y_ORIGIN" value="435"/>
+		<item key="DIALOG_WIDTH" value="322"/>
+		<item key="DIALOG_HEIGHT" value="391"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
 	</section>
 </section>

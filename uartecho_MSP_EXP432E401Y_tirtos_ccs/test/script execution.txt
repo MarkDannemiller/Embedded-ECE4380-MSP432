@@ -1,2 +1,0 @@
-python tirtos_serial_test.py --port COM11 --baud 115200
-python tirtos_serial_test.py --port COM3 --baud 115200
