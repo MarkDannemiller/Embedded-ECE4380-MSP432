@@ -129,9 +129,9 @@ const char* errorMessages[] = {
     "Error: Payload Queue Overflow.\r\n",                           // ERR_PAYLOAD_QUEUE_OF
     "Error: Out Messsage Queue Overflow.\r\n",                      // ERR_OUTMSG_QUEUE_OF
 
-    "Error: Invalid script line number.",                           // ERR_INVALID_SCRIPT_LINE
-    "Error: Missing command to write to script line.",              // ERR_MISSING_SCRIPT_COMMAND
-    "Error: Unknown operation for script command."                  // ERR_UNKNOWN_SCRIPT_OP
+    "Error: Invalid script line number.\r\n",                           // ERR_INVALID_SCRIPT_LINE
+    "Error: Missing command to write to script line.\r\n",              // ERR_MISSING_SCRIPT_COMMAND
+    "Error: Unknown operation for script command.\r\n"                  // ERR_UNKNOWN_SCRIPT_OP
 };
 
 const char* errorNames[] = {
@@ -478,6 +478,9 @@ void handle_UART() {
             // Remove the last character
             glo.inputMessageBuffer[--glo.cursor_pos] = '\0';
         }
+    } else if (key_in == '\033') {  // Escape character for arrow keys
+        // Implement handling of arrow keys if needed
+        // Normal Operation
     } else {
         // Add the character to the buffer if it's not full
         if (glo.cursor_pos < BUFFER_SIZE - 1) {
@@ -804,9 +807,11 @@ void CMD_gpio() {
     else {  // Otherwise assume read
         pinState read_state = digitalRead(pin_num);
         sprintf(output_msg, "Read => Pin: %d  State: %d\r\n", pin_num, read_state);
+        AddProgramMessage(output_msg);
+        return;
     }
 
-    AddProgramMessage(output_msg);
+    // AddProgramMessage(output_msg);  // Removed printout because we can visually see pin changes
 }
 
 // Function to print help information
@@ -987,7 +992,7 @@ void CMD_help() {
         helpMessage =
            //================================================================================ <-80 characters
             "| Supported Command [arg1][arg2]...   |  Command Description\r\n"
-            "-------------------------------------------------------------------------------\r\n"
+            "|-------------------------------------------------------------------------------\r\n"
             "| -about                              :  Display program information.\r\n"
             "| -callback  [index][count][payload]  :  Configures a callback to execute a\r\n"
             "|                                        payload when an event occurs.\r\n"
@@ -1086,6 +1091,7 @@ ERROR38:
 void CMD_print() {
     //get first content after "> -print"
     char *msg_token = strtok(NULL, "\r\n");
+    strcat(msg_token, "\r\n");
 
     if(msg_token) {
         //UART_write_safe(msg_token, strlen(msg_token));

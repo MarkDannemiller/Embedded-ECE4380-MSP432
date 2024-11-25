@@ -62,6 +62,8 @@ void uartWrite(UArg arg0, UArg arg1) {
                     // Move to the beginning of next line
                     UART_write_safe("\r\n", 2);
                     glo.progOutputCol = 0;
+                    // Need to clear the line which had the user input before
+                    UART_write_safe_strlen(CLEAR_LINE_RESET);
                 } else if (isPrintable(ch) && ch != '\r') {
                     // Printable character
                     UART_write_safe(&ch, 1);
