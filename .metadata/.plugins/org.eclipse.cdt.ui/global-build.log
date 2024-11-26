@@ -23078,3 +23078,1707 @@ Finished building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
  
 
 **** Build Finished ****
+
+**** Clean-only build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 clean -O 
+ 
+cleaning ../src/sysbios ...
+DEL /F  "tirtos_builds_MSP_EXP432E401Y_release_ccs.lib"  "configPkg\linker.cmd" "configPkg\compiler.opt" 
+RMDIR /S/Q  "configPkg" 
+Could Not Find C:\Users\Mark Dannemiller\OneDrive - Texas Tech University\Documents\ccs_workspace\tirtos_builds_MSP_EXP432E401Y_release_ccs\Debug\tirtos_builds_MSP_EXP432E401Y_release_ccs.lib
+Finished clean
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../release.cfg"
+Invoking: XDCtools
+"C:/ti/ccs1280/xdctools_3_62_01_16_core/xs" --xdcpath="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source;C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages;" xdc.tools.configuro -o configPkg -t ti.targets.arm.elf.M4F -p ti.platforms.msp432:MSP432E401Y -r release -c "C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS" "../release.cfg"
+making package.mak (because of package.bld) ...
+generating interfaces for package configPkg (because package/package.xdc.inc is older than package.xdc) ...
+configuring release.xem4f from package/cfg/release_pem4f.cfg ...
+generating custom ti.sysbios library makefile ... 
+Starting build of library sources ...
+making C:/Users/MARKDA~1/ONEDRI~2/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/src/sysbios/sysbios.aem4f ...
+clem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.c ...
+asmem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/Hwi_asm.sv7M ...
+asmem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/Hwi_asm_switch.sv7M ...
+asmem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/IntrinsicsSupport_asm.sv7M ...
+asmem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/TaskSupport_asm.sv7M ...
+arem4f BIOS.obj m3_Hwi_asm.obj m3_Hwi_asm_switch.obj m3_IntrinsicsSupport_asm.obj m3_TaskSupport_asm.obj ...
+Build of libraries done.
+clem4f package/cfg/release_pem4f.c ...
+Finished building: "../release.cfg"
+ 
+        1 file(s) copied.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Clean-only build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 clean -O 
+ 
+DEL /F  "syscfg\ti_drivers_config.h" "syscfg\ti_utils_build_linker.cmd.exp" "syscfg\syscfg_c.rov.xs"  "syscfg\ti_drivers_config.c"  "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" 
+DEL /F "syscfg\ti_drivers_config.obj" "src\callback.obj" "src\main_tirtos.obj" "src\p100.obj" "src\register.obj" "src\script.obj" "src\tasks.obj" "src\tickers.obj" 
+DEL /F "syscfg\ti_drivers_config.d" "src\callback.d" "src\main_tirtos.d" "src\p100.d" "src\register.d" "src\script.d" "src\tasks.d" "src\tickers.d" 
+RMDIR /S/Q  "syscfg" 
+Finished clean
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../uartecho.syscfg"
+Invoking: SysConfig
+"C:/ti/sysconfig_1.5.0/sysconfig_cli.bat" -o "syscfg" -s "C:/ti/simplelink_msp432e4_sdk_4_20_00_12/.metadata/product.json" "C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/uartecho.syscfg" --compiler ccs
+Running script...
+Validating...
+Generating Code...
+    '/ti/drivers' -> '/ti/devices/driverlib'
+Writing C:\Users\Mark Dannemiller\OneDrive - Texas Tech University\Documents\ccs_workspace\uartecho_MSP_EXP432E401Y_tirtos_ccs\Debug\syscfg\ti_drivers_config.c...
+Writing C:\Users\Mark Dannemiller\OneDrive - Texas Tech University\Documents\ccs_workspace\uartecho_MSP_EXP432E401Y_tirtos_ccs\Debug\syscfg\ti_drivers_config.h...
+Writing C:\Users\Mark Dannemiller\OneDrive - Texas Tech University\Documents\ccs_workspace\uartecho_MSP_EXP432E401Y_tirtos_ccs\Debug\syscfg\ti_utils_build_linker.cmd.exp...
+Writing C:\Users\Mark Dannemiller\OneDrive - Texas Tech University\Documents\ccs_workspace\uartecho_MSP_EXP432E401Y_tirtos_ccs\Debug\syscfg\syscfg_c.rov.xs...
+Finished building: "../uartecho.syscfg"
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/p100.obj' failed
+"..\src\script.h", line 17: error #148: declaration is incompatible with "int parse_register(char *)" (declared at line 16 of "..\src\register.h")
+"../src/p100.c", line 173: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 182: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 261: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 314: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 492: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 584: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 620: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 641: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 665: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 701: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 703: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 713: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 720: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 744: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 769: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 774: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 783: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 791: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 871: warning #176-D: expression has no effect
+"../src/p100.c", line 872: warning #176-D: expression has no effect
+"../src/p100.c", line 1025: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1026: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1045: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1051: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1082)
+"../src/p100.c", line 1053: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1082)
+"../src/p100.c", line 1090: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1119: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1216: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1218: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1231: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1249: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1265: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1267: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1275: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1277: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1285: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1287: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1297: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1304: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1339: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1344: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1358: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+1 error detected in the compilation of "../src/p100.c".
+gmake: *** [src/p100.obj] Error 1
+Building file: "../src/callback.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/callback.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/callback.c"
+"../src/callback.c", line 13: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/callback.c"
+ 
+Building file: "syscfg/ti_drivers_config.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="syscfg/ti_drivers_config.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="syscfg" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "syscfg/ti_drivers_config.c"
+Finished building: "syscfg/ti_drivers_config.c"
+ 
+Building file: "../src/main_tirtos.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/main_tirtos.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/main_tirtos.c"
+"../src/main_tirtos.c", line 98: warning #225-D: function "init_drivers" declared implicitly
+"../src/main_tirtos.c", line 99: warning #225-D: function "init_tickers" declared implicitly
+"../src/main_tirtos.c", line 100: warning #225-D: function "init_script_lines" declared implicitly
+"../src/main_tirtos.c", line 69: warning #179-D: variable "thread" was declared but never referenced
+"../src/main_tirtos.c", line 70: warning #179-D: variable "attrs" was declared but never referenced
+"../src/main_tirtos.c", line 71: warning #179-D: variable "priParam" was declared but never referenced
+"../src/main_tirtos.c", line 72: warning #179-D: variable "retc" was declared but never referenced
+Finished building: "../src/main_tirtos.c"
+ 
+Building file: "../src/script.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/script.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/script.c"
+"../src/script.c", line 19: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 31: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 33: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/script.c"
+ 
+Building file: "../src/register.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/register.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/register.c"
+"../src/register.c", line 38: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 31: warning #179-D: variable "msg" was declared but never referenced
+"../src/register.c", line 49: warning #225-D: function "atoi" declared implicitly
+"../src/register.c", line 66: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 69: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 83: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 86: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 101: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/register.c", line 137: warning #121-D: return value type does not match the function type
+"../src/register.c", line 150: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 171: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 188: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 205: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 227: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 248: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 269: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 290: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 355: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 373: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 391: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 414: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 437: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 454: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 482: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 505: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/register.c"
+ 
+Building file: "../src/tasks.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tasks.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tasks.c"
+"../src/tasks.c", line 14: warning #225-D: function "formatAboutHeaderMsg" declared implicitly
+"../src/tasks.c", line 14: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 15: warning #225-D: function "formatCompileDateTime" declared implicitly
+"../src/tasks.c", line 15: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 54: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 93: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 115: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 128: warning #225-D: function "process_tickers" declared implicitly
+Finished building: "../src/tasks.c"
+ 
+Building file: "../src/tickers.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tickers.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tickers.c"
+"../src/tickers.c", line 51: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/tickers.c"
+ 
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../src/callback.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/callback.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/callback.c"
+"../src/callback.c", line 13: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/callback.c"
+ 
+Building file: "../src/main_tirtos.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/main_tirtos.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/main_tirtos.c"
+"../src/main_tirtos.c", line 98: warning #225-D: function "init_drivers" declared implicitly
+"../src/main_tirtos.c", line 99: warning #225-D: function "init_tickers" declared implicitly
+"../src/main_tirtos.c", line 100: warning #225-D: function "init_script_lines" declared implicitly
+"../src/main_tirtos.c", line 69: warning #179-D: variable "thread" was declared but never referenced
+"../src/main_tirtos.c", line 70: warning #179-D: variable "attrs" was declared but never referenced
+"../src/main_tirtos.c", line 71: warning #179-D: variable "priParam" was declared but never referenced
+"../src/main_tirtos.c", line 72: warning #179-D: variable "retc" was declared but never referenced
+Finished building: "../src/main_tirtos.c"
+ 
+Building file: "../src/register.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/register.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/register.c"
+"../src/register.c", line 38: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 31: warning #179-D: variable "msg" was declared but never referenced
+"../src/register.c", line 49: warning #225-D: function "atoi" declared implicitly
+"../src/register.c", line 66: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 69: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 83: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 86: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 101: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/register.c", line 137: warning #121-D: return value type does not match the function type
+"../src/register.c", line 150: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 171: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 188: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 205: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 227: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 248: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 269: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 290: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 355: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 373: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 391: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 414: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 437: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 454: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 482: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 505: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/register.c"
+ 
+Building file: "../src/script.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/script.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/script.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/script.c", line 19: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 31: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 33: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/script.c"
+ 
+Building file: "../src/tasks.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tasks.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tasks.c"
+"../src/tasks.c", line 14: warning #225-D: function "formatAboutHeaderMsg" declared implicitly
+"../src/tasks.c", line 14: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 15: warning #225-D: function "formatCompileDateTime" declared implicitly
+"../src/tasks.c", line 15: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 54: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 93: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 115: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 128: warning #225-D: function "process_tickers" declared implicitly
+Finished building: "../src/tasks.c"
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 173: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 182: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 261: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 314: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 492: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 584: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 620: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 641: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 665: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 701: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 703: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 713: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 720: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 744: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 769: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 774: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 783: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 791: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 871: warning #176-D: expression has no effect
+"../src/p100.c", line 872: warning #176-D: expression has no effect
+"../src/p100.c", line 1025: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1026: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1045: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1051: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1082)
+"../src/p100.c", line 1053: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1082)
+"../src/p100.c", line 1090: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1119: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1216: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1218: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1231: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1249: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1265: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1267: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1275: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1277: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1285: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1287: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1297: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1304: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1339: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1344: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1358: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+Finished building: "../src/p100.c"
+ 
+Building file: "../src/tickers.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tickers.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tickers.c"
+"../src/tickers.c", line 51: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/tickers.c"
+ 
+Building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+Invoking: Arm Linker
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" "./syscfg/ti_drivers_config.obj" "./src/callback.obj" "./src/main_tirtos.obj" "./src/p100.obj" "./src/register.obj" "./src/script.obj" "./src/tasks.obj" "./src/tickers.obj" "../MSP_EXP432E401Y_TIRTOS.cmd" -l"ti/display/lib/display.aem4f" -l"ti/grlib/lib/ccs/m4f/grlib.a" -l"third_party/spiffs/lib/ccs/m4f/spiffs.a" -l"ti/drivers/lib/drivers_msp432e4.aem4f" -l"third_party/fatfs/lib/ccs/m4f/fatfs.a" -l"ti/dpl/lib/dpl_msp432e4.aem4f" -l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"  -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a" -llibc.a 
+<Linking>
+ 
+ undefined first referenced
+  symbol       in file     
+ --------- ----------------
+ CMD_if    ./src/p100.obj  
+ 
+error #10234-D: unresolved symbols remain
+error #10010: errors encountered during linking; "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" not built
+ 
+>> Compilation failure
+makefile:154: recipe for target 'uartecho_MSP_EXP432E401Y_tirtos_ccs.out' failed
+gmake[1]: *** [uartecho_MSP_EXP432E401Y_tirtos_ccs.out] Error 1
+makefile:147: recipe for target 'all' failed
+gmake: *** [all] Error 2
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../src/script.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/script.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/script.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/script.obj' failed
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/script.c", line 19: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 31: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 33: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 62: warning #225-D: function "strtol" declared implicitly
+"../src/script.c", line 65: error #20: identifier "INT_MIN" is undefined
+"../src/script.c", line 70: warning #225-D: function "parse_register" declared implicitly
+"../src/script.c", line 71: error #20: identifier "REGISTER_COUNT" is undefined
+"../src/script.c", line 73: error #20: identifier "INT_MIN" is undefined
+"../src/script.c", line 75: error #20: identifier "registers" is undefined
+"../src/script.c", line 83: warning #225-D: function "strncpy" declared implicitly
+"../src/script.c", line 87: warning #225-D: function "strlen" declared implicitly
+"../src/script.c", line 98: warning #225-D: function "isspace" declared implicitly
+"../src/script.c", line 101: warning #225-D: function "strlen" declared implicitly
+4 errors detected in the compilation of "../src/script.c".
+gmake: *** [src/script.obj] Error 1
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/p100.obj' failed
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 173: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 182: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 261: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 314: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 490: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 582: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 618: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 639: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 663: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 699: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 701: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 711: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 718: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 742: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 767: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 772: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 781: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 789: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 869: warning #176-D: expression has no effect
+"../src/p100.c", line 870: warning #176-D: expression has no effect
+"../src/p100.c", line 1023: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1024: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1027: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 639)
+"../src/p100.c", line 1062: error #20: identifier "INT_MIN" is undefined
+"../src/p100.c", line 1109: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1115: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1146)
+"../src/p100.c", line 1117: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1146)
+"../src/p100.c", line 1154: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1183: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1280: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1282: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1295: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1313: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1329: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1331: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1339: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1341: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1349: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1351: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1361: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1368: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1403: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1408: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1422: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+1 error detected in the compilation of "../src/p100.c".
+gmake: *** [src/p100.obj] Error 1
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../src/script.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/script.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/script.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/script.c", line 20: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 32: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 34: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 63: warning #225-D: function "strtol" declared implicitly
+"../src/script.c", line 66: warning #70-D: integer conversion resulted in truncation
+"../src/script.c", line 71: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/script.c", line 74: warning #70-D: integer conversion resulted in truncation
+"../src/script.c", line 84: warning #225-D: function "strncpy" declared implicitly
+"../src/script.c", line 88: warning #225-D: function "strlen" declared implicitly
+"../src/script.c", line 99: warning #225-D: function "isspace" declared implicitly
+"../src/script.c", line 102: warning #225-D: function "strlen" declared implicitly
+Finished building: "../src/script.c"
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 173: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 182: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 261: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 314: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 490: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 582: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 618: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 639: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 663: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 699: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 701: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 711: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 718: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 742: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 767: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 772: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 781: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 789: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 869: warning #176-D: expression has no effect
+"../src/p100.c", line 870: warning #176-D: expression has no effect
+"../src/p100.c", line 1023: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1024: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1027: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 639)
+"../src/p100.c", line 1109: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1115: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1146)
+"../src/p100.c", line 1117: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1146)
+"../src/p100.c", line 1154: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1183: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1280: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1282: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1295: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1313: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1329: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1331: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1339: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1341: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1349: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1351: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1361: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1368: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1403: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1408: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1422: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+Finished building: "../src/p100.c"
+ 
+Building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+Invoking: Arm Linker
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" "./syscfg/ti_drivers_config.obj" "./src/callback.obj" "./src/main_tirtos.obj" "./src/p100.obj" "./src/register.obj" "./src/script.obj" "./src/tasks.obj" "./src/tickers.obj" "../MSP_EXP432E401Y_TIRTOS.cmd" -l"ti/display/lib/display.aem4f" -l"ti/grlib/lib/ccs/m4f/grlib.a" -l"third_party/spiffs/lib/ccs/m4f/spiffs.a" -l"ti/drivers/lib/drivers_msp432e4.aem4f" -l"third_party/fatfs/lib/ccs/m4f/fatfs.a" -l"ti/dpl/lib/dpl_msp432e4.aem4f" -l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"  -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a" -llibc.a 
+<Linking>
+Finished building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+gmake[1]: 'uartecho_MSP_EXP432E401Y_tirtos_ccs.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 173: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 182: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 261: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 314: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 490: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 582: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 618: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 639: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 663: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 699: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 701: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 711: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 718: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 742: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 767: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 772: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 781: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 789: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 869: warning #176-D: expression has no effect
+"../src/p100.c", line 870: warning #176-D: expression has no effect
+"../src/p100.c", line 1023: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1024: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1027: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 639)
+"../src/p100.c", line 1109: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1115: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1146)
+"../src/p100.c", line 1117: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1146)
+"../src/p100.c", line 1154: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1182: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1279: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1281: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1294: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1312: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1328: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1330: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1338: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1340: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1348: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1350: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1360: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1367: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1402: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1407: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1421: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+Finished building: "../src/p100.c"
+ 
+Building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+Invoking: Arm Linker
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" "./syscfg/ti_drivers_config.obj" "./src/callback.obj" "./src/main_tirtos.obj" "./src/p100.obj" "./src/register.obj" "./src/script.obj" "./src/tasks.obj" "./src/tickers.obj" "../MSP_EXP432E401Y_TIRTOS.cmd" -l"ti/display/lib/display.aem4f" -l"ti/grlib/lib/ccs/m4f/grlib.a" -l"third_party/spiffs/lib/ccs/m4f/spiffs.a" -l"ti/drivers/lib/drivers_msp432e4.aem4f" -l"third_party/fatfs/lib/ccs/m4f/fatfs.a" -l"ti/dpl/lib/dpl_msp432e4.aem4f" -l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"  -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a" -llibc.a 
+<Linking>
+Finished building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+gmake[1]: 'uartecho_MSP_EXP432E401Y_tirtos_ccs.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+        1 file(s) copied.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+Building file: "../release.cfg"
+Invoking: XDCtools
+"C:/ti/ccs1280/xdctools_3_62_01_16_core/xs" --xdcpath="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source;C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages;" xdc.tools.configuro -o configPkg -t ti.targets.arm.elf.M4F -p ti.platforms.msp432:MSP432E401Y -r release -c "C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS" "../release.cfg"
+configuring release.xem4f from package/cfg/release_pem4f.cfg ...
+generating custom ti.sysbios library makefile ... 
+Starting build of library sources ...
+making C:/Users/MARKDA~1/ONEDRI~2/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/src/sysbios/sysbios.aem4f ...
+Build of libraries done.
+clem4f package/cfg/release_pem4f.c ...
+Finished building: "../release.cfg"
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../src/callback.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/callback.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/callback.c"
+"../src/callback.c", line 13: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/callback.c"
+ 
+Building file: "../src/main_tirtos.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/main_tirtos.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/main_tirtos.c"
+"../src/main_tirtos.c", line 98: warning #225-D: function "init_drivers" declared implicitly
+"../src/main_tirtos.c", line 99: warning #225-D: function "init_tickers" declared implicitly
+"../src/main_tirtos.c", line 100: warning #225-D: function "init_script_lines" declared implicitly
+"../src/main_tirtos.c", line 69: warning #179-D: variable "thread" was declared but never referenced
+"../src/main_tirtos.c", line 70: warning #179-D: variable "attrs" was declared but never referenced
+"../src/main_tirtos.c", line 71: warning #179-D: variable "priParam" was declared but never referenced
+"../src/main_tirtos.c", line 72: warning #179-D: variable "retc" was declared but never referenced
+Finished building: "../src/main_tirtos.c"
+ 
+Building file: "../src/register.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/register.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/register.c"
+"../src/register.c", line 38: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 31: warning #179-D: variable "msg" was declared but never referenced
+"../src/register.c", line 49: warning #225-D: function "atoi" declared implicitly
+"../src/register.c", line 66: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 69: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 83: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 86: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 101: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/register.c", line 137: warning #121-D: return value type does not match the function type
+"../src/register.c", line 150: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 171: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 188: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 205: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 227: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 248: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 269: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 290: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 355: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 373: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 391: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 414: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 437: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 454: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 482: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 505: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/register.c"
+ 
+Building file: "../src/script.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/script.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/script.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/script.c", line 20: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 32: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 34: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 64: warning #225-D: function "strtol" declared implicitly
+"../src/script.c", line 67: warning #70-D: integer conversion resulted in truncation
+"../src/script.c", line 72: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/script.c", line 75: warning #70-D: integer conversion resulted in truncation
+"../src/script.c", line 85: warning #225-D: function "strncpy" declared implicitly
+"../src/script.c", line 89: warning #225-D: function "strlen" declared implicitly
+"../src/script.c", line 100: warning #225-D: function "isspace" declared implicitly
+"../src/script.c", line 103: warning #225-D: function "strlen" declared implicitly
+Finished building: "../src/script.c"
+ 
+Building file: "../src/tasks.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tasks.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tasks.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/tasks.c", line 15: warning #225-D: function "formatAboutHeaderMsg" declared implicitly
+"../src/tasks.c", line 15: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 16: warning #225-D: function "formatCompileDateTime" declared implicitly
+"../src/tasks.c", line 16: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 55: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 94: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 128: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 140: warning #225-D: function "process_tickers" declared implicitly
+Finished building: "../src/tasks.c"
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 175: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 184: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 263: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 316: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 492: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 584: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 620: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 641: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 665: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 701: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 703: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 713: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 720: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 744: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 769: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 774: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 783: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 791: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 871: warning #176-D: expression has no effect
+"../src/p100.c", line 872: warning #176-D: expression has no effect
+"../src/p100.c", line 1025: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1026: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1029: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 641)
+"../src/p100.c", line 1111: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1117: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1148)
+"../src/p100.c", line 1119: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1148)
+"../src/p100.c", line 1156: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1184: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1281: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1283: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1296: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1314: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1330: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1332: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1340: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1342: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1350: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1352: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1362: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1369: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1404: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1409: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1423: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+Finished building: "../src/p100.c"
+ 
+Building file: "../src/tickers.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tickers.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tickers.c"
+"../src/tickers.c", line 51: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/tickers.c"
+ 
+Building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+Invoking: Arm Linker
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" "./syscfg/ti_drivers_config.obj" "./src/callback.obj" "./src/main_tirtos.obj" "./src/p100.obj" "./src/register.obj" "./src/script.obj" "./src/tasks.obj" "./src/tickers.obj" "../MSP_EXP432E401Y_TIRTOS.cmd" -l"ti/display/lib/display.aem4f" -l"ti/grlib/lib/ccs/m4f/grlib.a" -l"third_party/spiffs/lib/ccs/m4f/spiffs.a" -l"ti/drivers/lib/drivers_msp432e4.aem4f" -l"third_party/fatfs/lib/ccs/m4f/fatfs.a" -l"ti/dpl/lib/dpl_msp432e4.aem4f" -l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"  -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a" -llibc.a 
+<Linking>
+Finished building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+        1 file(s) copied.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+Building file: "../release.cfg"
+Invoking: XDCtools
+"C:/ti/ccs1280/xdctools_3_62_01_16_core/xs" --xdcpath="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source;C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages;" xdc.tools.configuro -o configPkg -t ti.targets.arm.elf.M4F -p ti.platforms.msp432:MSP432E401Y -r release -c "C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS" "../release.cfg"
+configuring release.xem4f from package/cfg/release_pem4f.cfg ...
+generating custom ti.sysbios library makefile ... 
+Starting build of library sources ...
+making C:/Users/MARKDA~1/ONEDRI~2/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/src/sysbios/sysbios.aem4f ...
+Build of libraries done.
+clem4f package/cfg/release_pem4f.c ...
+Finished building: "../release.cfg"
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+gmake[1]: 'uartecho_MSP_EXP432E401Y_tirtos_ccs.out' is up to date.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/p100.obj' failed
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 175: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 184: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 263: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 316: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 330: error #29: expected an expression
+"../src/p100.c", line 330: error #20: identifier "i" is undefined
+"../src/p100.c", line 340: error #29: expected an expression
+"../src/p100.c", line 541: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 633: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 669: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 693: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 717: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 753: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 755: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 765: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 772: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 796: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 821: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 826: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 835: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 843: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 923: warning #176-D: expression has no effect
+"../src/p100.c", line 924: warning #176-D: expression has no effect
+"../src/p100.c", line 1077: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1078: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1081: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 693)
+"../src/p100.c", line 1163: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1169: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1200)
+"../src/p100.c", line 1171: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1200)
+"../src/p100.c", line 1208: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1236: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1333: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1335: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1348: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1366: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1382: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1384: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1392: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1394: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1402: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1404: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1414: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1421: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1456: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1461: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1475: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+3 errors detected in the compilation of "../src/p100.c".
+gmake: *** [src/p100.obj] Error 1
+Building file: "../src/callback.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/callback.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/callback.c"
+"../src/callback.c", line 13: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/callback.c"
+ 
+Building file: "../src/main_tirtos.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/main_tirtos.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/main_tirtos.c"
+"../src/main_tirtos.c", line 98: warning #225-D: function "init_drivers" declared implicitly
+"../src/main_tirtos.c", line 99: warning #225-D: function "init_tickers" declared implicitly
+"../src/main_tirtos.c", line 100: warning #225-D: function "init_script_lines" declared implicitly
+"../src/main_tirtos.c", line 69: warning #179-D: variable "thread" was declared but never referenced
+"../src/main_tirtos.c", line 70: warning #179-D: variable "attrs" was declared but never referenced
+"../src/main_tirtos.c", line 71: warning #179-D: variable "priParam" was declared but never referenced
+"../src/main_tirtos.c", line 72: warning #179-D: variable "retc" was declared but never referenced
+Finished building: "../src/main_tirtos.c"
+ 
+Building file: "../src/script.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/script.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/script.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/script.c", line 20: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 32: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 34: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 64: warning #225-D: function "strtol" declared implicitly
+"../src/script.c", line 67: warning #70-D: integer conversion resulted in truncation
+"../src/script.c", line 72: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/script.c", line 75: warning #70-D: integer conversion resulted in truncation
+"../src/script.c", line 85: warning #225-D: function "strncpy" declared implicitly
+"../src/script.c", line 89: warning #225-D: function "strlen" declared implicitly
+"../src/script.c", line 100: warning #225-D: function "isspace" declared implicitly
+"../src/script.c", line 103: warning #225-D: function "strlen" declared implicitly
+Finished building: "../src/script.c"
+ 
+Building file: "../src/tasks.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tasks.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tasks.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/tasks.c", line 15: warning #225-D: function "formatAboutHeaderMsg" declared implicitly
+"../src/tasks.c", line 15: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 16: warning #225-D: function "formatCompileDateTime" declared implicitly
+"../src/tasks.c", line 16: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 55: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 94: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 128: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 140: warning #225-D: function "process_tickers" declared implicitly
+Finished building: "../src/tasks.c"
+ 
+Building file: "../src/register.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/register.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/register.c"
+"../src/register.c", line 38: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 31: warning #179-D: variable "msg" was declared but never referenced
+"../src/register.c", line 49: warning #225-D: function "atoi" declared implicitly
+"../src/register.c", line 66: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 69: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 83: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 86: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 101: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/register.c", line 137: warning #121-D: return value type does not match the function type
+"../src/register.c", line 150: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 171: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 188: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 205: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 227: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 248: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 269: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 290: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 355: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 373: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 391: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 414: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 437: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 454: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 482: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 505: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/register.c"
+ 
+Building file: "../src/tickers.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tickers.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tickers.c"
+"../src/tickers.c", line 51: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/tickers.c"
+ 
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 24 all -O 
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 175: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 184: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 263: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 316: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 542: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 634: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 670: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 694: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 718: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 754: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 756: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 766: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 773: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 797: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 822: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 827: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 836: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 844: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 924: warning #176-D: expression has no effect
+"../src/p100.c", line 925: warning #176-D: expression has no effect
+"../src/p100.c", line 1078: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1079: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1082: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 694)
+"../src/p100.c", line 1164: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1170: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1201)
+"../src/p100.c", line 1172: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1201)
+"../src/p100.c", line 1209: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1237: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1334: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1336: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1349: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1367: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1383: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1385: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1393: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1395: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1403: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1405: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1415: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1422: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1457: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1462: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1476: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+Finished building: "../src/p100.c"
+ 
+Building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+Invoking: Arm Linker
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" "./syscfg/ti_drivers_config.obj" "./src/callback.obj" "./src/main_tirtos.obj" "./src/p100.obj" "./src/register.obj" "./src/script.obj" "./src/tasks.obj" "./src/tickers.obj" "../MSP_EXP432E401Y_TIRTOS.cmd" -l"ti/display/lib/display.aem4f" -l"ti/grlib/lib/ccs/m4f/grlib.a" -l"third_party/spiffs/lib/ccs/m4f/spiffs.a" -l"ti/drivers/lib/drivers_msp432e4.aem4f" -l"third_party/fatfs/lib/ccs/m4f/fatfs.a" -l"ti/dpl/lib/dpl_msp432e4.aem4f" -l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"  -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a" -llibc.a 
+<Linking>
+Finished building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+ 
+
+**** Build Finished ****
+
+**** Clean-only build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 clean -O 
+ 
+cleaning ../src/sysbios ...
+DEL /F  "tirtos_builds_MSP_EXP432E401Y_release_ccs.lib"  "configPkg\linker.cmd" "configPkg\compiler.opt" 
+RMDIR /S/Q  "configPkg" 
+Could Not Find C:\Users\priva\OneDrive - Texas Tech University\Documents\ccs_workspace\tirtos_builds_MSP_EXP432E401Y_release_ccs\Debug\tirtos_builds_MSP_EXP432E401Y_release_ccs.lib
+Finished clean
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+Building file: "../release.cfg"
+Invoking: XDCtools
+"C:/ti/xdctools_3_61_01_25_core/xs" --xdcpath="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source;C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages;" xdc.tools.configuro -o configPkg -t ti.targets.arm.elf.M4F -p ti.platforms.msp432:MSP432E401Y -r release -c "C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS" "../release.cfg"
+making package.mak (because of package.bld) ...
+generating interfaces for package configPkg (because package/package.xdc.inc is older than package.xdc) ...
+configuring release.xem4f from package/cfg/release_pem4f.cfg ...
+generating custom ti.sysbios library makefile ... 
+Starting build of library sources ...
+making C:/Users/priva/ONEDRI~1/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/src/sysbios/sysbios.aem4f ...
+clem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.c ...
+asmem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/Hwi_asm.sv7M ...
+asmem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/Hwi_asm_switch.sv7M ...
+asmem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/IntrinsicsSupport_asm.sv7M ...
+asmem4f C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/TaskSupport_asm.sv7M ...
+arem4f BIOS.obj m3_Hwi_asm.obj m3_Hwi_asm_switch.obj m3_IntrinsicsSupport_asm.obj m3_TaskSupport_asm.obj ...
+Build of libraries done.
+clem4f package/cfg/release_pem4f.c ...
+Finished building: "../release.cfg"
+ 
+        1 file(s) copied.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Clean-only build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 clean -O 
+ 
+DEL /F  "syscfg\ti_drivers_config.h" "syscfg\ti_utils_build_linker.cmd.exp" "syscfg\syscfg_c.rov.xs"  "syscfg\ti_drivers_config.c"  "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" 
+DEL /F "syscfg\ti_drivers_config.obj" "src\callback.obj" "src\main_tirtos.obj" "src\p100.obj" "src\register.obj" "src\script.obj" "src\tasks.obj" "src\tickers.obj" 
+DEL /F "syscfg\ti_drivers_config.d" "src\callback.d" "src\main_tirtos.d" "src\p100.d" "src\register.d" "src\script.d" "src\tasks.d" "src\tickers.d" 
+RMDIR /S/Q  "syscfg" 
+Finished clean
+ 
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+Building file: "../uartecho.syscfg"
+Invoking: SysConfig
+"C:/ti/sysconfig_1.5.0/sysconfig_cli.bat" -o "syscfg" -s "C:/ti/simplelink_msp432e4_sdk_4_20_00_12/.metadata/product.json" "C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/uartecho.syscfg" --compiler ccs
+Running script...
+Validating...
+Generating Code...
+    '/ti/drivers' -> '/ti/devices/driverlib'
+Writing C:\Users\priva\OneDrive - Texas Tech University\Documents\ccs_workspace\uartecho_MSP_EXP432E401Y_tirtos_ccs\Debug\syscfg\ti_drivers_config.c...
+Writing C:\Users\priva\OneDrive - Texas Tech University\Documents\ccs_workspace\uartecho_MSP_EXP432E401Y_tirtos_ccs\Debug\syscfg\ti_drivers_config.h...
+Writing C:\Users\priva\OneDrive - Texas Tech University\Documents\ccs_workspace\uartecho_MSP_EXP432E401Y_tirtos_ccs\Debug\syscfg\ti_utils_build_linker.cmd.exp...
+Writing C:\Users\priva\OneDrive - Texas Tech University\Documents\ccs_workspace\uartecho_MSP_EXP432E401Y_tirtos_ccs\Debug\syscfg\syscfg_c.rov.xs...
+Finished building: "../uartecho.syscfg"
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/p100.obj' failed
+"../src/p100.c", line 51: fatal error #1965: cannot open source file "xdc.runtime/Semaphore.h"
+1 catastrophic error detected in the compilation of "../src/p100.c".
+Compilation terminated.
+gmake: *** [src/p100.obj] Error 1
+Building file: "../src/callback.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/callback.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/callback.c"
+"../src/callback.c", line 13: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/callback.c"
+ 
+Building file: "../src/main_tirtos.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/main_tirtos.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/main_tirtos.c"
+"../src/main_tirtos.c", line 98: warning #225-D: function "init_drivers" declared implicitly
+"../src/main_tirtos.c", line 99: warning #225-D: function "init_tickers" declared implicitly
+"../src/main_tirtos.c", line 100: warning #225-D: function "init_script_lines" declared implicitly
+"../src/main_tirtos.c", line 69: warning #179-D: variable "thread" was declared but never referenced
+"../src/main_tirtos.c", line 70: warning #179-D: variable "attrs" was declared but never referenced
+"../src/main_tirtos.c", line 71: warning #179-D: variable "priParam" was declared but never referenced
+"../src/main_tirtos.c", line 72: warning #179-D: variable "retc" was declared but never referenced
+Finished building: "../src/main_tirtos.c"
+ 
+Building file: "syscfg/ti_drivers_config.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="syscfg/ti_drivers_config.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="syscfg" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "syscfg/ti_drivers_config.c"
+Finished building: "syscfg/ti_drivers_config.c"
+ 
+Building file: "../src/tasks.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tasks.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tasks.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/tasks.c", line 15: warning #225-D: function "formatAboutHeaderMsg" declared implicitly
+"../src/tasks.c", line 15: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 16: warning #225-D: function "formatCompileDateTime" declared implicitly
+"../src/tasks.c", line 16: warning #145-D: a value of type "int" cannot be used to initialize an entity of type "char *"
+"../src/tasks.c", line 88: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 127: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 176: warning #225-D: function "strlen" declared implicitly
+"../src/tasks.c", line 203: warning #225-D: function "process_tickers" declared implicitly
+Finished building: "../src/tasks.c"
+ 
+Building file: "../src/script.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/script.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/script.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/script.c", line 20: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 32: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 34: warning #225-D: function "sprintf" declared implicitly
+"../src/script.c", line 64: warning #225-D: function "strtol" declared implicitly
+"../src/script.c", line 67: warning #70-D: integer conversion resulted in truncation
+"../src/script.c", line 72: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/script.c", line 75: warning #70-D: integer conversion resulted in truncation
+"../src/script.c", line 85: warning #225-D: function "strncpy" declared implicitly
+"../src/script.c", line 89: warning #225-D: function "strlen" declared implicitly
+"../src/script.c", line 100: warning #225-D: function "isspace" declared implicitly
+"../src/script.c", line 103: warning #225-D: function "strlen" declared implicitly
+Finished building: "../src/script.c"
+ 
+Building file: "../src/tickers.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tickers.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tickers.c"
+"../src/tickers.c", line 51: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/tickers.c"
+ 
+Building file: "../src/register.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/register.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/register.c"
+"../src/register.c", line 38: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 31: warning #179-D: variable "msg" was declared but never referenced
+"../src/register.c", line 49: warning #225-D: function "atoi" declared implicitly
+"../src/register.c", line 66: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 69: warning #225-D: function "strtol" declared implicitly
+"../src/register.c", line 83: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 86: warning #225-D: function "strtoul" declared implicitly
+"../src/register.c", line 101: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/register.c", line 137: warning #121-D: return value type does not match the function type
+"../src/register.c", line 150: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 171: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 188: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 205: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 227: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 248: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 269: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 290: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 355: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 373: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 391: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 414: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 437: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 454: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 482: warning #225-D: function "sprintf" declared implicitly
+"../src/register.c", line 505: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/register.c"
+ 
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/p100.obj' failed
+"../src/p100.c", line 51: fatal error #1965: cannot open source file "xdc.runtime/Semaphore.h"
+1 catastrophic error detected in the compilation of "../src/p100.c".
+Compilation terminated.
+gmake: *** [src/p100.obj] Error 1
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/p100.obj' failed
+"../src/p100.c", line 51: fatal error #1965: cannot open source file "xdc.runtime/Semaphore.h"
+1 catastrophic error detected in the compilation of "../src/p100.c".
+Compilation terminated.
+gmake: *** [src/p100.obj] Error 1
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/p100.obj' failed
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 183: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 192: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 271: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 324: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 342: error #20: identifier "NUM_TASKS" is undefined
+"../src/p100.c", line 348: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 348: error #167: too few arguments in function call
+"../src/p100.c", line 568: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 660: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 696: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 720: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 744: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 780: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 782: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 792: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 799: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 823: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 848: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 853: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 862: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 870: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 950: warning #176-D: expression has no effect
+"../src/p100.c", line 951: warning #176-D: expression has no effect
+"../src/p100.c", line 1104: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1105: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1108: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 720)
+"../src/p100.c", line 1190: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1196: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1227)
+"../src/p100.c", line 1198: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1227)
+"../src/p100.c", line 1235: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1263: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1360: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1362: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1375: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1393: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1409: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1411: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1419: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1421: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1429: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1431: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1441: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1448: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1483: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1488: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1502: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+2 errors detected in the compilation of "../src/p100.c".
+gmake: *** [src/p100.obj] Error 1
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+ 
+>> Compilation failure
+src/subdir_rules.mk:9: recipe for target 'src/p100.obj' failed
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 183: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 192: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 271: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 324: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 348: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 348: error #167: too few arguments in function call
+"../src/p100.c", line 568: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 660: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 696: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 720: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 744: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 780: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 782: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 792: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 799: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 823: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 848: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 853: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 862: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 870: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 950: warning #176-D: expression has no effect
+"../src/p100.c", line 951: warning #176-D: expression has no effect
+"../src/p100.c", line 1104: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1105: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1108: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 720)
+"../src/p100.c", line 1190: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1196: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1227)
+"../src/p100.c", line 1198: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1227)
+"../src/p100.c", line 1235: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1263: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1360: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1362: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1375: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1393: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1409: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1411: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1419: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1421: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1429: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1431: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1441: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1448: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1483: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1488: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1502: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+1 error detected in the compilation of "../src/p100.c".
+gmake: *** [src/p100.obj] Error 1
+Building file: "../src/tickers.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/tickers.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/tickers.c"
+"../src/tickers.c", line 51: warning #225-D: function "sprintf" declared implicitly
+Finished building: "../src/tickers.c"
+ 
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project tirtos_builds_MSP_EXP432E401Y_release_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+making ../src/sysbios/sysbios.aem4f ...
+gmake[1]: Nothing to be done for 'all'.
+gmake[1]: Nothing to be done for 'configPkg/linker.cmd'.
+making ../src/sysbios/sysbios.aem4f ...
+gmake[2]: Nothing to be done for 'all'.
+
+**** Build Finished ****
+
+**** Build of configuration Debug for project uartecho_MSP_EXP432E401Y_tirtos_ccs ****
+
+"C:\\ti\\ccs1280\\ccs\\utils\\bin\\gmake" -k -j 20 all -O 
+ 
+Building file: "../src/p100.c"
+Invoking: Arm Compiler
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+"..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
+"../src/p100.c", line 183: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 192: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 271: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 324: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 568: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 660: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 696: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 720: warning #225-D: function "CMD_if" declared implicitly
+"../src/p100.c", line 744: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 780: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 782: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 792: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 799: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 823: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 848: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 853: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 862: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 870: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 950: warning #176-D: expression has no effect
+"../src/p100.c", line 951: warning #176-D: expression has no effect
+"../src/p100.c", line 1104: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1105: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1108: warning #161-D: declaration is incompatible with previous "CMD_if" (declared at line 720)
+"../src/p100.c", line 1190: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1196: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1227)
+"../src/p100.c", line 1198: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1227)
+"../src/p100.c", line 1235: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1263: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1360: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1362: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1375: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1393: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1409: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1411: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1419: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1421: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1429: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1431: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1441: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1448: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1483: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1488: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1502: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+Finished building: "../src/p100.c"
+ 
+Building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+Invoking: Arm Linker
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" "./syscfg/ti_drivers_config.obj" "./src/callback.obj" "./src/main_tirtos.obj" "./src/p100.obj" "./src/register.obj" "./src/script.obj" "./src/tasks.obj" "./src/tickers.obj" "../MSP_EXP432E401Y_TIRTOS.cmd" -l"ti/display/lib/display.aem4f" -l"ti/grlib/lib/ccs/m4f/grlib.a" -l"third_party/spiffs/lib/ccs/m4f/spiffs.a" -l"ti/drivers/lib/drivers_msp432e4.aem4f" -l"third_party/fatfs/lib/ccs/m4f/fatfs.a" -l"ti/dpl/lib/dpl_msp432e4.aem4f" -l"C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"  -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a" -llibc.a 
+<Linking>
+Finished building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
+ 
+
+**** Build Finished ****

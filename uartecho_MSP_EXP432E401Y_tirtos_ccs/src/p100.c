@@ -44,7 +44,10 @@
 
 // Driver configuration
 #include "ti_drivers_config.h"
+
+// SysBIOS
 #include <ti/sysbios/hal/Hwi.h>
+#include <ti/sysbios/knl/Semaphore.h>
 
 #include <xdc/runtime/Memory.h>
 #include <xdc/runtime/System.h>
@@ -79,6 +82,8 @@ void init_globals() {
             glo.inputMessageBuffer[i] = 0;
     }
 
+    glo.scriptPointer = -1;  // No script loaded
+
     // Assign the handles to the BiosList struct
     glo.bios.UARTReader = UARTReader;
     glo.bios.UARTWriter = UARTWriter;
@@ -95,6 +100,11 @@ void init_globals() {
     glo.bios.Timer0_swi = Timer0_swi;
     glo.bios.SW1_swi = SW1_swi;
     glo.bios.SW2_swi = SW2_swi;
+
+    Semaphore_Params semParams;
+    Semaphore_Params_init(&semParams);
+    semParams.mode = Semaphore_Mode_COUNTING;
+    glo.emergencyStopSem = Semaphore_create(0, &semParams, NULL);
 }
 
 
@@ -314,6 +324,74 @@ void *mainThread(void *arg0)
     return;
 }
 
+// TODO: NEXT implement graceful shutdown
+// - [ ] conditionals
+void emergency_stop() {
+    int i;
+
+    // Set emergency stop flag
+    glo.emergencyStopActive = true;
+
+    // Post to semaphores to unblock tasks
+    Semaphore_post(glo.bios.PayloadSem);    // Unblocks executePayloadTask
+    Semaphore_post(glo.bios.UARTWriteSem);  // Unblocks uartWriteTask
+    Semaphore_post(glo.bios.TickerSem);     // Unblocks tickerProcessingTask
+    // For uartReadTask, if necessary
+
+    // Wait for all tasks to signal completion
+    for (i = 0; i < NUM_TASKS; i++) {
+        Semaphore_pend(glo.emergencyStopSem, BIOS_WAIT_FOREVER);
+    }
+
+    // Stop the timer
+    Timer_stop(glo.Timer0);
+    Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, 0);  // Set period to 0 to stop timer
+
+    // Clear the tickers
+    for (i = 0; i < MAX_TICKERS; i++) {
+        tickers[i].active = false;
+        tickers[i].initialDelay = 0;
+        tickers[i].period = 0;
+        tickers[i].count = 0;
+        tickers[i].currentDelay = 0;
+        memset(tickers[i].payload, 0, BUFFER_SIZE);
+    }
+
+    // Clear the callbacks
+    for (i = 0; i < MAX_CALLBACKS; i++) {
+        callbacks[i].count = 0;
+        memset(callbacks[i].payload, 0, BUFFER_SIZE);
+    }
+
+    // Clear the payload queue
+    while (!Queue_empty(glo.bios.PayloadQueue)) {
+        Queue_Elem *elem = Queue_get(glo.bios.PayloadQueue);
+        PayloadMessage *message = (PayloadMessage *)elem;
+        Memory_free(NULL, message->data, strlen(message->data) + 1);
+        Memory_free(NULL, message, sizeof(PayloadMessage));
+    }
+
+    // Clear the UART write queue
+    while (!Queue_empty(glo.bios.OutMsgQueue)) {
+        Queue_Elem *elem = Queue_get(glo.bios.OutMsgQueue);
+        PayloadMessage *message = (PayloadMessage *)elem;
+        Memory_free(NULL, message->data, strlen(message->data) + 1);
+        Memory_free(NULL, message, sizeof(PayloadMessage));
+    }
+
+
+    // Clear the emergency stop flag
+    glo.emergencyStopActive = false;
+
+    // Optionally, post to semaphores to wake tasks up
+    Semaphore_post(glo.bios.PayloadSem);
+    Semaphore_post(glo.bios.UARTWriteSem);
+    Semaphore_post(glo.bios.TickerSem);
+
+    // You can also add a message indicating the system is resuming
+    AddProgramMessage("Emergency stop cleared. Resuming normal operation.\r\n");
+}
+
 
 //================================================
 // Utility
@@ -397,7 +475,6 @@ void AddOutMessage(const char *data) {
 }
 
 
-//TODO implement "write_line" with a maximum line size of 60, and a maximum total message size
 bool UART_write_safe(const char *message, int size) {
     // Check if UART handle is valid (assuming glo.uart should be valid)
     if (glo.uart == NULL) {
@@ -425,7 +502,6 @@ bool UART_write_safe(const char *message, int size) {
         return false;
     }
 
-    // TODO Check each line of message (split by \n\r) for buffer overflow
     // Optional: Return false and send error message if size exceeds the maximum buffer size
     if (size > MAX_MESSAGE_SIZE) {
         UART_write_safe_strlen(raiseError(ERR_BUFFER_OF));
@@ -622,7 +698,10 @@ void execute_payload(char *msg) {
 
     //=========================================================================
     // Check for commmand
-    if (strcmp(token,           "-about") == 0) {
+    if(strcmp(token,                    "`") == 0) {
+        emergency_stop();
+    }
+    else if (strcmp(token,           "-about") == 0) {
         CMD_about();
     }
     else if (strcmp(token,      "-callback") == 0) {
@@ -636,6 +715,9 @@ void execute_payload(char *msg) {
     }
     else if (strcmp(token,      "-help") == 0) {
         CMD_help();
+    }
+    else if (strcmp(token,      "-if") == 0) {
+        CMD_if();
     }
     else if (strcmp(token,      "-memr") == 0) {
         CMD_memr();
@@ -1018,10 +1100,76 @@ void CMD_help() {
             "|                                        microseconds.\r\n";
     }
 
-    //UART_write_safe(helpMessage, strlen(helpMessage));
+    //UART_write_safe(helpMessage, strlen(helpMessage));`
     AddProgramMessage(help_prefix);
     AddProgramMessage(helpMessage);
 }
+
+void CMD_if() {
+    // Parse the condition inside parentheses
+    char *condition_part = strtok(NULL, "?");
+    if (!condition_part) {
+        AddProgramMessage("Error: Invalid syntax for -if command.\r\n");  // TODO: Add to errors
+        return;
+    }
+
+    // Trim leading and trailing whitespaces
+    trim(condition_part);
+
+    // Extract operands and condition
+    char operandA[BUFFER_SIZE], operandB[BUFFER_SIZE], cond[3];
+    if (sscanf(condition_part, "(%s %2[><=] %s)", operandA, cond, operandB) != 3) {
+        AddProgramMessage("Error: Invalid condition format.\r\n");  // TODO: Add to errors
+        return;
+    }
+
+    // Parse DESTT and DESTF
+    char *dest_part = strtok(NULL, "");
+    if (!dest_part) {
+        AddProgramMessage("Error: Missing destinations in -if command.\r\n");  // TODO: Add to errors
+        return;
+    }
+
+    char *destT = strtok(dest_part, ":");
+    char *destF = strtok(NULL, "");
+
+    // Trim leading and trailing whitespaces
+    trim(destT);
+    if (destF) trim(destF);
+
+    // Evaluate the condition
+    int valueA = getOperandValue(operandA);
+    int valueB = getOperandValue(operandB);
+    if (valueA == INT64_MIN || valueB == INT64_MIN) {
+        // Error message already handled in getOperandValue
+        return;
+    }
+
+    // Determine the result of the condition
+    bool conditionResult = false;
+    if (strcmp(cond, ">") == 0) {
+        conditionResult = (valueA > valueB);
+    } else if (strcmp(cond, "=") == 0 || strcmp(cond, "==") == 0) {
+        conditionResult = (valueA == valueB);
+    } else if (strcmp(cond, "<") == 0) {
+        conditionResult = (valueA < valueB);
+    } else {
+        AddProgramMessage("Error: Invalid condition operator.\r\n");  // TODO: Add to errors
+        return;
+    }
+
+    // Execute the appropriate destination
+    if (conditionResult) {
+        if (destT && strlen(destT) > 0) {
+            execute_destination(destT);
+        }
+    } else {
+        if (destF && strlen(destF) > 0) {
+            execute_destination(destF);
+        }
+    }
+}
+
 
 
 // Prints the contents of a given memory address
@@ -1089,13 +1237,12 @@ ERROR38:
 
 /// @brief Prints the message after the first token, which should be "-print"
 void CMD_print() {
-    //get first content after "> -print"
     char *msg_token = strtok(NULL, "\r\n");
-    strcat(msg_token, "\r\n");
 
     if(msg_token) {
         //UART_write_safe(msg_token, strlen(msg_token));
         AddProgramMessage(msg_token);
+        AddProgramMessage("\r\n");
     }
 }
 

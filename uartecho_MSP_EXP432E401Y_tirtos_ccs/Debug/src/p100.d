@@ -133,29 +133,6 @@ src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/interfaces/IHwi.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/family/arm/m3/Hwi__epilogue.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/hal/package/Hwi_HwiProxy.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Memory.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/Memory_HeapProxy.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/System.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/ISystemSupport.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_SupportProxy.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/ISystemSupport.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_Module_GateProxy.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IInstance.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_SupportProxy.h
-src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_Module_GateProxy.h
-src/p100.obj: ../src/p100.h
-src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/Timer.h
-src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.h
-src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/package/BIOS_RtsGateProxy.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Semaphore.h
 src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
 src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IInstance.h
@@ -227,6 +204,30 @@ src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Task.h
 src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Event__epilogue.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Memory.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/Memory_HeapProxy.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/System.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/ISystemSupport.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_SupportProxy.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/ISystemSupport.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_Module_GateProxy.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IInstance.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_SupportProxy.h
+src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_Module_GateProxy.h
+src/p100.obj: ../src/p100.h
+src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/Timer.h
+src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.h
+src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/package/BIOS_RtsGateProxy.h
+src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Semaphore.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Task.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/package/Task_SupportProxy.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Queue.h
@@ -505,52 +506,6 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/famil
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/hal/package/Hwi_HwiProxy.h:
 
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Memory.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/Memory_HeapProxy.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/System.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/ISystemSupport.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_SupportProxy.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/ISystemSupport.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_Module_GateProxy.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IInstance.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_SupportProxy.h:
-
-C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_Module_GateProxy.h:
-
-../src/p100.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/Timer.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/package/BIOS_RtsGateProxy.h:
-
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Semaphore.h:
 
 C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
@@ -692,6 +647,54 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/T
 C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Event__epilogue.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Memory.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/Memory_HeapProxy.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/System.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/ISystemSupport.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IModule.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_SupportProxy.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/ISystemSupport.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_Module_GateProxy.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Types.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IInstance.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_SupportProxy.h:
+
+C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/System_Module_GateProxy.h:
+
+../src/p100.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/Timer.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/package/BIOS_RtsGateProxy.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Semaphore.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Task.h:
 

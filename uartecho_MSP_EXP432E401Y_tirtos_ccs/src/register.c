@@ -29,12 +29,13 @@ void init_registers() {
 /// @brief Print the values of all registers
 void print_all_registers() {
     char msg[BUFFER_SIZE];
-    char line[BUFFER_SIZE];
+    char line[MAX_LINE_LENGTH];
 
-    AddProgramMessage("Register Values:\r\n");
+    AddProgramMessage("=============================== Register Values ================================\r\n");
+    AddProgramMessage("---------|-------------|----------------\r\n");
     int i;
     for (i = 0; i < NUM_REGISTERS; i++) {
-        sprintf(line, "R%d = %d\r\n", i, registers[i]);
+        sprintf(line, "R%-8d| %-11d | 0x%08X\r\n", i, registers[i], (unsigned int)&registers[i]);
         AddProgramMessage(line);
     }
 }

@@ -1,12 +1,13 @@
 #include "p100.h"
 #include <xdc/runtime/Memory.h>
+#include "script.h"
 
 #ifdef Globals
 extern Globals glo;
 #endif
 
 // Process user input to input_buffer -> PayloadQueue
-void uartRead(UArg arg0, UArg arg1) {
+void uartReadTask(UArg arg0, UArg arg1) {
 
     clear_console();
 
@@ -29,16 +30,49 @@ void uartRead(UArg arg0, UArg arg1) {
 
     /* Loop forever handling UART input and queue payloads  */
     while (1) {
+        // Check for emergency stop
+        if (glo.emergencyStopActive) {
+            // Perform cleanup if necessary
+            // ...
+
+            // Signal completion
+            Semaphore_post(glo.emergencyStopSem);
+
+            // Wait until emergency stop is cleared
+            while (glo.emergencyStopActive) {
+                Task_sleep(100);  // Sleep to yield CPU
+            }
+
+            // Continue or re-initialize as necessary
+            continue;
+        }
+
         handle_UART();
     }
 }
 
 // Write from OutMsgQueue
-void uartWrite(UArg arg0, UArg arg1) {
+void uartWriteTask(UArg arg0, UArg arg1) {
     PayloadMessage *out_message;
 
     while (1) {
         Semaphore_pend(glo.bios.UARTWriteSem, BIOS_WAIT_FOREVER);
+
+        // Check for emergency stop
+        if (glo.emergencyStopActive) {
+            // Perform cleanup
+            // No need to clear OutMsgQueue; emergency_stop will handle it
+
+            // Signal completion
+            Semaphore_post(glo.emergencyStopSem);
+
+            // Wait until emergency stop is cleared
+            while (glo.emergencyStopActive) {
+                Task_sleep(100);
+            }
+            continue;
+        }
+
         out_message = (PayloadMessage *)Queue_get(glo.bios.OutMsgQueue);
 
         if (out_message->isProgramOutput) {
@@ -98,22 +132,48 @@ void uartWrite(UArg arg0, UArg arg1) {
 
 
 // Execute Payloads on PayloadQueue
-void payloadExecute(UArg arg0, UArg arg1) {
+void executePayloadTask(UArg arg0, UArg arg1) {
     // Check if PayloadQueue has payload
     // Get payload
     // Execute
     // Add to OutMsgQueue if -print is called
     PMsg exec_payload;
 
-    digitalWrite(2, LOW);
-
     while (1) {
-        Semaphore_pend(glo.bios.PayloadSem, BIOS_WAIT_FOREVER);  // Wait for object on Queue
+        Semaphore_pend(glo.bios.PayloadSem, BIOS_WAIT_FOREVER);  // Wait for payload
+
+        // Check for emergency stop
+        if (glo.emergencyStopActive) {
+            // Perform cleanup
+            // No need to clear PayloadQueue; emergency_stop will handle it
+
+            // Signal completion
+            Semaphore_post(glo.emergencyStopSem);
+
+            // Wait until emergency stop is cleared
+            while (glo.emergencyStopActive) {
+                Task_sleep(100);
+            }
+            continue;
+        }
+
         exec_payload = (PayloadMessage *)Queue_get(glo.bios.PayloadQueue);
+
+        // Execute the payload
         execute_payload(exec_payload->data);
-        // Free the duplicated string
+
+        // If part of a script, queue the next line
+        if (glo.scriptPointer >= 0) {
+            glo.scriptPointer++; // Move to the next line
+            if (glo.scriptPointer < SCRIPT_LINE_COUNT && scriptLines[glo.scriptPointer]) {
+                AddPayload(scriptLines[glo.scriptPointer]);
+            } else {
+                glo.scriptPointer = -1; // End of script
+            }
+        }
+
+        // Free allocated memory
         Memory_free(NULL, exec_payload->data, strlen(exec_payload->data) + 1);
-        // Free the message structure
         Memory_free(NULL, exec_payload, sizeof(PayloadMessage));
     }
 }
@@ -123,6 +183,21 @@ void tickerProcessingTask(UArg arg0, UArg arg1) {
     while (1) {
         // Wait for the semaphore to be posted by the ticker timer
         Semaphore_pend(glo.bios.TickerSem, BIOS_WAIT_FOREVER);
+
+        // Check for emergency stop
+        if (glo.emergencyStopActive) {
+            // Perform cleanup if necessary
+            // ...
+
+            // Signal completion
+            Semaphore_post(glo.emergencyStopSem);
+
+            // Wait until emergency stop is cleared
+            while (glo.emergencyStopActive) {
+                Task_sleep(100);
+            }
+            continue;
+        }
 
         // Process tickers
         process_tickers();

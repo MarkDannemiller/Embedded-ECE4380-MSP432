@@ -1,4 +1,5 @@
 #include "script.h"
+#include "register.h"
 #include "p100.h"
 
 void init_script_lines() {
@@ -36,14 +37,72 @@ void print_script_line(int line_number) {
     AddProgramMessage("================================================================================\r\n");
 }
 
+// Execute the script starting from the specified line number
 void execute_script_from_line(int line_number) {
-    int i;
-    for (i = line_number; i < SCRIPT_LINE_COUNT; i++) {
-        if (scriptLines[i][0] == '\0') {
-            // Stop execution when an empty line is encountered
-            break;
-        }
-        
-        execute_payload(scriptLines[i]);
+    // Check for valid script line
+    if (line_number < 0 || line_number >= SCRIPT_LINE_COUNT || !scriptLines[line_number]) {
+        return; // No script to execute
     }
+
+    // Set scriptPointer to the starting line
+    glo.scriptPointer = line_number;
+
+    // Add the first line to the PayloadQueue
+    AddPayload(scriptLines[line_number]);
+}
+
+//=============================================================================
+// Conditionals
+//=============================================================================
+
+// Get the value of an operand
+int getOperandValue(const char *operand) {
+    // Check if it's an immediate value
+    if (operand[0] == '#') {
+        // Immediate value
+        char *endptr;
+        int value = strtol(operand + 1, &endptr, 0);
+        if (*endptr != '\0') {
+            AddProgramMessage("Error: Invalid immediate value.\r\n");  // TODO: Add to errors
+            return INT64_MIN;
+        }
+        return value;
+    } else {
+        // Should be a register
+        int regIndex = parse_register(operand);
+        if (regIndex < 0 || regIndex >= NUM_REGISTERS) {
+            AddProgramMessage("Error: Invalid register.\r\n");  // TODO: Add to errors
+            return INT64_MIN;
+        }
+        return registers[regIndex];
+    }
+}
+
+// Execute the destination of a conditional
+void execute_destination(const char *dest) {
+    // Trim leading and trailing whitespaces
+    char destCopy[BUFFER_SIZE];
+    strncpy(destCopy, dest, BUFFER_SIZE);
+    trim(destCopy);
+
+    // Check if destination is empty
+    if (strlen(destCopy) == 0) {
+        return; // Do nothing
+    }
+
+    // Since the destination can be any payload, we can simply add it to the payload queue
+    AddPayload(destCopy);
+}
+
+// Trim leading and trailing whitespaces
+void trim(char *str) {
+    // Trim leading spaces
+    while(isspace((unsigned char)*str)) str++;
+
+    // Trim trailing spaces
+    char *end = str + strlen(str) - 1;
+    while(end > str && isspace((unsigned char)*end)) end--;
+
+    // Write new null terminator
+    *(end + 1) = '\0';
 }

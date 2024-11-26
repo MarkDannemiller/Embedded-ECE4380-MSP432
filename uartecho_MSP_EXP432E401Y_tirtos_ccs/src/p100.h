@@ -96,6 +96,11 @@ struct Globals {
 
     BiosList bios;
     uint32_t integrityTail;
+
+    int scriptPointer;
+
+    bool emergencyStopActive;
+    Semaphore_Handle emergencyStopSem;
 } glo;
 
 
@@ -145,6 +150,8 @@ extern const char* errorNames[];
 extern int errorCounters[ERROR_COUNT];
 
 
+void emergency_stop();
+
 //================================================
 // Utility
 //================================================
@@ -178,11 +185,6 @@ void handle_UART();
 void reset_buffer();
 void clear_console();
 
-// TODO console output
-// - [ ] implement new uartWriter task
-// - [ ] define methods below
-// - [ ] fix moving up or down multiple lines
-// - [ ] ensure thread safety
 void refreshUserInputLine();
 void moveCursorToColumn(int col);
 void moveCursorUp(int lines);

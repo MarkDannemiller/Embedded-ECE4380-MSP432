@@ -182,6 +182,7 @@ src/tasks.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/Device
 src/tasks.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h
 src/tasks.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Memory.h
 src/tasks.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/Memory_HeapProxy.h
+src/tasks.obj: ../src/script.h
 
 ../src/tasks.c:
 
@@ -546,4 +547,6 @@ C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h:
 C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Memory.h:
 
 C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/Memory_HeapProxy.h:
+
+../src/script.h:
 
