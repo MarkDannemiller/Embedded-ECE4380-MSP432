@@ -92,7 +92,7 @@ struct Globals {
 
     Timer_Handle Timer0;
     Timer_Params timer0_params;
-    //int32_t Timer0Period;
+    int32_t Timer0Period;
 
     BiosList bios;
     uint32_t integrityTail;

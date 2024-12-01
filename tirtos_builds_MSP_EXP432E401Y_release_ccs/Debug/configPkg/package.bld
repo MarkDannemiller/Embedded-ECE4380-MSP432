@@ -11,7 +11,7 @@ var makeAssembly = false;
 var Executable = xdc.module('xdc.bld.Executable');
 
 var exeOpts = new Executable.Attrs({
-        cfgScript: 'C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg',
+        cfgScript: 'C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/release.cfg',
         profile: 'release',
         cfgHome: 'configPkg',
 });
@@ -41,7 +41,7 @@ else {
 
 var thisObj = {
     cfg:        '../release.cfg',
-    outputPath: 'C:/Users/priva/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg',
+    outputPath: 'C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg',
     exeName:    'release' + suffix,
     exeIntName: 'release' + suffix.replace('.', '_'),
     targ:       targ,

@@ -139,9 +139,9 @@ const char* errorMessages[] = {
     "Error: Payload Queue Overflow.\r\n",                           // ERR_PAYLOAD_QUEUE_OF
     "Error: Out Messsage Queue Overflow.\r\n",                      // ERR_OUTMSG_QUEUE_OF
 
-    "Error: Invalid script line number.\r\n",                           // ERR_INVALID_SCRIPT_LINE
-    "Error: Missing command to write to script line.\r\n",              // ERR_MISSING_SCRIPT_COMMAND
-    "Error: Unknown operation for script command.\r\n"                  // ERR_UNKNOWN_SCRIPT_OP
+    "Error: Invalid script line number.\r\n",                       // ERR_INVALID_SCRIPT_LINE
+    "Error: Missing command to write to script line.\r\n",          // ERR_MISSING_SCRIPT_COMMAND
+    "Error: Unknown operation for script command.\r\n"              // ERR_UNKNOWN_SCRIPT_OP
 };
 
 const char* errorNames[] = {
@@ -326,6 +326,10 @@ void *mainThread(void *arg0)
 
 // TODO: NEXT implement graceful shutdown
 // - [ ] conditionals
+
+/**
+ * @brief Emergency stop function to halt all tasks and timers.  Should only be called from uartReadTask.
+ */
 void emergency_stop() {
     int i;
 
@@ -339,12 +343,19 @@ void emergency_stop() {
     // For uartReadTask, if necessary
 
     // Wait for all tasks to signal completion
-    for (i = 0; i < NUM_TASKS; i++) {
+    for (i = 0; i < (NUM_TASKS - 1); i++) {  // -1 for the thread calling emergency_stop, which should only ever be uartReadTask
         Semaphore_pend(glo.emergencyStopSem, BIOS_WAIT_FOREVER);
     }
 
+    UART_write_safe_strlen("Emergency stop trigerred.");
+
+    // Disable interrupts
+    UInt hwi_key = Hwi_disable();
+    UInt swi_key = Swi_disable();
+
     // Stop the timer
     Timer_stop(glo.Timer0);
+    glo.Timer0Period = 0;
     Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, 0);  // Set period to 0 to stop timer
 
     // Clear the tickers
@@ -370,6 +381,7 @@ void emergency_stop() {
         Memory_free(NULL, message->data, strlen(message->data) + 1);
         Memory_free(NULL, message, sizeof(PayloadMessage));
     }
+    Semaphore_reset(glo.bios.PayloadSem, 0);  // Reset the semaphore count (no payloads to execute)
 
     // Clear the UART write queue
     while (!Queue_empty(glo.bios.OutMsgQueue)) {
@@ -378,18 +390,24 @@ void emergency_stop() {
         Memory_free(NULL, message->data, strlen(message->data) + 1);
         Memory_free(NULL, message, sizeof(PayloadMessage));
     }
+    Semaphore_reset(glo.bios.UARTWriteSem, 0);  // Reset the semaphore count (no messages to write)
 
+    // Re-enable interrupts
+    Hwi_restore(hwi_key);
+    Swi_restore(swi_key);
 
     // Clear the emergency stop flag
     glo.emergencyStopActive = false;
 
     // Optionally, post to semaphores to wake tasks up
-    Semaphore_post(glo.bios.PayloadSem);
-    Semaphore_post(glo.bios.UARTWriteSem);
-    Semaphore_post(glo.bios.TickerSem);
+    // Semaphore_post(glo.bios.PayloadSem);
+    // Semaphore_post(glo.bios.UARTWriteSem);
+    // Semaphore_post(glo.bios.TickerSem);
 
     // You can also add a message indicating the system is resuming
-    AddProgramMessage("Emergency stop cleared. Resuming normal operation.\r\n");
+    AddProgramMessage("Emergency stop completed. Resuming normal operation.\r\n");
+    Task_sleep(100);  // Sleep for a short time to let system become stable.
+    // TODO remove need for Task_sleep() -> right now it is locking up the system if not included and the user presses '`' continuously
 }
 
 
@@ -541,7 +559,11 @@ void handle_UART() {
 
     UART_read(glo.uart, &key_in, 1);
 
-    if (key_in == '\r' || key_in == '\n') {  // Enter key
+    if(key_in == '`') {
+        emergency_stop();  // Emergency stop with special character
+        return;
+    }
+    else if (key_in == '\r' || key_in == '\n') {  // Enter key
         if(glo.cursor_pos > 0) {
             // Process the completed input
             AddOutMessage("\r\n");  // Use AddOutMessage to move cursor to new line
@@ -698,10 +720,7 @@ void execute_payload(char *msg) {
 
     //=========================================================================
     // Check for commmand
-    if(strcmp(token,                    "`") == 0) {
-        emergency_stop();
-    }
-    else if (strcmp(token,           "-about") == 0) {
+    if (strcmp(token,           "-about") == 0) {
         CMD_about();
     }
     else if (strcmp(token,      "-callback") == 0) {
@@ -963,6 +982,24 @@ void CMD_help() {
             "| Example usage: \"-help print\" -> Displays information about print command.\r\n";
 
     }
+    else if(strcmp(cmd_arg_token,       "if") == 0  || strcmp(cmd_arg_token,              "-if") == 0) {
+        helpMessage =
+           //================================================================================ <-80 characters
+            "Command: -if (A COND B) ? DESTT : DESTF\n\r"
+            "| args:\n\r"
+            "| | A: The first operand, which can be a register or an immediate value\r\n"
+            "| |    (#value)\r\n"
+            "| | COND: The condition to evaluate. Acceptable values are >, =, or <.\r\n"
+            "| | B: The second operand, which can be a register or an immediate value\r\n"
+            "| |    (#value).\r\n"
+            "| | DESTT: The payload to execute if the condition is true. Can be null.\r\n"
+            "| | DESTF: The payload to execute if the condition is false. Can be null.\r\n"
+            "| Description: Executes a payload based on the condition.\r\n"
+            "| Example usage: \"-if (10 > #0) ? -script 5 : -print FALSE\" -> Executes script\r\n"
+            "|                 line 5 if the contents of register 10 are greater than 0,\r\n"
+            "|                 otherwise prints FALSE.\r\n";
+
+    }
     else if (strcmp(cmd_arg_token,      "memr") == 0  || strcmp(cmd_arg_token,           "-memr") == 0) {
         helpMessage =
            //================================================================================ <-80 characters
@@ -1005,7 +1042,7 @@ void CMD_help() {
             "| | max dest src        : Set dest to max of dest and src.\r\n"
             "| | min dest src        : Set dest to min of dest and src.\r\n"
             "| Operands:\r\n"
-            "| | Registers: r0 to r31\r\n"
+            "| | Registers: r0 to r31, (0 to 31 also works)\r\n"
             "| | Immediate: #value or #xvalue\r\n"
             "| | Memory Address: @address\r\n"
             "| Examples:\r\n"
@@ -1074,29 +1111,31 @@ void CMD_help() {
         helpMessage =
            //================================================================================ <-80 characters
             "| Supported Command [arg1][arg2]...   |  Command Description\r\n"
-            "|-------------------------------------------------------------------------------\r\n"
-            "| -about                              :  Display program information.\r\n"
-            "| -callback  [index][count][payload]  :  Configures a callback to execute a\r\n"
-            "|                                        payload when an event occurs.\r\n"
-            "| -error                              :  Displays number of times that each\r\n"
-            "|                                        error type has triggered.\r\n"
-            "| -gpio      [pin][function][val]     :  Performs pin function on selected\r\n"
-            "|                                        GPIO.\r\n"
-            "| -help      [command]                :  Display this help message or a\r\n"
-            "|                                        specific message based on command\r\n"
-            "|                                     :  to a command. I.E \"-help print\"\r\n"
-            "| -memr      [address]                :  Display contents of given memory\r\n"
-            "|                                        address.\r\n"
-            "| -print     [string]                 :  Display inputted string.\r\n"
-            "|                                        I.E \"-print abc\"\r\n"
-            "| -reg       [operation][operands]    :  Perform operation on specified\r\n"
-            "|                                        register.\r\n"
-            "| -rem       [remark]                 :  Add comments or remarks in scripts.\r\n" 
-            "| -script    [line_number][operation] :  Manage and execute scripts of\r\n"
-            "|                                        commands.\r\n"
-            "| -ticker    [index][initialDelay]    :  Configures a ticker to execute a\r\n"
-            "|            [period][count][payload]    payload after a delay and repeat it.\r\n"
-            "| -timer     [period_us]              :  Sets the period of Timer0 in\r\n"
+            "|-------------------------------------|-----------------------------------------\r\n"
+            "| -about                              |  Display program information.\r\n"
+            "| -callback  [index] [count] [payload]|  Configures a callback to execute a\r\n"
+            "|                                     |  payload when an event occurs.\r\n"
+            "| -error                              |  Displays number of times that each\r\n"
+            "|                                     |  error type has triggered.\r\n"
+            "| -gpio      [pin] [function] [val]   |  Performs pin function on selected\r\n"
+            "|                                     |  GPIO.\r\n"
+            "| -help      [command]                |  Display this help message or a\r\n"
+            "|                                     |  specific message based on command\r\n"
+            "| -if        [A] [COND] [B] ?         |  Executes a payload based on the\r\n"
+            "|            [DESTT] : [DESTF]        |  condition.\r\n" 
+            "|                                     |  to a command. I.E \"-help print\"\r\n"
+            "| -memr      [address]                |  Display contents of given memory\r\n"
+            "|                                     |  address.\r\n"
+            "| -print     [string]                 |  Display inputted string.\r\n"
+            "|                                     |  I.E \"-print abc\"\r\n"
+            "| -reg       [operation] [operands]   |  Perform operation on specified\r\n"
+            "|                                     |  register.\r\n"
+            "| -rem       [remark]                 |  Add comments or remarks in scripts.\r\n" 
+            "| -script    [line_number] [operation]|  Manage and execute scripts of\r\n"
+            "|                                     |  commands.\r\n"
+            "| -ticker    [index] [initialDelay]   |  Configures a ticker to execute a\r\n"
+            "|            [period] [count] [payload]  payload after a delay and repeat it.\r\n"
+            "| -timer     [period_us]              |  Sets the period of Timer0 in\r\n"
             "|                                        microseconds.\r\n";
     }
 
@@ -1106,7 +1145,7 @@ void CMD_help() {
 }
 
 void CMD_if() {
-    // Parse the condition inside parentheses
+    // Parse the condition (A COND B) or A COND B, where COND is >, =, or <
     char *condition_part = strtok(NULL, "?");
     if (!condition_part) {
         AddProgramMessage("Error: Invalid syntax for -if command.\r\n");  // TODO: Add to errors
@@ -1116,10 +1155,16 @@ void CMD_if() {
     // Trim leading and trailing whitespaces
     trim(condition_part);
 
+    // Remove surrounding parentheses if present
+    if (condition_part[0] == '(' && condition_part[strlen(condition_part) - 1] == ')') {
+        condition_part[strlen(condition_part) - 1] = '\0'; // Remove closing parenthesis
+        condition_part++; // Move pointer past opening parenthesis
+    }
+
     // Extract operands and condition
     char operandA[BUFFER_SIZE], operandB[BUFFER_SIZE], cond[3];
-    if (sscanf(condition_part, "(%s %2[><=] %s)", operandA, cond, operandB) != 3) {
-        AddProgramMessage("Error: Invalid condition format.\r\n");  // TODO: Add to errors
+    if (sscanf(condition_part, "%s %2[><=] %s", operandA, cond, operandB) != 3) {
+        AddProgramMessage("Error: Invalid condition format.\r\n");
         return;
     }
 
@@ -1474,13 +1519,23 @@ void CMD_timer() {
 
     if(!val_token) {
         // No period provided, display current Timer0 period
-        sprintf(output_msg, "Current Timer0 period is %u us\r\n", glo.timer0_params.period);
+        sprintf(output_msg, "Current Timer0 period is %u us\r\n", glo.Timer0Period);
         AddProgramMessage(output_msg);
         return;
     }
 
     char *val_ptr;
     uint32_t val_us = strtoul(val_token, &val_ptr, 10);
+
+    // Stop the timer if the value is 0
+    if(val_us == 0) {
+        // Stop the timer
+        Timer_stop(glo.Timer0);
+        glo.Timer0Period = 0;
+        Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, 0);  // Set period to 0 to stop timer
+        AddProgramMessage("Timer0 stopped\r\n");
+        return;
+    }
 
     // Throw error if value is too low
     if(val_us < MIN_TIMER_PERIOD_US) {
@@ -1492,8 +1547,7 @@ void CMD_timer() {
     AddProgramMessage("Time to write...\r\n");
 
     Timer_stop(glo.Timer0);
-    //glo.Timer0Period = val_us;
-    //glo.timer0_params.period = val_us;
+    glo.Timer0Period = val_us;
     Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, val_us);
     int32_t status = Timer_start(glo.Timer0);
 

@@ -31,7 +31,8 @@ void print_all_registers() {
     char msg[BUFFER_SIZE];
     char line[MAX_LINE_LENGTH];
 
-    AddProgramMessage("=============================== Register Values ================================\r\n");
+    AddProgramMessage("================================== Registers ===================================\r\n");
+    AddProgramMessage("Register | Value       | Address\r\n");
     AddProgramMessage("---------|-------------|----------------\r\n");
     int i;
     for (i = 0; i < NUM_REGISTERS; i++) {
@@ -45,8 +46,15 @@ void print_all_registers() {
 /// @return Register number if valid, -1 otherwise
 int parse_register(char *token) {
     if (!token) return -1;
+    // Check for register with 'r' prefix
     if (token[0] == 'r' || token[0] == 'R') {
         int reg_num = atoi(&token[1]);
+        if (reg_num >= 0 && reg_num < NUM_REGISTERS) {
+            return reg_num;
+        }
+    // Check for register without 'r' prefix
+    } else if (token[0] != '#' && token[0] != '@' && token[0] != '$' && token[0] != 'h') {
+        int reg_num = atoi(token);
         if (reg_num >= 0 && reg_num < NUM_REGISTERS) {
             return reg_num;
         }
@@ -61,8 +69,11 @@ int parse_register(char *token) {
 bool parse_immediate(char *token, int32_t *value) {
     if (!token || token[0] != '#') return false;
     char *endptr;
-    if (token[1] == 'x' || token[1] == 'X') {
-        // Hexadecimal immediate (e.g., #xFF)
+    if (token[1] == 'x' || token[1] == 'X'                          // Hexadecimal with 'x' prefix
+     || (token[1] == '0' && (token[2] == 'x' || token[2] == 'X'))   // Hexadecimal with '0x' prefix
+     || token[1] == 'h' || token[1] == 'H'                          // Hexadecimal with 'h' prefix
+     || token[1] == '$') {                                          // Hexadecimal with '$' prefix
+        // Hexadecimal immediate (e.g., #xFF, #0xFF, #$FF, #hFF)
         *value = strtol(&token[2], &endptr, 16);
     } else {
         // Decimal immediate (e.g., #10)
@@ -77,14 +88,30 @@ bool parse_immediate(char *token, int32_t *value) {
 /// @return Whether the token was successfully parsed
 bool parse_memory_address(char *token, uint32_t *address) {
     if (!token || token[0] != '@') return false;
+
+    int reg_num;
+    int32_t immediate_value;
     char *endptr;
-    if (token[1] == 'x' || token[1] == 'X') {
-        // Hexadecimal address
-        *address = strtoul(&token[2], &endptr, 16);
-    } else {
-        // Decimal address
-        *address = strtoul(&token[1], &endptr, 10);
+
+    // Check if the token is a register
+    reg_num = parse_register(&token[1]);
+    if (reg_num != -1) {
+        *address = (uint32_t)&registers[reg_num];
+        return true;
     }
+
+    // Check if the token is an immediate value
+    if (parse_immediate(&token[1], &immediate_value)) {
+        *address = (uint32_t)immediate_value;
+        return true;
+    }
+
+    // Check if the token is a hexadecimal address
+    if (token[1] == 'x' || token[1] == 'X') {
+        *address = strtoul(&token[2], &endptr, 16);
+        return (*endptr == '\0');
+    }
+    
     return (*endptr == '\0');
 }
 
@@ -116,31 +143,9 @@ bool is_valid_memory_address(uint32_t address) {
 void reg_mov(char *dest_token, char *src_token) {
     int dest_reg = parse_register(dest_token);
     int32_t src_value;
-    uint32_t address;
 
-    if (dest_reg == -1) {
-        AddProgramMessage("Error: Invalid destination register.\r\n");
-        return;
-    }
-
-    int src_reg = parse_register(src_token);
-    if (src_reg != -1) {
-        // Source is a register
-        src_value = registers[src_reg];
-    }
-    else if (parse_immediate(src_token, &src_value)) {
-        // Source is an immediate value
-    }
-    else if (parse_memory_address(src_token,  &address)) {
-        if (!is_valid_memory_address(address)) {
-            AddProgramMessage("Error: Invalid memory address.\r\n");
-            return false;
-        }
-        // Source is a memory address (for grad students)
-        src_value = *(int32_t *)address;
-    }
-    else {
-        AddProgramMessage("Error: Invalid source operand.\r\n");
+    // Parse operands
+    if (!parse_operands(dest_token, src_token, &dest_reg, &src_value)) {
         return;
     }
 
@@ -159,7 +164,7 @@ void reg_xchg(char *reg1_token, char *reg2_token) {
     int reg2 = parse_register(reg2_token);
 
     if (reg1 == -1 || reg2 == -1) {
-        AddProgramMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");  //  TODO: Add to errors
         return;
     }
 
@@ -178,7 +183,7 @@ void reg_inc(char *reg_token) {
     int reg = parse_register(reg_token);
 
     if (reg == -1) {
-        AddProgramMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");  // TODO: Add to errors
         return;
     }
 
@@ -195,7 +200,7 @@ void reg_dec(char *reg_token) {
     int reg = parse_register(reg_token);
 
     if (reg == -1) {
-        AddProgramMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");  // TODO: Add to errors
         return;
     }
 
@@ -217,7 +222,7 @@ void reg_not(char *reg_token) {
     int reg = parse_register(reg_token);
 
     if (reg == -1) {
-        AddProgramMessage("Error: Invalid register.\r\n");
+        AddProgramMessage("Error: Invalid register.\r\n");  // TODO: Add to errors
         return;
     }
 
@@ -307,7 +312,7 @@ bool parse_operands(char *dest_token, char *src_token, int *dest_reg, int32_t *s
     uint32_t address;
     *dest_reg = parse_register(dest_token);
     if (*dest_reg == -1) {
-        AddProgramMessage("Error: Invalid destination register.\r\n");
+        AddProgramMessage("Error: Invalid destination register.\r\n");  // TODO: Add to errors
         return false;
     }
 
@@ -323,7 +328,7 @@ bool parse_operands(char *dest_token, char *src_token, int *dest_reg, int32_t *s
     }
     else if (parse_memory_address(src_token, &address)) {
         if (!is_valid_memory_address(address)) {
-            AddProgramMessage("Error: Invalid memory address.\r\n");
+            AddProgramMessage("Error: Invalid memory address.\r\n");  // TODO: Add to errors
             return false;
         }
         // Memory address (grad students)
@@ -331,7 +336,7 @@ bool parse_operands(char *dest_token, char *src_token, int *dest_reg, int32_t *s
         AddProgramMessage("Memory Address.\r\n");
     }
     else {
-        AddProgramMessage("Error: Invalid source operand.\r\n");
+        AddProgramMessage("Error: Invalid source operand.\r\n");  // TODO: Add to errors
         return false;
     }
 

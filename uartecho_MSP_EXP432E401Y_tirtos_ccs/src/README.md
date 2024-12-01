@@ -2,6 +2,7 @@
 - [ ] Console Command history with arrow key traversing
 - [ ] Make `-reg rem` by 0 return remainder of numerator
 - [ ] Debug print statement system enabled via shadow registers
+- [ ] Create `-shadow` to access shadow register contents (for system setup)
 
 ## P700-P800
 - [x] Implement `-script` with 64 lines.

@@ -31,6 +31,7 @@ void uartReadTask(UArg arg0, UArg arg1) {
     /* Loop forever handling UART input and queue payloads  */
     while (1) {
         // Check for emergency stop
+        // This should not be triggered currently, since uartReadTask is the only task that can trigger an emergency stop
         if (glo.emergencyStopActive) {
             // Perform cleanup if necessary
             // ...
@@ -70,6 +71,11 @@ void uartWriteTask(UArg arg0, UArg arg1) {
             while (glo.emergencyStopActive) {
                 Task_sleep(100);
             }
+            continue;
+        }
+
+        // Do not write if OutMsgQueue is empty
+        if(Queue_empty(glo.bios.OutMsgQueue)) {
             continue;
         }
 
@@ -154,6 +160,11 @@ void executePayloadTask(UArg arg0, UArg arg1) {
             while (glo.emergencyStopActive) {
                 Task_sleep(100);
             }
+            continue;
+        }
+
+        // Do not execute if PayloadQueue is empty
+        if(Queue_empty(glo.bios.PayloadQueue)) {
             continue;
         }
 
