@@ -73,7 +73,6 @@ void init_globals() {
     glo.integrityTail = 0xa5a5a5a5;
     glo.byteSize = sizeof(glo);
     glo.cursor_pos = 0;
-    glo.input_msg_size = 0;
     glo.progOutputCol = 0;
     glo.progOutputLines = 1;
 
@@ -324,8 +323,6 @@ void *mainThread(void *arg0)
     return;
 }
 
-// TODO: NEXT implement graceful shutdown
-// - [ ] conditionals
 
 /**
  * @brief Emergency stop function to halt all tasks and timers.  Should only be called from uartReadTask.
@@ -382,6 +379,7 @@ void emergency_stop() {
         Memory_free(NULL, message, sizeof(PayloadMessage));
     }
     Semaphore_reset(glo.bios.PayloadSem, 0);  // Reset the semaphore count (no payloads to execute)
+    glo.scriptPointer = -1;  // Reset the script pointer to disable script execution
 
     // Clear the UART write queue
     while (!Queue_empty(glo.bios.OutMsgQueue)) {
@@ -404,8 +402,10 @@ void emergency_stop() {
     // Semaphore_post(glo.bios.UARTWriteSem);
     // Semaphore_post(glo.bios.TickerSem);
 
-    // You can also add a message indicating the system is resuming
-    AddProgramMessage("Emergency stop completed. Resuming normal operation.\r\n");
+    // You can also add a message indicating the system is resuming normal operation
+    AddProgramMessage("Emergency stop completed.\r\n");
+    AddProgramMessage("Timer, callbacks, tickers, and payloads have been cleared.\r\n");
+    AddProgramMessage("Resuming normal operation.\r\n");
     Task_sleep(100);  // Sleep for a short time to let system become stable.
     // TODO remove need for Task_sleep() -> right now it is locking up the system if not included and the user presses '`' continuously
 }
@@ -576,6 +576,7 @@ void handle_UART() {
             // Remove the last character
             glo.inputMessageBuffer[--glo.cursor_pos] = '\0';
         }
+        refresh_user_input();  // TODO TEST
     } else if (key_in == '\033') {  // Escape character for arrow keys
         // Implement handling of arrow keys if needed
         // Normal Operation
@@ -584,6 +585,7 @@ void handle_UART() {
         if (glo.cursor_pos < BUFFER_SIZE - 1) {
             glo.inputMessageBuffer[glo.cursor_pos++] = key_in;
             glo.inputMessageBuffer[glo.cursor_pos] = '\0';
+            AddOutMessage(&key_in);  // Use AddOutMessage to echo the character
         } else {
             AddOutMessage("\r\n");  // Move to a new line
             reset_buffer();
@@ -591,14 +593,13 @@ void handle_UART() {
         }
     }
 
-    glo.input_msg_size = glo.cursor_pos;
-    refresh_user_input();  // This will use AddOutMessage()
+    //glo.input_msg_size = glo.cursor_pos;
+    //refresh_user_input();  // This will use AddOutMessage()
 }
 
 
 void reset_buffer() {
     glo.cursor_pos = 0;
-    glo.input_msg_size = -1;
     memset(glo.inputMessageBuffer, 0, BUFFER_SIZE);
     AddProgramMessage(NEW_LINE_RETURN);  // Use AddOutMessage to move to a new line
 }
@@ -614,7 +615,7 @@ void clear_console() {
 void refresh_user_input() {
     AddOutMessage(CLEAR_LINE_RESET);  // Clear the input line
     AddOutMessage("> ");              // Display the prompt
-    if(glo.input_msg_size > 0)
+    if(glo.cursor_pos > 0)
         AddOutMessage(glo.inputMessageBuffer); // Display the current input buffer
 }
 
@@ -656,8 +657,8 @@ void refreshUserInputLine() {
 
     // Write the input prompt and current buffer
     UART_write_safe("> ", 2);
-    if(glo.input_msg_size > 0)
-        UART_write_safe(glo.inputMessageBuffer, glo.input_msg_size);
+    if(glo.cursor_pos > 0)
+        UART_write_safe(glo.inputMessageBuffer, glo.cursor_pos);
 }
 
 
@@ -1076,7 +1077,9 @@ void CMD_help() {
             "| | -script 3              : Display script line 3.\r\n"
             "| | -script 17 w -gpio 0 t : Write '-gpio 0 t' to script line 17.\r\n"
             "| | -script 17 x           : Execute script starting from line 17.\r\n"
-            "| | -script 17 c           : Clear script line 17.\r\n";
+            "| | -script 17 c           : Clear script line 17.\r\n"
+            "| Special Case:\r\n"
+            "| | -script r              : Reset the script pointer to -1 (stops execution).\r\n";
     }
     else if (strcmp(cmd_arg_token,      "timer") == 0 || strcmp(cmd_arg_token,           "-timer") == 0) {
         helpMessage =
@@ -1402,6 +1405,13 @@ void CMD_script() {
         return;
     }
 
+    // -script r: Reset the script execution
+    if (strcmp(arg1, "r") == 0) {
+        // Reset the script execution
+        glo.scriptPointer = -1;  // Reset script pointer
+        return;
+    }
+
     int line_number = atoi(arg1);
     if (line_number < 0 || line_number >= SCRIPT_LINE_COUNT) {
         AddProgramMessage(raiseError(ERR_INVALID_SCRIPT_LINE));
@@ -1425,9 +1435,11 @@ void CMD_script() {
         char msg[SCRIPT_LINE_SIZE];
         sprintf(msg, "Script line %d set to: %s\r\n", line_number, scriptLines[line_number]);
         AddProgramMessage(msg);
+
     } else if (strcmp(arg2, "x") == 0) {
         // Execute script starting from line_number
         execute_script_from_line(line_number);
+
     } else if (strcmp(arg2, "c") == 0) {
         // Clear script line
         scriptLines[line_number][0] = '\0';

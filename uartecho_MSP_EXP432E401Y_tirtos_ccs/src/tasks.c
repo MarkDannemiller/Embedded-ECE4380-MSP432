@@ -52,7 +52,9 @@ void uartReadTask(UArg arg0, UArg arg1) {
     }
 }
 
-// Write from OutMsgQueue
+/**
+ * @brief Task to write messages from OutMsgQueue to UART
+ */
 void uartWriteTask(UArg arg0, UArg arg1) {
     PayloadMessage *out_message;
 
@@ -137,7 +139,10 @@ void uartWriteTask(UArg arg0, UArg arg1) {
 
 
 
-// Execute Payloads on PayloadQueue
+/** 
+ * Execute Payloads on PayloadQueue.
+ * Also handles script execution.
+ */
 void executePayloadTask(UArg arg0, UArg arg1) {
     // Check if PayloadQueue has payload
     // Get payload
@@ -163,6 +168,24 @@ void executePayloadTask(UArg arg0, UArg arg1) {
             continue;
         }
 
+        // If script is running, execute the current line and move to the next
+        if (glo.scriptPointer >= 0) {
+            if (glo.scriptPointer < SCRIPT_LINE_COUNT && scriptLines[glo.scriptPointer]
+                && scriptLines[glo.scriptPointer][0] != '\0') { // Check for valid script line. Empty lines are skipped
+
+                int currentLine = glo.scriptPointer;
+                execute_payload(scriptLines[glo.scriptPointer]);
+
+                // Increment scriptPointer if the line was executed and did not result in a line change
+                if(currentLine == glo.scriptPointer) {
+                    glo.scriptPointer++;                    // Move to the next line
+                    Semaphore_post(glo.bios.PayloadSem);    // Allow next line to execute
+                }
+            } else {
+                glo.scriptPointer = -1; // End of script
+            }
+        }
+
         // Do not execute if PayloadQueue is empty
         if(Queue_empty(glo.bios.PayloadQueue)) {
             continue;
@@ -173,15 +196,14 @@ void executePayloadTask(UArg arg0, UArg arg1) {
         // Execute the payload
         execute_payload(exec_payload->data);
 
-        // If part of a script, queue the next line
-        if (glo.scriptPointer >= 0) {
-            glo.scriptPointer++; // Move to the next line
-            if (glo.scriptPointer < SCRIPT_LINE_COUNT && scriptLines[glo.scriptPointer]) {
-                AddPayload(scriptLines[glo.scriptPointer]);
-            } else {
-                glo.scriptPointer = -1; // End of script
-            }
-        }
+        // if (glo.scriptPointer >= 0) {
+        //     glo.scriptPointer++; // Move to the next line
+        //     if (glo.scriptPointer < SCRIPT_LINE_COUNT && scriptLines[glo.scriptPointer]) {
+        //         AddPayload(scriptLines[glo.scriptPointer]);
+        //     } else {
+        //         glo.scriptPointer = -1; // End of script
+        //     }
+        // }
 
         // Free allocated memory
         Memory_free(NULL, exec_payload->data, strlen(exec_payload->data) + 1);

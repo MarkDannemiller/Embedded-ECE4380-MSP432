@@ -44,11 +44,18 @@ void execute_script_from_line(int line_number) {
         return; // No script to execute
     }
 
+    if(scriptLines[line_number][0] == '\0') {
+        return; // Empty script line
+    }
+
     // Set scriptPointer to the starting line
     glo.scriptPointer = line_number;
 
-    // Add the first line to the PayloadQueue
-    AddPayload(scriptLines[line_number]);
+    // Allow the first line to execute.  Otherwise, the task will wait for the semaphore from regular payloads
+    Semaphore_post(glo.bios.PayloadSem);
+
+    // // Add the first line to the PayloadQueue
+    // AddPayload(scriptLines[line_number]);
 }
 
 //=============================================================================
@@ -91,7 +98,7 @@ void execute_destination(const char *dest) {
     }
 
     // Since the destination can be any payload, we can simply add it to the payload queue
-    AddPayload(destCopy);
+    execute_payload(destCopy);
 }
 
 // Trim leading and trailing whitespaces

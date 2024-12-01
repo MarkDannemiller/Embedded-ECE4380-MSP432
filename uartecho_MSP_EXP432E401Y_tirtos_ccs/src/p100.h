@@ -21,7 +21,7 @@
 #define BUFFER_SIZE 80          // Maximum input buffer by user (check whether to increase?)
 #define MAX_LINE_LENGTH 80      // Maximum line length before wrapping
 #define MAX_MESSAGE_SIZE 2000   // Maximum output message size
-#define MAX_QUEUE_SIZE 500      // Maximum number of messages in queue
+#define MAX_QUEUE_SIZE 1000      // Maximum number of messages in queue
 
 #define CLEAR_LINE_RESET "\033[2K\033[1G\r"
 #define NEW_LINE_RETURN "\r\n"
@@ -83,7 +83,6 @@ struct Globals {
     uint32_t byteSize;  // Size of Globals
     char inputMessageBuffer[BUFFER_SIZE];
     int cursor_pos;                 // Cursor position of cursor in the input buffer
-    int input_msg_size;             // Size of the incoming message buffer
     int progOutputCol;          // Program output column position
     int progOutputLines;        // Number of lines program output occupies
 
