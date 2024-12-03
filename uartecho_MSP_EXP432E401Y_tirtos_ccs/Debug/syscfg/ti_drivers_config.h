@@ -90,6 +90,12 @@ extern const uint_least8_t          CONFIG_GPT_1_CONST;
  */
 extern const uint_least8_t          CONFIG_UART_0_CONST;
 #define CONFIG_UART_0               0
+/*
+ *  TX: PC5
+ *  RX: PC4
+ */
+extern const uint_least8_t          CONFIG_UART_1_CONST;
+#define CONFIG_UART_1               1
 
 
 /*

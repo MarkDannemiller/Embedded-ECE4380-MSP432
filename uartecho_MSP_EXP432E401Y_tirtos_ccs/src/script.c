@@ -1,3 +1,6 @@
+/*
+ *  ======== script.c ========
+ */
 #include "script.h"
 #include "register.h"
 #include "p100.h"

@@ -1,3 +1,6 @@
+/*
+ *  ======== tickers.c ========
+ */
 #include <string.h>
 #include <stdlib.h>
 #include "tickers.h"

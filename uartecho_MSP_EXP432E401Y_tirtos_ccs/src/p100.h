@@ -30,8 +30,9 @@
 #define MIN_TIMER_PERIOD_US 100
 
 // Extern declarations for BIOS objects created in .cfg
-extern Task_Handle UARTReader;
+extern Task_Handle UARTReader0;
 extern Task_Handle UARTWriter;
+extern Task_Handle UARTReader1;
 extern Task_Handle PayloadExecutor;
 extern Task_Handle TickerProcessor;
 
@@ -58,7 +59,10 @@ typedef struct PayloadMessage {
 typedef struct {
 
     Task_Handle UARTWriter;                 // Created statically in release.cfg
-    Task_Handle UARTReader;                 // Created statically in release.cfg
+    Task_Handle UARTReader0;                 // Created statically in release.cfg
+
+    Task_Handle UARTReader1;                 // Created statically in release.cfg
+
     Task_Handle PayloadExecutor;            // Created statically in release.cfg
     Task_Handle TickerProcessor;
 
@@ -81,13 +85,21 @@ typedef struct {
 struct Globals {
     uint32_t integrityHead;
     uint32_t byteSize;  // Size of Globals
-    char inputMessageBuffer[BUFFER_SIZE];
-    int cursor_pos;                 // Cursor position of cursor in the input buffer
-    int progOutputCol;          // Program output column position
-    int progOutputLines;        // Number of lines program output occupies
 
-    UART_Handle uart;
-    UART_Params uartParams;
+    // UART Console
+    char inputBuffer_uart0[BUFFER_SIZE];
+    int cursor_pos;                 // Cursor position of cursor in the input buffer
+    int progOutputCol;              // Program output column position
+    int progOutputLines;            // Number of lines program output occupies
+    UART_Handle uart0;
+    UART_Params uartParams0;
+
+    // TODO look at switching to callbacks for uart0 and uart1
+    // UART1 for outputting payloads to another device
+    char inputBuffer_uart1[BUFFER_SIZE];
+    UART_Handle uart1;
+    UART_Params uartParams1;
+    int cursor_pos_uart1;
 
     Timer_Handle Timer0;
     Timer_Params timer0_params;
@@ -104,6 +116,7 @@ struct Globals {
 
 
 void init_globals();
+void init_drivers();
 
 
 //================================================
@@ -175,12 +188,12 @@ const char* getErrorName(Errors error);
 
 
 //================================================
-// UART Comms
+// UART0 Comms
 //================================================
 
-// UART Console Functions (Called by UARTReader)
+// UART Console Functions (Called by UARTReader0)
 void refresh_user_input();
-void handle_UART();
+void handle_UART0();
 void reset_buffer();
 void clear_console();
 
@@ -194,6 +207,14 @@ void moveCursorDown(int lines);
 void AddProgramMessage(char *data);
 bool UART_write_safe(const char *message, int size);
 bool UART_write_safe_strlen(const char *message);
+
+//================================================
+// UART1 Comms
+//================================================
+
+// UART1 Comms (Called by UARTReader1)
+void handle_UART1();
+void reset_buffer_uart1();
 
 
 //================================================
@@ -209,6 +230,7 @@ void CMD_callback();    // Configure a callback for timer or GPIO events
 void CMD_error();       // Display count of each error type
 void CMD_gpio();        // Read/Write/Toggle inputed GPIO pin
 void CMD_help();        // Print help info about all/specific command(s)
+void CMD_if();          // Conditional execution of payload
 void CMD_memr();        // Display contents of memory address
 void CMD_print();       // Print inputed string
 void CMD_reg();         // Perform register operations
@@ -216,6 +238,8 @@ void CMD_rem();         // Add comments or remarks in scripts
 void CMD_script();      // Handle operations related to loading and executing scripts
 void CMD_timer();       // Sets the periodic timer0 period
 void CMD_ticker();      // Configures ticker and payload
+void CMD_uart();        // Send payload to UART1
+
 
 // TODO these prints and tie into commands when no args are given
 // void print_timer_info();

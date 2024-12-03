@@ -23,6 +23,7 @@ const Timer1 = Timer.addInstance();
 const Timer2 = Timer.addInstance();
 const UART   = scripting.addModule("/ti/drivers/UART");
 const UART1  = UART.addInstance();
+const UART2  = UART.addInstance();
 
 /**
  * Write custom configuration values to the imported modules.
@@ -65,6 +66,9 @@ Timer2.$name     = "CONFIG_GPT_1";
 UART1.$name     = "CONFIG_UART_0";
 UART1.$hardware = system.deviceData.board.components.XDS110UART;
 
+UART2.$name        = "CONFIG_UART_1";
+UART2.uart.$assign = "UART7";
+
 /**
  * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
@@ -81,3 +85,5 @@ Timer2.timer.$suggestSolution         = "Timer1";
 UART1.uart.$suggestSolution           = "UART0";
 UART1.uart.txPin.$suggestSolution     = "expansion.76";
 UART1.uart.rxPin.$suggestSolution     = "expansion.74";
+UART2.uart.txPin.$suggestSolution     = "boosterpack.4";
+UART2.uart.rxPin.$suggestSolution     = "boosterpack.3";

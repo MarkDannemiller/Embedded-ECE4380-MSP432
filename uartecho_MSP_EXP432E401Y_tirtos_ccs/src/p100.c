@@ -31,7 +31,7 @@
  */
 
 /*
- *  ======== uartecho.c ========
+ *  ======== p100.c ========
  */
 #include <stdint.h>
 #include <stddef.h>
@@ -72,22 +72,33 @@ void init_globals() {
     glo.integrityHead = 0x5a5a5a5a;
     glo.integrityTail = 0xa5a5a5a5;
     glo.byteSize = sizeof(glo);
+
+    // UART 0 for console
     glo.cursor_pos = 0;
     glo.progOutputCol = 0;
     glo.progOutputLines = 1;
-
     int i;
     for(i=3; i<BUFFER_SIZE; i++){
-            glo.inputMessageBuffer[i] = 0;
+        glo.inputBuffer_uart0[i] = 0;
+    }
+
+    // UART 1
+    glo.cursor_pos_uart1 = 0;
+    for(i=3; i<BUFFER_SIZE; i++){
+        glo.inputBuffer_uart1[i] = 0;
     }
 
     glo.scriptPointer = -1;  // No script loaded
 
     // Assign the handles to the BiosList struct
-    glo.bios.UARTReader = UARTReader;
+    glo.bios.UARTReader0 = UARTReader0;
     glo.bios.UARTWriter = UARTWriter;
+
+    glo.bios.UARTReader1 = UARTReader1;
+    
     glo.bios.PayloadExecutor = PayloadExecutor;
     glo.bios.TickerProcessor = TickerProcessor;
+
 
     glo.bios.PayloadQueue = PayloadQueue;
     glo.bios.OutMsgQueue = OutMsgQueue;
@@ -232,33 +243,51 @@ void init_drivers() {
     GPIO_setCallback(CONFIG_GPIO_SWITCH_7, sw2Callback_fxn);
     GPIO_enableInt(CONFIG_GPIO_SWITCH_7);
 
-
     /* Turn on user LED */
     //GPIO_write(CONFIG_GPIO_LED_0, CONFIG_GPIO_LED_ON);
     digitalWrite(0, HIGH);
-    digitalWrite(1, HIGH);
-    digitalWrite(2, HIGH);
-    digitalWrite(3, HIGH);
-
-    /* Create a UART with data processing off. */
-    UART_Params_init(&glo.uartParams);
-    glo.uartParams.writeDataMode = UART_DATA_BINARY;
-    glo.uartParams.readDataMode = UART_DATA_BINARY;
-    glo.uartParams.readReturnMode = UART_RETURN_FULL;
-    glo.uartParams.baudRate = 115200;
-
-    glo.uart = UART_open(CONFIG_UART_0, &glo.uartParams);
+    // digitalWrite(1, HIGH);
+    // digitalWrite(2, HIGH);
+    // digitalWrite(3, HIGH);
 
 
+    /* Create a UART0 with data processing off. */
+    UART_Params_init(&glo.uartParams0);
+    glo.uartParams0.writeDataMode = UART_DATA_BINARY;
+    glo.uartParams0.readDataMode = UART_DATA_BINARY;
+    glo.uartParams0.readReturnMode = UART_RETURN_FULL;
+    glo.uartParams0.baudRate = 115200;
+    glo.uart0 = UART_open(CONFIG_UART_0, &glo.uartParams0);
+
+    if (glo.uart0 == NULL) {
+        // UART_open() failed
+        while (1);
+    }
+
+
+    /* Initialize UART1 */
+    UART_Params_init(&glo.uartParams1);
+    glo.uartParams1.writeDataMode = UART_DATA_BINARY;
+    glo.uartParams1.readDataMode = UART_DATA_BINARY;
+    glo.uartParams1.readReturnMode = UART_RETURN_FULL;
+    glo.uartParams1.baudRate = 115200;
+    glo.uart1 = UART_open(CONFIG_UART_1, &glo.uartParams1);
+
+    if (glo.uart1 == NULL) {
+        // UART_open() failed
+        while (1);
+    }
+
+
+    // Initialize the timer
     Timer_Params_init(&glo.timer0_params);
     glo.timer0_params.periodUnits = Timer_PERIOD_US;
     glo.timer0_params.period = 5000000; // 10 seconds
     glo.timer0_params.timerMode  = Timer_CONTINUOUS_CALLBACK;
     glo.timer0_params.timerCallback = timer0Callback_fxn;
     glo.Timer0 = Timer_open(CONFIG_GPT_0, &glo.timer0_params);
+    int32_t status = Timer_start(glo.Timer0);  // Activate Timer0 Periodically
 
-    // Activate Timer0 Periodically
-    int32_t status = Timer_start(glo.Timer0);
     if (status == Timer_STATUS_ERROR) {
         //Timer_start() failed
         while (1);
@@ -306,7 +335,7 @@ void *mainThread(void *arg0)
     init_globals();
     init_drivers();
 
-    if (glo.uart == NULL) {
+    if (glo.uart0 == NULL) {
         while (1);
     }
 
@@ -325,7 +354,7 @@ void *mainThread(void *arg0)
 
 
 /**
- * @brief Emergency stop function to halt all tasks and timers.  Should only be called from uartReadTask.
+ * @brief Emergency stop function to halt all tasks and timers.  Should only be called from uart0ReadTask.
  */
 void emergency_stop() {
     int i;
@@ -337,10 +366,10 @@ void emergency_stop() {
     Semaphore_post(glo.bios.PayloadSem);    // Unblocks executePayloadTask
     Semaphore_post(glo.bios.UARTWriteSem);  // Unblocks uartWriteTask
     Semaphore_post(glo.bios.TickerSem);     // Unblocks tickerProcessingTask
-    // For uartReadTask, if necessary
+    // For uart0ReadTask, if necessary
 
     // Wait for all tasks to signal completion
-    for (i = 0; i < (NUM_TASKS - 1); i++) {  // -1 for the thread calling emergency_stop, which should only ever be uartReadTask
+    for (i = 0; i < (NUM_TASKS - 1); i++) {  // -1 for the thread calling emergency_stop, which should only ever be uart0ReadTask
         Semaphore_pend(glo.emergencyStopSem, BIOS_WAIT_FOREVER);
     }
 
@@ -494,41 +523,41 @@ void AddOutMessage(const char *data) {
 
 
 bool UART_write_safe(const char *message, int size) {
-    // Check if UART handle is valid (assuming glo.uart should be valid)
-    if (glo.uart == NULL) {
+    // Check if UART handle is valid (assuming glo.uart0 should be valid)
+    if (glo.uart0 == NULL) {
         return false;  // If UART is not initialized, we can't send any error messages
     }
 
     // Return false and send error message if size is 0 or negative
     if (size <= 0) {
         UART_write_safe_strlen(raiseError(ERR_INVALID_MSG_SIZE));
-        //UART_write(glo.uart, "Error: Invalid message size.\r\n", 28);
+        //UART_write(glo.uart0, "Error: Invalid message size.\r\n", 28);
         return false;
     }
 
     // Return false and send error message if message is a null pointer
     if (message == NULL) {
         UART_write_safe_strlen(raiseError(ERR_NULL_MSG_PTR));
-        //UART_write(glo.uart, "Error: Null message pointer.\r\n", 29);
+        //UART_write(glo.uart0, "Error: Null message pointer.\r\n", 29);
         return false;
     }
 
     // Return false and send error message if message is empty (first character is the null terminator)
     if (message[0] == '\0') {
         UART_write_safe_strlen(raiseError(ERR_EMPTY_MSG));
-        //UART_write(glo.uart, "Error: Empty message.\r\n", 22);
+        //UART_write(glo.uart0, "Error: Empty message.\r\n", 22);
         return false;
     }
 
     // Optional: Return false and send error message if size exceeds the maximum buffer size
     if (size > MAX_MESSAGE_SIZE) {
         UART_write_safe_strlen(raiseError(ERR_BUFFER_OF));
-       // UART_write(glo.uart, "Error: Message size exceeds maximum size.\r\n", 42);
+       // UART_write(glo.uart0, "Error: Message size exceeds maximum size.\r\n", 42);
         return false;
     }
 
     // Write the message and check if the write operation is successful
-    if (UART_write(glo.uart, message, size) == UART_STATUS_ERROR) {
+    if (UART_write(glo.uart0, message, size) == UART_STATUS_ERROR) {
         raiseError(ERR_MSG_WRITE_FAILED);
         return false;
     }
@@ -549,7 +578,7 @@ bool UART_write_safe_strlen(const char *message) {
 //================================================
 
 
-void handle_UART() {
+void handle_UART0() {
     char key_in;
 
     // Catch cursor out of bounds
@@ -557,7 +586,7 @@ void handle_UART() {
         glo.cursor_pos = 0;
     }
 
-    UART_read(glo.uart, &key_in, 1);
+    UART_read(glo.uart0, &key_in, 1);
 
     if(key_in == '`') {
         emergency_stop();  // Emergency stop with special character
@@ -567,14 +596,14 @@ void handle_UART() {
         if(glo.cursor_pos > 0) {
             // Process the completed input
             AddOutMessage("\r\n");  // Use AddOutMessage to move cursor to new line
-            AddPayload(glo.inputMessageBuffer);
+            AddPayload(glo.inputBuffer_uart0);
         }
         reset_buffer();
         return;
     } else if (key_in == '\b' || key_in == 0x7F) {  // Backspace key
         if (glo.cursor_pos > 0) {
             // Remove the last character
-            glo.inputMessageBuffer[--glo.cursor_pos] = '\0';
+            glo.inputBuffer_uart0[--glo.cursor_pos] = '\0';
         }
         refresh_user_input();  // TODO TEST
     } else if (key_in == '\033') {  // Escape character for arrow keys
@@ -583,8 +612,8 @@ void handle_UART() {
     } else {
         // Add the character to the buffer if it's not full
         if (glo.cursor_pos < BUFFER_SIZE - 1) {
-            glo.inputMessageBuffer[glo.cursor_pos++] = key_in;
-            glo.inputMessageBuffer[glo.cursor_pos] = '\0';
+            glo.inputBuffer_uart0[glo.cursor_pos++] = key_in;
+            glo.inputBuffer_uart0[glo.cursor_pos] = '\0';
             AddOutMessage(&key_in);  // Use AddOutMessage to echo the character
         } else {
             AddOutMessage("\r\n");  // Move to a new line
@@ -600,7 +629,7 @@ void handle_UART() {
 
 void reset_buffer() {
     glo.cursor_pos = 0;
-    memset(glo.inputMessageBuffer, 0, BUFFER_SIZE);
+    memset(glo.inputBuffer_uart0, 0, BUFFER_SIZE);
     AddProgramMessage(NEW_LINE_RETURN);  // Use AddOutMessage to move to a new line
 }
 
@@ -616,7 +645,7 @@ void refresh_user_input() {
     AddOutMessage(CLEAR_LINE_RESET);  // Clear the input line
     AddOutMessage("> ");              // Display the prompt
     if(glo.cursor_pos > 0)
-        AddOutMessage(glo.inputMessageBuffer); // Display the current input buffer
+        AddOutMessage(glo.inputBuffer_uart0); // Display the current input buffer
 }
 
 
@@ -658,11 +687,59 @@ void refreshUserInputLine() {
     // Write the input prompt and current buffer
     UART_write_safe("> ", 2);
     if(glo.cursor_pos > 0)
-        UART_write_safe(glo.inputMessageBuffer, glo.cursor_pos);
+        UART_write_safe(glo.inputBuffer_uart0, glo.cursor_pos);
 }
 
 
+//================================================
+// UART1 Comms
+//================================================
 
+void handle_UART1() {
+    char key_in;
+
+    // Catch cursor out of bounds
+    if(glo.cursor_pos_uart1 < 0) {
+        glo.cursor_pos_uart1 = 0;
+    }
+
+    UART_read(glo.uart1, &key_in, 1);
+
+    if (key_in == '\r' || key_in == '\n') {  // Enter key
+        if(glo.cursor_pos_uart1 > 0) {
+            // Process the completed input
+            AddPayload(glo.inputBuffer_uart1);
+
+            // Echo the input to the console
+            AddProgramMessage("Receveived Over UART1: ");
+            AddProgramMessage(glo.inputBuffer_uart1);
+        }
+        reset_buffer_uart1();
+    } else if (key_in == '\b' || key_in == 0x7F) {  // Backspace key
+        if (glo.cursor_pos_uart1 > 0) {
+            // Remove the last character
+            glo.inputBuffer_uart1[--glo.cursor_pos_uart1] = '\0';
+        }
+    } else {
+        // Add the character to the buffer if it's not full
+        if (glo.cursor_pos_uart1 < BUFFER_SIZE - 1) {
+            glo.inputBuffer_uart1[glo.cursor_pos_uart1++] = key_in;
+            glo.inputBuffer_uart1[glo.cursor_pos_uart1] = '\0';
+        } else {
+            // Buffer overflow handling
+            reset_buffer_uart1();
+            // Optionally, you can send an error message or handle overflow
+        }
+    }
+}
+
+void reset_buffer_uart1() {
+    // Reset the cursor position for UART1 input buffer
+    glo.cursor_pos_uart1 = 0;
+
+    // Clear the input buffer for UART1
+    memset(glo.inputBuffer_uart1, 0, BUFFER_SIZE);
+}
 
 
 //================================================
@@ -760,6 +837,9 @@ void execute_payload(char *msg) {
     else if (strcmp(token,      "-timer") == 0) {
         CMD_timer();
     }
+    if (strcmp(token,           "-uart") == 0) {
+        CMD_uart();
+    }
     else {
         AddProgramMessage(raiseError(ERR_UNKNOWN_COMMAND));
 
@@ -809,7 +889,10 @@ void CMD_callback() {
     if (count_token) {
         count = atoi(count_token);
     } else {
-        AddProgramMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
+        //AddProgramMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
+        AddProgramMessage("Clearing callback.\r\n");
+        callbacks[index].count = 0;
+        memset(callbacks[index].payload, 0, BUFFER_SIZE);
         return;
     }
 
@@ -1090,7 +1173,8 @@ void CMD_help() {
             "| Description: Sets the period of Timer0 to the specified period in microseconds.\r\n"
             "| |            If no period is specified, displays the current Timer0 period.\r\n"
             "| Example usage: \"-timer 100000\" -> Sets Timer0 period to 100,000 us (100 ms).\r\n"
-            "| Example usage: \"-timer\" -> Displays the current Timer0 period.\r\n";
+            "| Example usage: \"-timer\" -> Displays the current Timer0 period.\r\n"
+            "| Example usage: \"-timer 0\" -> Disables the timer\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "ticker") == 0 || strcmp(cmd_arg_token,           "-ticker") == 0) {
@@ -1109,6 +1193,15 @@ void CMD_help() {
             "| |              ms, then toggles GPIO 2 every 1000 ms, repeating 5 times.\r\n"
             "| Example usage: \"-ticker\" -> Displays all tickers and payloads.\r\n";
 
+    }
+    else if (strcmp(cmd_arg_token,      "uart" == 0) || strcmp(cmd_arg_token,           "-uart") == 0) {
+        helpMessage =
+           //================================================================================ <-80 characters
+            "Command: -uart [payload]\r\n"
+            "| args:\r\n"
+            "| | payload: The message to send over UART1.\r\n"
+            "| Description: Sends a payload message over UART1.\r\n"
+            "| Example usage: \"-uart -print Hello, World!\" -> Sends -print over UART1.\r\n";
     }
     else {
         helpMessage =
@@ -1139,7 +1232,8 @@ void CMD_help() {
             "| -ticker    [index] [initialDelay]   |  Configures a ticker to execute a\r\n"
             "|            [period] [count] [payload]  payload after a delay and repeat it.\r\n"
             "| -timer     [period_us]              |  Sets the period of Timer0 in\r\n"
-            "|                                        microseconds.\r\n";
+            "|                                        microseconds.\r\n"
+            "| -uart      [payload]                |  Sends a payload message over UART1.\r\n";
     }
 
     //UART_write_safe(helpMessage, strlen(helpMessage));`
@@ -1572,4 +1666,29 @@ void CMD_timer() {
         //UART_write_safe_strlen(output_msg);
         AddProgramMessage(output_msg);
     }
+}
+
+/**
+ * @brief Command function to send a payload over UART 1
+ */
+void CMD_uart() {
+    // Get the rest of the line as the payload
+    char *payload = strtok(NULL, "\r\n");
+    if (!payload) {
+        AddProgramMessage("Error: No payload provided for -uart command.\r\n");  // TODO: Add to errors
+        return;
+    }
+
+    // Send the payload out UART 1
+    int len = strlen(payload);
+    if (UART_write(glo.uart1, payload, len) != len) {
+        AddProgramMessage("Error: UART 1 write failed.\r\n");  // TODO: Add to errors
+        return;
+    }
+
+    // Send a newline to complete the command
+    UART_write(glo.uart1, "\r\n", 2);
+
+    // Acknowledge the command
+    AddProgramMessage("Payload sent over UART 1.\r\n");
 }

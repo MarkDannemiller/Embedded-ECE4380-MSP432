@@ -1,3 +1,6 @@
+/*
+ *  ======== tasks.c ========
+ */
 #include "p100.h"
 #include <xdc/runtime/Memory.h>
 #include "script.h"
@@ -7,7 +10,7 @@ extern Globals glo;
 #endif
 
 // Process user input to input_buffer -> PayloadQueue
-void uartReadTask(UArg arg0, UArg arg1) {
+void uart0ReadTask(UArg arg0, UArg arg1) {
 
     clear_console();
 
@@ -31,7 +34,7 @@ void uartReadTask(UArg arg0, UArg arg1) {
     /* Loop forever handling UART input and queue payloads  */
     while (1) {
         // Check for emergency stop
-        // This should not be triggered currently, since uartReadTask is the only task that can trigger an emergency stop
+        // This should not be triggered currently, since uart0ReadTask is the only task that can trigger an emergency stop
         if (glo.emergencyStopActive) {
             // Perform cleanup if necessary
             // ...
@@ -48,7 +51,7 @@ void uartReadTask(UArg arg0, UArg arg1) {
             continue;
         }
 
-        handle_UART();
+        handle_UART0();
     }
 }
 
@@ -136,7 +139,6 @@ void uartWriteTask(UArg arg0, UArg arg1) {
         Memory_free(NULL, out_message, sizeof(PayloadMessage));
     }
 }
-
 
 
 /** 
@@ -234,5 +236,32 @@ void tickerProcessingTask(UArg arg0, UArg arg1) {
 
         // Process tickers
         process_tickers();
+    }
+}
+
+
+void uart1ReadTask(UArg arg0, UArg arg1) {
+    while (1) {
+        // Check for emergency stop
+        if (glo.emergencyStopActive) {
+            // Perform cleanup if necessary
+            // ...
+
+            // Signal completion
+            Semaphore_post(glo.emergencyStopSem);
+
+            // Wait until emergency stop is cleared
+            while (glo.emergencyStopActive) {
+                Task_sleep(100);  // Sleep to yield CPU
+            }
+
+            // Continue or re-initialize as necessary
+            continue;
+        }
+
+        handle_UART1();
+
+        // UART1 input is handled via callback, so nothing to do here
+        //Task_sleep(100);  // Sleep to yield CPU
     }
 }

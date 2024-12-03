@@ -1,11 +1,11 @@
 #include <stdio.h>  // Include this for sprintf
 #include "p100.h"
 
-#define VERSION 8
-#define SUBVERSION 1
+#define VERSION 9
+#define SUBVERSION 0
 #define TERMINAL_NAME "MARK-DANNEMILLER-MSP432"
 
-#define ASSIGNMENT "P800"
+#define ASSIGNMENT "P900"
 
 //================================================
 // System Messages

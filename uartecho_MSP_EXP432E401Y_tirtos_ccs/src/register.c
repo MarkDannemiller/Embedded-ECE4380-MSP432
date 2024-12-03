@@ -12,6 +12,9 @@
  * @note Ensure that the memory addresses used are within the valid range defined for the specific MCU.
  */
 
+/*
+ *  ======== register.c ========
+ */
 #include "register.h"
 #include <stdbool.h>
 #include "p100.h"

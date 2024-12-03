@@ -14,7 +14,7 @@ extern const ti_sysbios_heaps_HeapMem_Handle heap0;
 extern const ti_sysbios_gates_GateSwi_Handle gateSwi0;
 
 #include <ti/sysbios/knl/Task.h>
-extern const ti_sysbios_knl_Task_Handle UARTReader;
+extern const ti_sysbios_knl_Task_Handle UARTReader0;
 
 #include <ti/sysbios/knl/Task.h>
 extern const ti_sysbios_knl_Task_Handle UARTWriter;
@@ -48,6 +48,9 @@ extern const ti_sysbios_knl_Semaphore_Handle TickerSem;
 
 #include <ti/sysbios/knl/Task.h>
 extern const ti_sysbios_knl_Task_Handle TickerProcessor;
+
+#include <ti/sysbios/knl/Task.h>
+extern const ti_sysbios_knl_Task_Handle UARTReader1;
 
 #include <ti/sysbios/gates/GateMutex.h>
 extern const ti_sysbios_gates_GateMutex_Handle tiposix_mqGate;

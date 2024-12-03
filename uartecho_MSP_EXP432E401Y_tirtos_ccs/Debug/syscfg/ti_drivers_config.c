@@ -181,11 +181,12 @@ const uint_least8_t Timer_count = CONFIG_TIMER_COUNT;
 #include <ti/drivers/uart/UARTMSP432E4.h>
 #include <ti/devices/msp432e4/driverlib/interrupt.h>
 
-#define CONFIG_UART_COUNT 1
+#define CONFIG_UART_COUNT 2
 
 UARTMSP432E4_Object uartMSP432E4Objects[CONFIG_UART_COUNT];
 
 static unsigned char uartMSP432E4RingBuffer0[32];
+static unsigned char uartMSP432E4RingBuffer1[32];
 static const UARTMSP432E4_HWAttrs uartMSP432E4HWAttrs[CONFIG_UART_COUNT] = {
   {
     .baseAddr           = UART0_BASE,
@@ -200,6 +201,19 @@ static const UARTMSP432E4_HWAttrs uartMSP432E4HWAttrs[CONFIG_UART_COUNT] = {
     .rtsPin             = UARTMSP432E4_PIN_UNASSIGNED,
     .errorFxn           = NULL
   },
+  {
+    .baseAddr           = UART7_BASE,
+    .intNum             = INT_UART7,
+    .intPriority        = (~0),
+    .flowControl        = UARTMSP432E4_FLOWCTRL_NONE,
+    .ringBufPtr         = uartMSP432E4RingBuffer1,
+    .ringBufSize        = sizeof(uartMSP432E4RingBuffer1),
+    .rxPin              = UARTMSP432E4_PC4_U7RX,
+    .txPin              = UARTMSP432E4_PC5_U7TX,
+    .ctsPin             = UARTMSP432E4_PIN_UNASSIGNED,
+    .rtsPin             = UARTMSP432E4_PIN_UNASSIGNED,
+    .errorFxn           = NULL
+  },
 };
 
 const UART_Config UART_config[CONFIG_UART_COUNT] = {
@@ -208,10 +222,16 @@ const UART_Config UART_config[CONFIG_UART_COUNT] = {
         .object      = &uartMSP432E4Objects[CONFIG_UART_0],
         .hwAttrs     = &uartMSP432E4HWAttrs[CONFIG_UART_0]
     },
+    {   /* CONFIG_UART_1 */
+        .fxnTablePtr = &UARTMSP432E4_fxnTable,
+        .object      = &uartMSP432E4Objects[CONFIG_UART_1],
+        .hwAttrs     = &uartMSP432E4HWAttrs[CONFIG_UART_1]
+    },
 };
 
 const uint_least8_t CONFIG_UART_0_CONST = CONFIG_UART_0;
-const uint_least8_t UART_count = 1;
+const uint_least8_t CONFIG_UART_1_CONST = CONFIG_UART_1;
+const uint_least8_t UART_count = 2;
 
 
 #include <ti/drivers/Board.h>
