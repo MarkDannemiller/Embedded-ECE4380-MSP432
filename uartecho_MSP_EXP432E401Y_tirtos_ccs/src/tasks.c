@@ -262,3 +262,71 @@ void uart1ReadTask(UArg arg0, UArg arg1) {
         handle_UART1();
     }
 }
+
+// void ADCStream() {
+//     uint16_t *source;
+//     char longload[sizeof(uint16_t)*DATABLOCKSIZE+MsgQueueMsgLen];
+//     int32_t dest_choice;
+//     int32_t hdrlen;
+//     bool local = true;
+
+//     while(1){
+//         Semaphore_pend(global.Bios.ADCSemaphore, BIOS_WAIT_FOREVER);
+
+//         if(global.ADCBufCtrl.RX_Completed == global.ADCBufCtrl.RX_Ping)
+//         {
+//             source = global.ADCBufCtrl.RX_Completed;
+//             dest_choice = 0;
+//             global.ADCBufCtrl.ping_count++;
+//         }
+//         else if(global.ADCBufCtrl.RX_Completed == global.ADCBufCtrl.RX_Pong)
+//         {
+//             source = global.ADCBufCtrl.RX_Completed;
+//             dest_choice = 1;
+//             global.ADCBufCtrl.pong_count++;
+//         }
+//         else
+//         {
+//             AddError(STREAM_ERR, "RX_Ping and RX_Pong not completed, lost pointer");
+//             return;
+//         }
+//         //net packaging
+//         if(global.Regs.Reg[REG_DIAL1] != 0){
+//             sprintf(longload, "-netudp %d.%d.%d.%d:%d -voice %d 128  ",
+//                     (uint8_t)(global.Regs.Reg[REG_DIAL1] >> 24) & 0xFF,
+//                     (uint8_t)(global.Regs.Reg[REG_DIAL1] >> 16) & 0xFF,
+//                     (uint8_t)(global.Regs.Reg[REG_DIAL1] >> 8 ) & 0xFF,
+//                     (uint8_t)(global.Regs.Reg[REG_DIAL1]      ) & 0xFF,
+//                     DEFAULTPORT, dest_choice);
+//             hdrlen = strlen(longload)+1;                                        //Extra byte for null terminator
+//             memcpy(&longload[hdrlen], source, sizeof(uint16_t)*DATABLOCKSIZE);
+//                                                                                 //Copying adc buff values
+//             ParseNetUDP(longload, sizeof(uint16_t)*DATABLOCKSIZE);
+//                                                                                 //Add to NETUDP Queue
+//             local = false;
+//         }
+
+//         if(global.Regs.Reg[REG_DIAL2] != 0){
+//             sprintf(longload, "-netudp %d.%d.%d.%d:%d -voice %d 128  ",
+//                     (uint8_t)(global.Regs.Reg[REG_DIAL1] >> 24) & 0xFF,
+//                     (uint8_t)(global.Regs.Reg[REG_DIAL1] >> 16) & 0xFF,
+//                     (uint8_t)(global.Regs.Reg[REG_DIAL1] >> 8 ) & 0xFF,
+//                     (uint8_t)(global.Regs.Reg[REG_DIAL1]      ) & 0xFF,
+//                     DEFAULTPORT, dest_choice+2);
+//             hdrlen = strlen(longload)+1;                                        //Extra byte for null terminator
+//             memcpy(&longload[hdrlen], source, sizeof(uint16_t)*DATABLOCKSIZE);
+//                                                                                 //Copying adc buff values
+//             ParseNetUDP(longload, sizeof(uint16_t)*DATABLOCKSIZE);
+//                                                                                 //Add to NETUDP Queue
+//             local = false;
+//         }
+
+//         if(local == true)
+//         {
+//             sprintf(longload, "-voice %d 128  ", dest_choice);
+//             hdrlen = strlen(longload)+1;
+//             memcpy(&longload[hdrlen], source, sizeof(uint16_t)*DATABLOCKSIZE);
+//             VoiceParse(longload);
+//         }
+//     }
+// }

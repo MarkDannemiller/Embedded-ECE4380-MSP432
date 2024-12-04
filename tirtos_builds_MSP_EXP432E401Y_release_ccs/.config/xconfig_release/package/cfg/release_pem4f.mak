@@ -11,7 +11,7 @@ package/cfg/release_pem4f.oem4f.dep: ;
 endif
 
 package/cfg/release_pem4f.oem4f: | .interfaces
-package/cfg/release_pem4f.oem4f: package/cfg/release_pem4f.c package/cfg/release_pem4f.mak 
+package/cfg/release_pem4f.oem4f: package/cfg/release_pem4f.c package/cfg/release_pem4f.mak
 	@$(RM) $@.dep
 	$(RM) $@
 	@$(MSG) clem4f $< ...

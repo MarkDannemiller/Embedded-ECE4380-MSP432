@@ -47,6 +47,7 @@ const uint16_t SINETABLE[SINE_TABLE_SIZE+1] = {
 };
 
 // Initialize audio system
+// Make sure that the AMP_ON resistor on the audio boossterpack is set to R0!
 void initAudio() {
     glo.audioController.lutPosition = 0.0;
     glo.audioController.lutDelta = 0.0;
@@ -69,6 +70,25 @@ void initAudio() {
     digitalWrite(5, HIGH);  // Set PD4 LOW to enable microphone on BOOSTXL-AUDIO
 }
 
+void initADCBuf(){
+    ADCBuf_init();
+    ADCBuf_Params_init(&glo.audioController.adcBufParams);
+    glo.audioController.adcBufParams.returnMode = ADCBuf_RETURN_MODE_CALLBACK;
+    glo.audioController.adcBufParams.recurrenceMode = ADCBuf_RECURRENCE_MODE_CONTINUOUS;
+
+    glo.audioController.adcBufParams.callbackFxn = adcBufCallback;
+    glo.audioController.adcBufParams.samplingFrequency = 8000;
+    glo.audioController.adcBuf = ADCBuf_open(CONFIG_ADCBUF_0, &glo.audioController.adcBufParams);
+    if (glo.audioController.adcBuf == NULL) {
+        // ADCBuf_open() failed
+        while(1);
+    }
+
+    glo.audioController.adcConversion.adcChannel = ADCBUF_CHANNEL_0;
+    glo.audioController.adcConversion.arg = NULL;
+    glo.audioController.adcConversion.sampleBuffer = glo.audioController.
+}
+
 // Generate sine sample and send to DAC
 void generateSineSample() {
     uint32_t l_index, u_index;
@@ -85,7 +105,7 @@ void generateSineSample() {
 
     // Calculate indices for interpolation
     l_index = (uint32_t) glo.audioController.lutPosition;
-    u_index = l_index + 1;
+    u_index = (l_index + 1) % SINE_TABLE_SIZE;
     if (u_index >= SINE_TABLE_SIZE) {
         u_index = 0;  // Wrap around
     }

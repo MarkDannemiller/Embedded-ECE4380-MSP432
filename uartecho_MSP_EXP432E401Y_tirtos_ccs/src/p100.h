@@ -167,6 +167,11 @@ typedef enum {
     ERR_MISSING_SCRIPT_COMMAND,
     ERR_UNKNOWN_SCRIPT_OP,
 
+    ERR_INVALID_IF_SYNTAX,
+    ERR_MISSING_DESTINATION,
+    ERR_INVALID_CONDITION,
+    ERR_UART1_WRITE_FAILED,
+
     ERROR_COUNT // Keeps track of the number of error types
 } Errors;
 

@@ -90,3 +90,13 @@ void sw2SWI(UArg arg0, UArg arg1) {
     }
     GateSwi_leave(gateSwi2, gateKey);
 }
+
+
+// void ADCBufCallback(ADCBuf_Handle handle, ADCBuf_Conversion *conversion, void *buffer, uint32_t channel, int_fast16_t status){
+//     if(buffer != global.ADCBufCtrl.RX_Ping && buffer != global.ADCBufCtrl.RX_Pong){
+//         Swi_post(global.Bios.ADCSWI);
+//         return;
+//     }
+//     global.ADCBufCtrl.RX_Completed = buffer;
+//     Semaphore_post(global.Bios.ADCSemaphore);
+// }

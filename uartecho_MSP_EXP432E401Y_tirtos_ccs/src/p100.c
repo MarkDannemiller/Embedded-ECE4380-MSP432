@@ -284,7 +284,14 @@ const char* errorMessages[] = {
 
     "Error: Invalid script line number.\r\n",                       // ERR_INVALID_SCRIPT_LINE
     "Error: Missing command to write to script line.\r\n",          // ERR_MISSING_SCRIPT_COMMAND
-    "Error: Unknown operation for script command.\r\n"              // ERR_UNKNOWN_SCRIPT_OP
+    "Error: Unknown operation for script command.\r\n",             // ERR_UNKNOWN_SCRIPT_OP
+
+
+    "Error: Invalid syntax for -if command.\r\n",                   // ERR_INVALID_IF_SYNTAX
+    "Error: Missing destinations in -if command.\r\n",              // ERR_MISSING_DESTINATION
+    "Error: Invalid condition operator.\r\n",                       // ERR_INVALID_CONDITION
+    "Error: UART 7 write failed.\r\n",                              // ERR_UART1_WRITE_FAILED
+
 };
 
 const char* errorNames[] = {
@@ -315,6 +322,11 @@ const char* errorNames[] = {
     "ERR_INVALID_SCRIPT_LINE",      // ERR_INVALID_SCRIPT_LINE
     "ERR_MISSING_SCRIPT_COMMAND",   // ERR_MISSING_SCRIPT_COMMAND
     "ERR_UNKNOWN_SCRIPT_OP"         // ERR_UNKNOWN_SCRIPT_OPS
+
+    "ERR_INVALID_IF_SYNTAX",        // ERR_INVALID_IF_SYNTAX
+    "ERR_MISSING_DESTINATION",      // ERR_MISSING_DESTINATION
+    "ERR_INVALID_CONDITION",        // ERR_INVALID_CONDITION
+    "ERR_UART1_WRITE_FAILED"        // ERR_UART1_WRITE_FAILED
 };
 
 // Array to store the error counters
@@ -1336,7 +1348,8 @@ void CMD_if() {
     // Parse the condition (A COND B) or A COND B, where COND is >, =, or <
     char *condition_part = strtok(NULL, "?");
     if (!condition_part) {
-        AddProgramMessage("Error: Invalid syntax for -if command.\r\n");  // TODO: Add to errors
+        //AddProgramMessage("Error: Invalid syntax for -if command.\r\n");  // TODO: Add to errors
+        AddProgramMessage(raiseError(ERR_INVALID_IF_SYNTAX));
         return;
     }
 
@@ -1359,7 +1372,8 @@ void CMD_if() {
     // Parse DESTT and DESTF
     char *dest_part = strtok(NULL, "");
     if (!dest_part) {
-        AddProgramMessage("Error: Missing destinations in -if command.\r\n");  // TODO: Add to errors
+        //AddProgramMessage("Error: Missing destinations in -if command.\r\n");  // TODO: Add to errors
+        AddProgramMessage(raiseError(ERR_MISSING_DESTINATION));
         return;
     }
 
@@ -1387,13 +1401,14 @@ void CMD_if() {
     } else if (strcmp(cond, "<") == 0) {
         conditionResult = (valueA < valueB);
     } else {
-        AddProgramMessage("Error: Invalid condition operator.\r\n");  // TODO: Add to errors
+        //AddProgramMessage("Error: Invalid condition operator.\r\n");  // TODO: Add to errors
+        AddProgramMessage(raiseError(ERR_INVALID_CONDITION));
         return;
     }
 
     // Execute the appropriate destination
     if (conditionResult) {
-        if (destT && strlen(destT) > 0) {
+        if (destT && strlen(destT) > 0 && destT[0] != ' ') {
             execute_destination(destT);
         }
     } else {
@@ -1642,10 +1657,17 @@ void CMD_sine() {
 
     // Check if Timer0 is running
     uint16_t gateKey = GateSwi_enter(gateSwi0); // Timer and audioController share the same gateSwi
-    if (glo.Timer0Period == 0) {
-        AddProgramMessage("Error: Timer0 is not running. Start Timer0 before generating a sine wave.\r\n");
-        GateSwi_leave(gateSwi0, gateKey);
-        return;
+    // if (glo.Timer0Period == 0) {
+    //     AddProgramMessage("Error: Timer0 is not running. Start Timer0 before generating a sine wave.\r\n");
+    //     GateSwi_leave(gateSwi0, gateKey);
+    //     return;
+    // }
+    if(glo.Timer0Period != 125) {
+        Timer_stop(glo.Timer0);
+        glo.Timer0Period = 125;
+        Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, 125);
+        int32_t status = Timer_start(glo.Timer0);
+        AddProgramMessage("Timer0 restarted with 125 us period.\r\n");
     }
 
     // No frequency provided, display the current frequency
@@ -1861,14 +1883,16 @@ void CMD_uart() {
     // Get the rest of the line as the payload
     char *payload = strtok(NULL, "\r\n");
     if (!payload) {
-        AddProgramMessage("Error: No payload provided for -uart command.\r\n");  // TODO: Add to errors
+        //AddProgramMessage("Error: No payload provided for -uart command.\r\n");  // TODO: Add to errors
+        AddProgramMessage(raiseError(ERR_MISSING_PAYLOAD));
         return;
     }
 
     // Send the payload out UART 1
     int len = strlen(payload);
     if (UART_write(glo.uart1, payload, len) != len) {
-        AddProgramMessage("Error: UART 1 write failed.\r\n");  // TODO: Add to errors
+        //AddProgramMessage("Error: UART 1 write failed.\r\n");  // TODO: Add to errors
+        AddProgramMessage(raiseError(ERR_UART1_WRITE_FAILED));
         return;
     }
 
