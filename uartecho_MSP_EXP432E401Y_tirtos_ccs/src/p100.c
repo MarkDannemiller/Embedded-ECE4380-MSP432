@@ -41,6 +41,7 @@
 // Driver Header files
 #include <ti/drivers/GPIO.h>
 #include <ti/drivers/UART.h>
+#include <ti/drivers/SPI.h>
 
 // Driver configuration
 #include "ti_drivers_config.h"
@@ -61,10 +62,18 @@
 #include "register.h"
 #include "script.h"
 
-
 #ifdef Globals
 extern Globals glo;
 #endif
+
+
+/*
+ *  ======== mainThread ========
+ */
+void *mainThread(void *arg0)
+{
+    return; // Not used, tasks handle everything
+}
 
 
 // Initialize Global Struct from header file
@@ -90,6 +99,8 @@ void init_globals() {
 
     glo.scriptPointer = -1;  // No script loaded
 
+
+    // BIOS Tasks
     // Assign the handles to the BiosList struct
     glo.bios.UARTReader0 = UARTReader0;
     glo.bios.UARTWriter = UARTWriter;
@@ -100,6 +111,7 @@ void init_globals() {
     glo.bios.TickerProcessor = TickerProcessor;
 
 
+    // BIOS Queues and Semaphores
     glo.bios.PayloadQueue = PayloadQueue;
     glo.bios.OutMsgQueue = OutMsgQueue;
 
@@ -116,6 +128,127 @@ void init_globals() {
     semParams.mode = Semaphore_Mode_COUNTING;
     glo.emergencyStopSem = Semaphore_create(0, &semParams, NULL);
 }
+
+
+//================================================
+// Drivers
+//================================================
+
+
+void init_drivers() {
+
+    /* Call driver init functions */
+    GPIO_init();
+    UART_init();
+    Timer_init();
+    SPI_init();
+
+
+    // OUTPUTS
+    /* Configure the LED 0 pin */
+    GPIO_setConfig(CONFIG_GPIO_LED_0, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
+    /* Configure the LED 1 pin */
+    GPIO_setConfig(CONFIG_GPIO_LED_1, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
+    /* Configure the LED 2 pin */
+    GPIO_setConfig(CONFIG_GPIO_LED_2, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
+    /* Configure the LED 3 pin */
+    GPIO_setConfig(CONFIG_GPIO_LED_3, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
+    /* Configure the GPIO 4 pin // PK5 */
+    GPIO_setConfig(CONFIG_GPIO_4, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
+    /* Configure the GPIO 5 pin // PD4 */
+    GPIO_setConfig(CONFIG_GPIO_5, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
+
+    //Configure SW1 (GPIO 6)
+    GPIO_setConfig(CONFIG_GPIO_SWITCH_6, GPIO_CFG_IN_PU | GPIO_CFG_IN_INT_FALLING);
+    GPIO_setCallback(CONFIG_GPIO_SWITCH_6, sw1Callback_fxn);
+    GPIO_enableInt(CONFIG_GPIO_SWITCH_6);
+
+    //Configure SW2 (GPIO 7)
+    GPIO_setConfig(CONFIG_GPIO_SWITCH_7, GPIO_CFG_IN_PU | GPIO_CFG_IN_INT_FALLING);
+    GPIO_setCallback(CONFIG_GPIO_SWITCH_7, sw2Callback_fxn);
+    GPIO_enableInt(CONFIG_GPIO_SWITCH_7);
+
+    /* Turn on user LED */
+    //GPIO_write(CONFIG_GPIO_LED_0, CONFIG_GPIO_LED_ON);
+    digitalWrite(0, HIGH);
+    // digitalWrite(1, HIGH);
+    // digitalWrite(2, HIGH);
+    // digitalWrite(3, HIGH);
+
+
+    /* Create a UART0 with data processing off. */
+    UART_Params_init(&glo.uartParams0);
+    glo.uartParams0.writeDataMode = UART_DATA_BINARY;
+    glo.uartParams0.readDataMode = UART_DATA_BINARY;
+    glo.uartParams0.readReturnMode = UART_RETURN_FULL;
+    glo.uartParams0.baudRate = 115200;
+    glo.uart0 = UART_open(CONFIG_UART_0, &glo.uartParams0);
+
+    if (glo.uart0 == NULL) {
+        // UART_open() failed
+        while (1);
+    }
+
+
+    /* Initialize UART1 */
+    UART_Params_init(&glo.uartParams1);
+    glo.uartParams1.writeDataMode = UART_DATA_BINARY;
+    glo.uartParams1.readDataMode = UART_DATA_BINARY;
+    glo.uartParams1.readReturnMode = UART_RETURN_FULL;
+    glo.uartParams1.baudRate = 115200;
+    glo.uart1 = UART_open(CONFIG_UART_1, &glo.uartParams1);
+
+    if (glo.uart1 == NULL) {
+        // UART_open() failed
+        while (1);
+    }
+
+
+    // Initialize the timer
+    Timer_Params_init(&glo.timer0_params);
+    glo.timer0_params.periodUnits = Timer_PERIOD_US;
+    glo.timer0_params.period = 5000000; // 10 seconds
+    glo.timer0_params.timerMode  = Timer_CONTINUOUS_CALLBACK;
+    glo.timer0_params.timerCallback = timer0Callback_fxn;
+    glo.Timer0 = Timer_open(CONFIG_GPT_0, &glo.timer0_params);
+    int32_t status = Timer_start(glo.Timer0);  // Activate Timer0 Periodically
+
+    if (status == Timer_STATUS_ERROR) {
+        //Timer_start() failed
+        while (1);
+    }
+
+    // Initialize audio system
+    initAudio();
+}
+
+// Pin mappings - Index pins based on their order for -gpio command
+const int pin_count = 8;
+const int pinMap[pin_count] = {
+    CONFIG_GPIO_LED_0, // -gpio 0
+    CONFIG_GPIO_LED_1,
+    CONFIG_GPIO_LED_2,
+    CONFIG_GPIO_LED_3,
+    CONFIG_GPIO_4,
+    CONFIG_GPIO_5,
+    CONFIG_GPIO_SWITCH_6,
+    CONFIG_GPIO_SWITCH_7
+};
+
+
+// Simple language to toggle a pin in the pinMap
+void togglePin(int pin_num) {
+    GPIO_toggle(pinMap[pin_num]);
+}
+// Simple language to write HIGH or LOW on a pin in the pinMap
+void digitalWrite(int pin_num, pinState state) {
+    GPIO_write(pinMap[pin_num], state);
+}
+// Simple language to convert gpio read to pinState on a pin in the pinMap
+pinState digitalRead(int pin_num) {
+    return (pinState) GPIO_read(pinMap[pin_num]);
+}
+
 
 
 //================================================
@@ -198,158 +331,11 @@ const char* raiseError(Errors error) {
 }
 
 // Function to convert enum to string
-const char* getErrorName(Errors error) {
+const char *getErrorName(Errors error) {
     if (error >= 0 && error < ERROR_COUNT) {
         return errorNames[error];
     }
     return "Unknown error"; // Fallback for out-of-range values
-}
-
-
-//================================================
-// Drivers
-//================================================
-
-
-void init_drivers() {
-
-    /* Call driver init functions */
-    GPIO_init();
-    UART_init();
-    Timer_init();
-
-
-    // OUTPUTS
-    /* Configure the LED 0 pin */
-    GPIO_setConfig(CONFIG_GPIO_LED_0, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
-    /* Configure the LED 1 pin */
-    GPIO_setConfig(CONFIG_GPIO_LED_1, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
-    /* Configure the LED 2 pin */
-    GPIO_setConfig(CONFIG_GPIO_LED_2, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
-    /* Configure the LED 3 pin */
-    GPIO_setConfig(CONFIG_GPIO_LED_3, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
-    /* Configure the GPIO 4 pin*/
-    GPIO_setConfig(CONFIG_GPIO_4, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
-    /* Configure the GPIO 5 pin*/
-    GPIO_setConfig(CONFIG_GPIO_5, GPIO_CFG_OUT_STD | GPIO_CFG_OUT_LOW);
-
-    //Configure SW1 (GPIO 6)
-    GPIO_setConfig(CONFIG_GPIO_SWITCH_6, GPIO_CFG_IN_PU | GPIO_CFG_IN_INT_FALLING);
-    GPIO_setCallback(CONFIG_GPIO_SWITCH_6, sw1Callback_fxn);
-    GPIO_enableInt(CONFIG_GPIO_SWITCH_6);
-
-    //Configure SW2 (GPIO 7)
-    GPIO_setConfig(CONFIG_GPIO_SWITCH_7, GPIO_CFG_IN_PU | GPIO_CFG_IN_INT_FALLING);
-    GPIO_setCallback(CONFIG_GPIO_SWITCH_7, sw2Callback_fxn);
-    GPIO_enableInt(CONFIG_GPIO_SWITCH_7);
-
-    /* Turn on user LED */
-    //GPIO_write(CONFIG_GPIO_LED_0, CONFIG_GPIO_LED_ON);
-    digitalWrite(0, HIGH);
-    // digitalWrite(1, HIGH);
-    // digitalWrite(2, HIGH);
-    // digitalWrite(3, HIGH);
-
-
-    /* Create a UART0 with data processing off. */
-    UART_Params_init(&glo.uartParams0);
-    glo.uartParams0.writeDataMode = UART_DATA_BINARY;
-    glo.uartParams0.readDataMode = UART_DATA_BINARY;
-    glo.uartParams0.readReturnMode = UART_RETURN_FULL;
-    glo.uartParams0.baudRate = 115200;
-    glo.uart0 = UART_open(CONFIG_UART_0, &glo.uartParams0);
-
-    if (glo.uart0 == NULL) {
-        // UART_open() failed
-        while (1);
-    }
-
-
-    /* Initialize UART1 */
-    UART_Params_init(&glo.uartParams1);
-    glo.uartParams1.writeDataMode = UART_DATA_BINARY;
-    glo.uartParams1.readDataMode = UART_DATA_BINARY;
-    glo.uartParams1.readReturnMode = UART_RETURN_FULL;
-    glo.uartParams1.baudRate = 115200;
-    glo.uart1 = UART_open(CONFIG_UART_1, &glo.uartParams1);
-
-    if (glo.uart1 == NULL) {
-        // UART_open() failed
-        while (1);
-    }
-
-
-    // Initialize the timer
-    Timer_Params_init(&glo.timer0_params);
-    glo.timer0_params.periodUnits = Timer_PERIOD_US;
-    glo.timer0_params.period = 5000000; // 10 seconds
-    glo.timer0_params.timerMode  = Timer_CONTINUOUS_CALLBACK;
-    glo.timer0_params.timerCallback = timer0Callback_fxn;
-    glo.Timer0 = Timer_open(CONFIG_GPT_0, &glo.timer0_params);
-    int32_t status = Timer_start(glo.Timer0);  // Activate Timer0 Periodically
-
-    if (status == Timer_STATUS_ERROR) {
-        //Timer_start() failed
-        while (1);
-    }
-}
-
-// Pin mappings - Index pins based on their order for -gpio command
-const int pin_count = 8;
-const int pinMap[pin_count] = {
-    CONFIG_GPIO_LED_0, // -gpio 0
-    CONFIG_GPIO_LED_1,
-    CONFIG_GPIO_LED_2,
-    CONFIG_GPIO_LED_3,
-    CONFIG_GPIO_4,
-    CONFIG_GPIO_5,
-    CONFIG_GPIO_SWITCH_6,
-    CONFIG_GPIO_SWITCH_7
-};
-
-
-// Simple language to toggle a pin in the pinMap
-void togglePin(int pin_num) {
-    GPIO_toggle(pinMap[pin_num]);
-}
-// Simple language to write HIGH or LOW on a pin in the pinMap
-void digitalWrite(int pin_num, pinState state) {
-    GPIO_write(pinMap[pin_num], state);
-}
-// Simple language to convert gpio read to pinState on a pin in the pinMap
-pinState digitalRead(int pin_num) {
-    return (pinState) GPIO_read(pinMap[pin_num]);
-}
-
-
-
-
-
-/*
- *  ======== mainThread ========
- */
-void *mainThread(void *arg0)
-{
-
-/*
-    init_globals();
-    init_drivers();
-
-    if (glo.uart0 == NULL) {
-        while (1);
-    }
-
-    clear_console();
-
-    // Send system info at start of UART
-    char* initMsg = formatAboutHeaderMsg();
-    char* compileTimeMsg = formatCompileDateTime();
-
-    UART_write_safe(initMsg, strlen(initMsg));
-    UART_write_safe(compileTimeMsg, strlen(compileTimeMsg));
-    reset_buffer();
-    refresh_user_input();*/
-    return;
 }
 
 
@@ -358,6 +344,7 @@ void *mainThread(void *arg0)
  */
 void emergency_stop() {
     int i;
+    uint16_t gateKey;
 
     // Set emergency stop flag
     glo.emergencyStopActive = true;
@@ -380,9 +367,11 @@ void emergency_stop() {
     UInt swi_key = Swi_disable();
 
     // Stop the timer
+    gateKey = GateSwi_enter(gateSwi0);
     Timer_stop(glo.Timer0);
     glo.Timer0Period = 0;
     Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, 0);  // Set period to 0 to stop timer
+    GateSwi_leave(gateSwi0, gateKey);
 
     // Clear the tickers
     for (i = 0; i < MAX_TICKERS; i++) {
@@ -394,12 +383,15 @@ void emergency_stop() {
         memset(tickers[i].payload, 0, BUFFER_SIZE);
     }
 
+    gateKey = GateSwi_enter(gateSwi2);
     // Clear the callbacks
     for (i = 0; i < MAX_CALLBACKS; i++) {
         callbacks[i].count = 0;
         memset(callbacks[i].payload, 0, BUFFER_SIZE);
     }
+    GateSwi_leave(gateSwi2, gateKey);
 
+    gateKey = GateSwi_enter(gateSwi1);
     // Clear the payload queue
     while (!Queue_empty(glo.bios.PayloadQueue)) {
         Queue_Elem *elem = Queue_get(glo.bios.PayloadQueue);
@@ -409,7 +401,9 @@ void emergency_stop() {
     }
     Semaphore_reset(glo.bios.PayloadSem, 0);  // Reset the semaphore count (no payloads to execute)
     glo.scriptPointer = -1;  // Reset the script pointer to disable script execution
+    GateSwi_leave(gateSwi1, gateKey);
 
+    gateKey = GateSwi_enter(gateSwi3);
     // Clear the UART write queue
     while (!Queue_empty(glo.bios.OutMsgQueue)) {
         Queue_Elem *elem = Queue_get(glo.bios.OutMsgQueue);
@@ -418,6 +412,7 @@ void emergency_stop() {
         Memory_free(NULL, message, sizeof(PayloadMessage));
     }
     Semaphore_reset(glo.bios.UARTWriteSem, 0);  // Reset the semaphore count (no messages to write)
+    GateSwi_leave(gateSwi3, gateKey);
 
     // Re-enable interrupts
     Hwi_restore(hwi_key);
@@ -460,6 +455,41 @@ char *memory_strdup(const char *src) {
 
 int isPrintable(char ch) { return (ch >= 32 && ch <= 126); }  // ASCII printable characters
 
+bool isNumeric(const char *str) {
+    char *endptr;
+    strtod(str, &endptr);
+    return *str != '\0' && *endptr == '\0';
+}
+
+double parseDouble(const char *str, bool *success) {
+    // Input validation
+    if (!str || *str == '\0') {
+        *success = false;
+        return 0.0;
+    }
+
+    double result;
+    char temp_str[256];
+    strncpy(temp_str, str, sizeof(temp_str)-1);
+    temp_str[sizeof(temp_str)-1] = '\0';
+
+    // Use sscanf - returns number of items successfully parsed
+    if (sscanf(temp_str, "%lf", &result) != 1) {
+        *success = false;
+        return 0.0;
+    }
+
+    // // Add debug output
+    // char msg[256];
+    // sprintf(msg, "Parsed value using sscanf: %.6f\n", result);
+    // AddProgramMessage(msg);
+
+
+    *success = true;
+    return result;
+}
+
+
 
 //================================================
 // UART Writer
@@ -475,14 +505,17 @@ int isPrintable(char ch) { return (ch >= 32 && ch <= 126); }  // ASCII printable
 
 void AddProgramMessage(char *data) {
 
+    uint16_t gateKey = GateSwi_enter(gateSwi3);  // Enter the gate to protect the queue
     if(Semaphore_getCount(glo.bios.UARTWriteSem) >= MAX_QUEUE_SIZE) {
         raiseError(ERR_PAYLOAD_QUEUE_OF); // Can't display error if queue is full!
+        GateSwi_leave(gateSwi3, gateKey);  // Leave the gate
         return;  // Do not add message in case of overflow
     }
 
     PayloadMessage *message = (PayloadMessage *)Memory_alloc(NULL, sizeof(PayloadMessage), 0, NULL);
     if (message == NULL) {
-        System_abort("Failed to allocate memory for message");
+        //System_abort("Failed to allocate memory for message");
+        while(1);
     }
 
     message->data = memory_strdup(data);
@@ -490,17 +523,22 @@ void AddProgramMessage(char *data) {
 
     if (message->data == NULL) {
         Memory_free(NULL, message, sizeof(PayloadMessage));
-        System_abort("Failed to allocate memory for message data");
+        //System_abort("Failed to allocate memory for message data");
+        while(1);
     }
 
     Queue_put(glo.bios.OutMsgQueue, &(message->elem));
+    GateSwi_leave(gateSwi3, gateKey);  // Leave the gate
     Semaphore_post(glo.bios.UARTWriteSem);
 }
 
 
 void AddOutMessage(const char *data) {
+
+    uint16_t gateKey = GateSwi_enter(gateSwi3);  // Enter the gate to protect the queue
     if(Semaphore_getCount(glo.bios.UARTWriteSem) >= MAX_QUEUE_SIZE) {
         raiseError(ERR_PAYLOAD_QUEUE_OF); // Can't display error if queue is full!
+        GateSwi_leave(gateSwi3, gateKey);  // Leave the gate
         return;  // Do not add message in case of overflow
     }
 
@@ -518,6 +556,7 @@ void AddOutMessage(const char *data) {
     }
 
     Queue_put(glo.bios.OutMsgQueue, &(message->elem));
+    GateSwi_leave(gateSwi3, gateKey);  // Leave the gate
     Semaphore_post(glo.bios.UARTWriteSem);
 }
 
@@ -595,8 +634,12 @@ void handle_UART0() {
     else if (key_in == '\r' || key_in == '\n') {  // Enter key
         if(glo.cursor_pos > 0) {
             // Process the completed input
-            AddOutMessage("\r\n");  // Use AddOutMessage to move cursor to new line
-            AddPayload(glo.inputBuffer_uart0);
+            if(strcmp(&glo.inputBuffer_uart0, "-stop") == 0)
+                emergency_stop();
+            else {
+                AddOutMessage("\r\n");  // Use AddOutMessage to move cursor to new line
+                AddPayload(glo.inputBuffer_uart0);
+            }
         }
         reset_buffer();
         return;
@@ -711,8 +754,9 @@ void handle_UART1() {
             AddPayload(glo.inputBuffer_uart1);
 
             // Echo the input to the console
-            AddProgramMessage("Receveived Over UART1: ");
-            AddProgramMessage(glo.inputBuffer_uart1);
+            char msg[BUFFER_SIZE];
+            snprintf(msg, BUFFER_SIZE, "\r\nReceived Over UART7: %s\r\n", glo.inputBuffer_uart1);
+            AddProgramMessage(msg); 
         }
         reset_buffer_uart1();
     } else if (key_in == '\b' || key_in == 0x7F) {  // Backspace key
@@ -756,27 +800,32 @@ void reset_buffer_uart1() {
 }*/
 void AddPayload(char *payload) {
 
+    uint16_t gateKey = GateSwi_enter(gateSwi1);
     if(Semaphore_getCount(glo.bios.PayloadSem) >= MAX_QUEUE_SIZE) {
         AddProgramMessage(raiseError(ERR_PAYLOAD_QUEUE_OF));
+        GateSwi_leave(gateSwi1, gateKey);
         return;  // Do not add payload in case of overflow
     }
 
     // Allocate memory for the message structure
     PayloadMessage *message = (PayloadMessage *)Memory_alloc(NULL, sizeof(PayloadMessage), 0, NULL);
     if (message == NULL) {
-        System_abort("Failed to allocate memory for payload message");
+        //System_abort("Failed to allocate memory for payload message");
+        while (1); 
     }
 
     // Duplicate the payload string using Memory_alloc
     message->data = memory_strdup(payload);
     if (message->data == NULL) {
         Memory_free(NULL, message, sizeof(PayloadMessage));
-        System_abort("Failed to allocate memory for payload data");
+        //System_abort("Failed to allocate memory for payload data");
+        while(1);
     }
 
     // Add the message to the queue
     Queue_put(glo.bios.PayloadQueue, &(message->elem));
     Semaphore_post(glo.bios.PayloadSem);
+    GateSwi_leave(gateSwi1, gateKey);
 }
 
 
@@ -831,14 +880,20 @@ void execute_payload(char *msg) {
     else if (strcmp(token,      "-script") == 0) {
         CMD_script();
     }
+    else if(strcmp(token,       "-sine") == 0) {
+        CMD_sine();
+    }
     else if (strcmp(token,      "-ticker") == 0) {
         CMD_ticker();
     }
     else if (strcmp(token,      "-timer") == 0) {
         CMD_timer();
     }
-    if (strcmp(token,           "-uart") == 0) {
+    else if (strcmp(token,      "-uart") == 0) {
         CMD_uart();
+    }
+    else if(strcmp(token,       "-sus") == 0) {
+        CMD_sus();
     }
     else {
         AddProgramMessage(raiseError(ERR_UNKNOWN_COMMAND));
@@ -870,6 +925,7 @@ void CMD_about() {
 void CMD_callback() {
     // Parse index
     char *index_token = strtok(NULL, " \t\r\n");
+    uint16_t gateKey;
 
     if (!index_token) {
         // No index provided, display all callbacks
@@ -888,11 +944,14 @@ void CMD_callback() {
     int count = -1;
     if (count_token) {
         count = atoi(count_token);
+    // If no count is provided, clear the callback
     } else {
         //AddProgramMessage(raiseError(ERR_MISSING_COUNT_PARAMETER));
         AddProgramMessage("Clearing callback.\r\n");
+        gateKey = GateSwi_enter(gateSwi2);
         callbacks[index].count = 0;
         memset(callbacks[index].payload, 0, BUFFER_SIZE);
+        GateSwi_leave(gateSwi2, gateKey);
         return;
     }
 
@@ -904,6 +963,7 @@ void CMD_callback() {
     }
 
     // Copy the payload
+    gateKey = GateSwi_enter(gateSwi2);
     strncpy(callbacks[index].payload, payload_start, BUFFER_SIZE);
     callbacks[index].payload[BUFFER_SIZE - 1] = '\0';  // Ensure null-terminated
 
@@ -913,6 +973,7 @@ void CMD_callback() {
     // Acknowledge
     char msg[BUFFER_SIZE];
     sprintf(msg, "Callback %d set with count %d and payload: %s\r\n", index, count, callbacks[index].payload);
+    GateSwi_leave(gateSwi2, gateKey);
     AddProgramMessage(msg);
 }
 
@@ -1027,8 +1088,10 @@ void CMD_help() {
             "| | payload: Command to execute when the event occurs.\r\n"
             "| Description: Configures a callback to execute a payload when an event occurs.\r\n"
             "|              If no arguments are provided, displays all callbacks.\r\n"
+            "|              If count is not provided, clears the callback.\r\n"
             "| Example usage: \"-callback 1 2 -gpio 3 t\" -> On SW1 press, toggle GPIO 3 twice.\r\n"
             "| Example usage: \"-callback\" -> Displays all callbacks, counts, and  payloads.\r\n";
+            "| Example usage: \"-callback 1\" -> Clears the SW1 callback.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "error") == 0 || strcmp(cmd_arg_token,           "-error") == 0) {
@@ -1164,6 +1227,27 @@ void CMD_help() {
             "| Special Case:\r\n"
             "| | -script r              : Reset the script pointer to -1 (stops execution).\r\n";
     }
+    else if (strcmp(cmd_arg_token,       "sine") == 0 || strcmp(cmd_arg_token,           "-sine") == 0) {
+        helpMessage =
+           //================================================================================ <-80 characters
+            "Command: -sine [frequency]\n\r"
+            "| args:\n\r"
+            "| | frequency: Frequency of the sine wave in Hz.\r\n"
+            "| Description: Plays a frequency using the BOOST-XL Audio board.\r\n"
+            "| Example usage: \"-sine 1000\" -> Plays a 1000 Hz sine wave.\r\n"
+            "| Example usage: \"-sine 0\" -> Stops the sine wave.\r\n";
+            "| Example usage: \"-sine\" -> Displays the current frequency.\r\n";
+            "| Note: The sine wave will play until stopped.\r\n";
+    }
+    else if (strcmp(cmd_arg_token,      "stop") == 0 || strcmp(cmd_arg_token,           "-stop") == 0) {
+        helpMessage =
+           //================================================================================ <-80 characters
+            "Command: -stop\n\r"
+            "| args: none\n\r"
+            "| Description: Emergency stop. Resets all timers, tickers, callbacks, etc.\r\n"
+            "|              Also triggered by the ` key.\r\n"
+            "| Example usage: \"-stop\" -> Stops and restarts all running processes.\r\n";
+    }
     else if (strcmp(cmd_arg_token,      "timer") == 0 || strcmp(cmd_arg_token,           "-timer") == 0) {
         helpMessage =
            //================================================================================ <-80 characters
@@ -1191,7 +1275,10 @@ void CMD_help() {
             "| |            repeat it. If no arguments are given, displays all tickers.\r\n"
             "| Example usage: \"-ticker 3 100 100 5 -gpio 2 t\" -> Uses ticker 3, waits 1000\r\n"
             "| |              ms, then toggles GPIO 2 every 1000 ms, repeating 5 times.\r\n"
-            "| Example usage: \"-ticker\" -> Displays all tickers and payloads.\r\n";
+            "| Example usage: \"-ticker\" -> Displays all tickers and payloads.\r\n"
+            "| Special Case: \"-ticker c\" -> Clears all tickers.\r\n"
+            "| Special Case: \"-ticker p\" -> Pauses all tickers.\r\n"
+            "| Special Case: \"-ticker r\" -> Resumes all tickers.\r\n";
 
     }
     else if (strcmp(cmd_arg_token,      "uart" == 0) || strcmp(cmd_arg_token,           "-uart") == 0) {
@@ -1199,9 +1286,9 @@ void CMD_help() {
            //================================================================================ <-80 characters
             "Command: -uart [payload]\r\n"
             "| args:\r\n"
-            "| | payload: The message to send over UART1.\r\n"
-            "| Description: Sends a payload message over UART1.\r\n"
-            "| Example usage: \"-uart -print Hello, World!\" -> Sends -print over UART1.\r\n";
+            "| | payload: The message to send over UART7.\r\n"
+            "| Description: Sends a payload message over UART7 (RX=PC4 & TX=PC5).\r\n"
+            "| Example usage: \"-uart -print Hello, World!\" -> Sends -print over UART7.\r\n";
     }
     else {
         helpMessage =
@@ -1229,11 +1316,15 @@ void CMD_help() {
             "| -rem       [remark]                 |  Add comments or remarks in scripts.\r\n" 
             "| -script    [line_number] [operation]|  Manage and execute scripts of\r\n"
             "|                                     |  commands.\r\n"
+            "| -sine      [frequency]              |  Play a frequency using the BOOST-XL\r\n"
+            "|                                     |  Audio board.\r\n"
+            "| -stop                               |  Emergency stop. Resets all timers,\r\n"
+            "|                                     |  tickers, callbacks, etc.\r\n"
             "| -ticker    [index] [initialDelay]   |  Configures a ticker to execute a\r\n"
             "|            [period] [count] [payload]  payload after a delay and repeat it.\r\n"
             "| -timer     [period_us]              |  Sets the period of Timer0 in\r\n"
             "|                                        microseconds.\r\n"
-            "| -uart      [payload]                |  Sends a payload message over UART1.\r\n";
+            "| -uart      [payload]                |  Sends a payload message over UART7.\r\n";
     }
 
     //UART_write_safe(helpMessage, strlen(helpMessage));`
@@ -1545,6 +1636,75 @@ void CMD_script() {
     }
 }
 
+void CMD_sine() {
+    char *freq_token = strtok(NULL, " \t\r\n");  // Frequency token in Hz, try 261.63 for middle C
+    char msg[BUFFER_SIZE];
+
+    // Check if Timer0 is running
+    uint16_t gateKey = GateSwi_enter(gateSwi0); // Timer and audioController share the same gateSwi
+    if (glo.Timer0Period == 0) {
+        AddProgramMessage("Error: Timer0 is not running. Start Timer0 before generating a sine wave.\r\n");
+        GateSwi_leave(gateSwi0, gateKey);
+        return;
+    }
+
+    // No frequency provided, display the current frequency
+    if (!freq_token) {
+        if (glo.audioController.lutDelta == 0.0) {
+            AddProgramMessage("Sine wave generation is not active.\r\n");
+        } else {
+            sprintf(msg, "Current sine wave frequency is %.2f Hz.\r\n", glo.audioController.setFreq);
+            AddProgramMessage(msg);
+        }
+        GateSwi_leave(gateSwi0, gateKey);
+        return;
+    }
+
+    // Add these debug prints before parseDouble call
+    // sprintf(msg, "freq_token: '%s'\n", freq_token);  // Print with quotes to see any whitespace
+    // AddProgramMessage(msg);
+    // sprintf(msg, "freq_token length: %zu\n", strlen(freq_token));
+    // AddProgramMessage(msg);
+
+    // Parse the frequency token
+    bool success;
+    glo.audioController.setFreq = parseDouble(freq_token, &success);
+    if (!success) {
+        AddProgramMessage("Error: Invalid frequency input.\r\n");
+        GateSwi_leave(gateSwi0, gateKey);
+        return;
+    }
+
+    // Stop the sine wave if the frequency is 0
+    if (glo.audioController.setFreq <= 0) {
+        glo.audioController.lutDelta = 0.0;
+        glo.audioController.setFreq = 0.0;
+        AddProgramMessage("Sine wave generation stopped.\r\n");
+        GateSwi_leave(gateSwi0, gateKey);
+        return;
+    }
+
+    // Calculate lutDelta
+    // lutDelta = freq * SINE_TABLE_SIZE * Timer0Period / 1,000,000
+    // Timer0Period is in microseconds
+    glo.audioController.lutDelta = glo.audioController.setFreq * (double)SINE_TABLE_SIZE * (double)glo.Timer0Period / 1000000.0;
+    sprintf(msg, "lutDelta: %.2f, Timer0Period: %u us\r\n", glo.audioController.lutDelta, glo.Timer0Period);
+    AddProgramMessage(msg);
+
+    // Check for Nyquist violation
+    if (glo.audioController.lutDelta >= (double)(SINE_TABLE_SIZE / 2)) {
+        glo.audioController.lutDelta = 0.0;
+        AddProgramMessage("Nyquist violation. Sine wave generation stopped.\r\n");
+        GateSwi_leave(gateSwi0, gateKey);
+        return;
+    }
+
+    // Provide feedback to the user
+    sprintf(msg, "Sine wave generation started with frequency %.2f Hz.\r\n", glo.audioController.setFreq);
+    AddProgramMessage(msg);
+    GateSwi_leave(gateSwi0, gateKey);
+}
+
 
 /// @brief Command function to parse and set up a ticker
 void CMD_ticker() {
@@ -1557,6 +1717,28 @@ void CMD_ticker() {
         return;
     }
 
+    // Special case: Clear all tickers
+    if (strcmp(index_token, "c") == 0) {
+        clear_all_tickers();
+        AddProgramMessage("All tickers cleared.\r\n");
+        return;
+    }
+
+    // Special case: Pause all tickers
+    if (strcmp(index_token, "p") == 0) {
+        stop_all_tickers();
+        AddProgramMessage("All tickers paused.\r\n");
+        return;
+    }
+
+    // Special case: Resume all tickers
+    if (strcmp(index_token, "r") == 0) {
+        resume_all_tickers();
+        AddProgramMessage("All tickers resumed.\r\n");
+        return;
+    }
+
+    // Normal case: Parse the index
     int index = atoi(index_token);
     if (index < 0 || index >= MAX_TICKERS) {
         AddProgramMessage(raiseError(ERR_INVALID_TICKER_INDEX));
@@ -1618,15 +1800,15 @@ void CMD_ticker() {
 
 /// @brief Command function to parse and set up a timer
 void CMD_timer() {
-
     // Next parameter should be the period in microseconds
     char *val_token = strtok(NULL, " \t\r\n");
     char output_msg[BUFFER_SIZE];
+    uint32_t gateKey;
 
     if(!val_token) {
         // No period provided, display current Timer0 period
         sprintf(output_msg, "Current Timer0 period is %u us\r\n", glo.Timer0Period);
-        AddProgramMessage(output_msg);
+    AddProgramMessage(output_msg);
         return;
     }
 
@@ -1636,9 +1818,11 @@ void CMD_timer() {
     // Stop the timer if the value is 0
     if(val_us == 0) {
         // Stop the timer
+        gateKey = GateSwi_enter(gateSwi0);
         Timer_stop(glo.Timer0);
         glo.Timer0Period = 0;
         Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, 0);  // Set period to 0 to stop timer
+        GateSwi_leave(gateSwi0, gateKey);
         AddProgramMessage("Timer0 stopped\r\n");
         return;
     }
@@ -1650,12 +1834,14 @@ void CMD_timer() {
         return; // No change
     }
     //UART_write_safe_strlen("Time to write...\r\n");
-    AddProgramMessage("Time to write...\r\n");
+    //AddProgramMessage("Time to write...\r\n");
 
+    gateKey = GateSwi_enter(gateSwi0);
     Timer_stop(glo.Timer0);
     glo.Timer0Period = val_us;
     Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, val_us);
     int32_t status = Timer_start(glo.Timer0);
+    GateSwi_leave(gateSwi0, gateKey);
 
     if(status == Timer_STATUS_ERROR) {
         //UART_write_safe_strlen(raiseError(ERR_TIMER_STATUS_ERROR));
@@ -1691,4 +1877,9 @@ void CMD_uart() {
 
     // Acknowledge the command
     AddProgramMessage("Payload sent over UART 1.\r\n");
+}
+
+// Currently does not work, these need to be converted to ASCII-128 art
+void CMD_sus() {
+    // add among us graphic
 }

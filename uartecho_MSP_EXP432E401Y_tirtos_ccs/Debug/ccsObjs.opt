@@ -1,4 +1,5 @@
 "./syscfg/ti_drivers_config.obj"
+"./src/audio.obj"
 "./src/callback.obj"
 "./src/main_tirtos.obj"
 "./src/p100.obj"

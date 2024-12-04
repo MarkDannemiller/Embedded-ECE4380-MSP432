@@ -43,6 +43,34 @@ void init_tickers() {
     }
 }
 
+void clear_all_tickers() {
+    int i;
+    for (i = 0; i < MAX_TICKERS; i++) {
+        tickers[i].active = false;
+        tickers[i].initialDelay = 0;
+        tickers[i].period = 0;
+        tickers[i].count = 0;
+        tickers[i].currentDelay = 0;
+        memset(tickers[i].payload, 0, BUFFER_SIZE);
+    }
+}
+
+void stop_all_tickers() {
+    int i;
+    for (i = 0; i < MAX_TICKERS; i++) {
+        tickers[i].active = false;
+    }
+}
+
+void resume_all_tickers() {
+    int i;
+    for (i = 0; i < MAX_TICKERS; i++) {
+        if (tickers[i].period > 0) {
+            tickers[i].active = true;
+        }
+    }
+}
+
 void print_all_tickers() {
     char msg[BUFFER_SIZE];
 

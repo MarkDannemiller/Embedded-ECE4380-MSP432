@@ -19,6 +19,9 @@ extern Ticker tickers[MAX_TICKERS];
 
 // Function prototypes
 void init_tickers();
+void clear_all_tickers();
+void stop_all_tickers();
+void resume_all_tickers();
 void print_all_tickers();
 void ticker_timer_callback(Timer_Handle myHandle, int_fast16_t status);
 void process_tickers();

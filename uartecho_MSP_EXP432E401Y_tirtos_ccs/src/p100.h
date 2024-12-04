@@ -1,27 +1,34 @@
 #ifndef P100_H  // Include guard to prevent multiple inclusions
 #define P100_H
 
+// System Header files
+#include <xdc/std.h> /* initializes XDCtools */
+#include <stdbool.h>  // Include this header to use bool, true, and false
+
 // Driver Header files
 #include <ti/drivers/GPIO.h>
 #include <ti/drivers/UART.h>
 #include <ti/drivers/Timer.h>
+#include "ti_drivers_config.h"
 
-#include <xdc/std.h> /* initializes XDCtools */
+// BIOS Header files
 #include <ti/sysbios/BIOS.h> /* initializes SYS/BIOS */
 #include <ti/sysbios/knl/Semaphore.h>
 #include <ti/sysbios/knl/Task.h>
 #include <ti/sysbios/knl/Queue.h>
 #include <ti/sysbios/knl/Swi.h>
+#include <ti/sysbios/gates/GateSwi.h>
 
-#include "ti_drivers_config.h"
+// User defined headers
+#include "audio.h"
 
 
-#include <stdbool.h>  // Include this header to use bool, true, and false
+
 
 #define BUFFER_SIZE 80          // Maximum input buffer by user (check whether to increase?)
 #define MAX_LINE_LENGTH 80      // Maximum line length before wrapping
 #define MAX_MESSAGE_SIZE 2000   // Maximum output message size
-#define MAX_QUEUE_SIZE 1000      // Maximum number of messages in queue
+#define MAX_QUEUE_SIZE 500      // Maximum number of messages in queue
 
 #define CLEAR_LINE_RESET "\033[2K\033[1G\r"
 #define NEW_LINE_RETURN "\r\n"
@@ -46,6 +53,11 @@ extern Queue_Handle OutMsgQueue;
 extern Swi_Handle Timer0_swi;
 extern Swi_Handle SW1_swi;
 extern Swi_Handle SW2_swi;
+
+extern GateSwi_Handle gateSwi0;  // Timer and audio gateSwi
+extern GateSwi_Handle gateSwi1;  // Payload gateSwi
+extern GateSwi_Handle gateSwi2;  // Callback gateSwi
+extern GateSwi_Handle gateSwi3;  // OutMessage gateSwi
 
 
 typedef struct PayloadMessage {
@@ -104,6 +116,8 @@ struct Globals {
     Timer_Handle Timer0;
     Timer_Params timer0_params;
     int32_t Timer0Period;
+
+    AudioController audioController;
 
     BiosList bios;
     uint32_t integrityTail;
@@ -168,8 +182,10 @@ void emergency_stop();
 // Utility
 //================================================
 
-char *memory_strdup(const char *src);
-int isPrintable(char ch);  // ASCII printable characters
+char *memory_strdup(const char *src);                   // Duplicate a string in memory
+int isPrintable(char ch);                               // ASCII printable characters
+bool isNumeric(const char *str);                        // Check if a string is numeric.
+double parseDouble(const char *str, bool *success);     // Parse a double from a string
 
 //================================================
 // Drivers
@@ -184,7 +200,7 @@ extern const int pinMap[];
 void togglePin(int pin_num);
 void digitalWrite(int pin_num, pinState state);
 pinState digitalRead(int pin_num);
-const char* getErrorName(Errors error);
+const char *getErrorName(Errors error);
 
 
 //================================================
@@ -236,9 +252,11 @@ void CMD_print();       // Print inputed string
 void CMD_reg();         // Perform register operations
 void CMD_rem();         // Add comments or remarks in scripts
 void CMD_script();      // Handle operations related to loading and executing scripts
+void CMD_sine();        // Generate a sine wave sample or set the frequency for continuous generation with sample rate based on timer0 period
 void CMD_timer();       // Sets the periodic timer0 period
 void CMD_ticker();      // Configures ticker and payload
 void CMD_uart();        // Send payload to UART1
+void CMD_sus();         // The imposter is sus
 
 
 // TODO these prints and tie into commands when no args are given

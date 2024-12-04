@@ -34,6 +34,34 @@ extern "C" {
 
 
 /*
+ *  ======== ADC ========
+ */
+
+/* PE1 */
+extern const uint_least8_t          CONFIG_ADC_0_CONST;
+#define CONFIG_ADC_0                0
+/* PE2 */
+extern const uint_least8_t          CONFIG_ADC_1_CONST;
+#define CONFIG_ADC_1                1
+
+
+/*
+ *  ======== ADCBuf ========
+ */
+
+extern const uint_least8_t          CONFIG_ADCBUF_0_CONST;
+#define CONFIG_ADCBUF_0             0
+
+/*
+ * ======== ADCBuf Channels ========
+ */
+
+/* PE3 */
+extern const uint_least8_t          ADCBUF_CHANNEL_0_CONST;
+#define ADCBUF_CHANNEL_0            0
+
+
+/*
  *  ======== GPIO ========
  */
 
@@ -68,6 +96,20 @@ extern const uint_least8_t          CONFIG_GPIO_SWITCH_7_CONST;
 
 #define CONFIG_LED_ON  (CONFIG_GPIO_LED_ON)
 #define CONFIG_LED_OFF (CONFIG_GPIO_LED_OFF)
+
+
+/*
+ *  ======== SPI ========
+ */
+
+/*
+ *  MOSI: PQ2
+ *  MISO: Unassigned
+ *  SCLK: PQ0
+ *  SS: PQ1
+ */
+extern const uint_least8_t          CONFIG_SPI_0_CONST;
+#define CONFIG_SPI_0                0
 
 
 /*

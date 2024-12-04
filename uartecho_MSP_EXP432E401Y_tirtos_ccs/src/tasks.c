@@ -260,8 +260,5 @@ void uart1ReadTask(UArg arg0, UArg arg1) {
         }
 
         handle_UART1();
-
-        // UART1 input is handled via callback, so nothing to do here
-        //Task_sleep(100);  // Sleep to yield CPU
     }
 }

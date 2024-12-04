@@ -6,55 +6,61 @@
 Building file: "../src/p100.c"
 Invoking: Arm Compiler
 "C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include" --include_path="C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/posix/ccs" --include_path="C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include" --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on --preproc_with_compile --preproc_dependency="src/p100.d_raw" --include_path="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/uartecho_MSP_EXP432E401Y_tirtos_ccs/Debug/syscfg" --obj_directory="src" --cmd_file="C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/compiler.opt"  "../src/p100.c"
+"..\src\audio.h", line 28: warning #1-D: last line of file ends without a newline
 "..\src\script.h", line 16: warning #1-D: last line of file ends without a newline
-"../src/p100.c", line 193: warning #188-D: pointless comparison of unsigned integer with zero
-"../src/p100.c", line 202: warning #188-D: pointless comparison of unsigned integer with zero
-"../src/p100.c", line 299: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
-"../src/p100.c", line 352: warning #118-D: non-void function "mainThread" should return a value
-"../src/p100.c", line 621: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 760: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 796: warning #225-D: function "tolower" declared implicitly
-"../src/p100.c", line 844: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 880: warning #225-D: function "atoi" declared implicitly
-"../src/p100.c", line 882: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 901: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 925: warning #190-D: enumerated type mixed with another type
-"../src/p100.c", line 950: warning #225-D: function "strtoul" declared implicitly
-"../src/p100.c", line 955: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 964: warning #225-D: function "tolower" declared implicitly
-"../src/p100.c", line 972: warning #225-D: function "tolower" declared implicitly
-"../src/p100.c", line 1052: warning #176-D: expression has no effect
-"../src/p100.c", line 1053: warning #176-D: expression has no effect
-"../src/p100.c", line 1196: warning #169-D: argument of type "int" is incompatible with parameter of type "const char *"
-"../src/p100.c", line 1239: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1240: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1331: warning #225-D: function "strtoul" declared implicitly
-"../src/p100.c", line 1337: warning #548-D: transfer of control bypasses initialization of:
-            variable "last_byte" (declared at line 1368)
-"../src/p100.c", line 1339: warning #548-D: transfer of control bypasses initialization of:
-            variable "last_byte" (declared at line 1368)
-"../src/p100.c", line 1376: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1404: warning #225-D: function "tolower" declared implicitly
-"../src/p100.c", line 1508: warning #225-D: function "atoi" declared implicitly
-"../src/p100.c", line 1510: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1523: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1543: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1559: warning #225-D: function "atoi" declared implicitly
-"../src/p100.c", line 1561: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1569: warning #225-D: function "strtoul" declared implicitly
-"../src/p100.c", line 1571: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1579: warning #225-D: function "strtoul" declared implicitly
-"../src/p100.c", line 1581: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1591: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1598: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1633: warning #225-D: function "strtoul" declared implicitly
-"../src/p100.c", line 1648: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
-"../src/p100.c", line 1661: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 75: warning #118-D: non-void function "mainThread" should return a value
+"../src/p100.c", line 227: warning #2170-D: use of a const variable in a constant expression is nonstandard in C
+"../src/p100.c", line 326: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 335: warning #188-D: pointless comparison of unsigned integer with zero
+"../src/p100.c", line 460: warning #225-D: function "strtod" declared implicitly
+"../src/p100.c", line 637: warning #169-D: argument of type "char (*)[80]" is incompatible with parameter of type "const char *"
+"../src/p100.c", line 664: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 805: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 845: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 899: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 936: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 938: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 961: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 987: warning #190-D: enumerated type mixed with another type
+"../src/p100.c", line 1012: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1017: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1026: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1034: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1094: warning #176-D: expression has no effect
+"../src/p100.c", line 1116: warning #176-D: expression has no effect
+"../src/p100.c", line 1117: warning #176-D: expression has no effect
+"../src/p100.c", line 1239: warning #176-D: expression has no effect
+"../src/p100.c", line 1240: warning #176-D: expression has no effect
+"../src/p100.c", line 1284: warning #169-D: argument of type "int" is incompatible with parameter of type "const char *"
+"../src/p100.c", line 1331: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1332: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1423: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1429: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1460)
+"../src/p100.c", line 1431: warning #548-D: transfer of control bypasses initialization of:
+            variable "last_byte" (declared at line 1460)
+"../src/p100.c", line 1468: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1496: warning #225-D: function "tolower" declared implicitly
+"../src/p100.c", line 1600: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1602: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1615: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1635: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1742: warning #225-D: function "atoi" declared implicitly
+"../src/p100.c", line 1744: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1752: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1754: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1762: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1764: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1774: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1781: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1816: warning #225-D: function "strtoul" declared implicitly
+"../src/p100.c", line 1833: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
+"../src/p100.c", line 1848: warning #169-D: argument of type "const char *" is incompatible with parameter of type "char *"
 Finished building: "../src/p100.c"
  
 Building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
 Invoking: Arm Linker
-"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" "./syscfg/ti_drivers_config.obj" "./src/callback.obj" "./src/main_tirtos.obj" "./src/p100.obj" "./src/register.obj" "./src/script.obj" "./src/tasks.obj" "./src/tickers.obj" "../MSP_EXP432E401Y_TIRTOS.cmd" -l"ti/display/lib/display.aem4f" -l"ti/grlib/lib/ccs/m4f/grlib.a" -l"third_party/spiffs/lib/ccs/m4f/spiffs.a" -l"ti/drivers/lib/drivers_msp432e4.aem4f" -l"third_party/fatfs/lib/ccs/m4f/fatfs.a" -l"ti/dpl/lib/dpl_msp432e4.aem4f" -l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"  -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a" -llibc.a 
+"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 -me --advice:power=none -g --diag_warning=225 --diag_warning=255 --diag_wrap=off --display_error_number --gen_func_subsections=on -z -m"uartecho_MSP_EXP432E401Y_tirtos_ccs.map" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source" -i"C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages" -i"C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/lib" --diag_wrap=off --display_error_number --warn_sections --xml_link_info="uartecho_MSP_EXP432E401Y_tirtos_ccs_linkInfo.xml" --rom_model -o "uartecho_MSP_EXP432E401Y_tirtos_ccs.out" "./syscfg/ti_drivers_config.obj" "./src/audio.obj" "./src/callback.obj" "./src/main_tirtos.obj" "./src/p100.obj" "./src/register.obj" "./src/script.obj" "./src/tasks.obj" "./src/tickers.obj" "../MSP_EXP432E401Y_TIRTOS.cmd" -l"ti/display/lib/display.aem4f" -l"ti/grlib/lib/ccs/m4f/grlib.a" -l"third_party/spiffs/lib/ccs/m4f/spiffs.a" -l"ti/drivers/lib/drivers_msp432e4.aem4f" -l"third_party/fatfs/lib/ccs/m4f/fatfs.a" -l"ti/dpl/lib/dpl_msp432e4.aem4f" -l"C:/Users/Mark Dannemiller/OneDrive - Texas Tech University/Documents/ccs_workspace/tirtos_builds_MSP_EXP432E401Y_release_ccs/Debug/configPkg/linker.cmd"  -l"ti/devices/msp432e4/driverlib/lib/ccs/m4f/msp432e4_driverlib.a" -llibc.a 
 <Linking>
 Finished building target: "uartecho_MSP_EXP432E401Y_tirtos_ccs.out"
  

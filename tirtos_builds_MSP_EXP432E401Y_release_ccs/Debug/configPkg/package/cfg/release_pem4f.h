@@ -52,6 +52,15 @@ extern const ti_sysbios_knl_Task_Handle TickerProcessor;
 #include <ti/sysbios/knl/Task.h>
 extern const ti_sysbios_knl_Task_Handle UARTReader1;
 
+#include <ti/sysbios/gates/GateSwi.h>
+extern const ti_sysbios_gates_GateSwi_Handle gateSwi1;
+
+#include <ti/sysbios/gates/GateSwi.h>
+extern const ti_sysbios_gates_GateSwi_Handle gateSwi2;
+
+#include <ti/sysbios/gates/GateSwi.h>
+extern const ti_sysbios_gates_GateSwi_Handle gateSwi3;
+
 #include <ti/sysbios/gates/GateMutex.h>
 extern const ti_sysbios_gates_GateMutex_Handle tiposix_mqGate;
 

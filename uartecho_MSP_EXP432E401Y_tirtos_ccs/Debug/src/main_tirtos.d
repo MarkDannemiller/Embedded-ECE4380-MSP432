@@ -83,9 +83,12 @@ src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/pack
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/package/BIOS_RtsGateProxy.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/Board.h
 src/main_tirtos.obj: ../src/p100.h
+src/main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/Timer.h
+src/main_tirtos.obj: syscfg/ti_drivers_config.h
+src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Semaphore.h
 src/main_tirtos.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Types.h
@@ -191,9 +194,14 @@ src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/pack
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/package/Task_SupportProxy.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Queue.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Swi.h
-src/main_tirtos.obj: syscfg/ti_drivers_config.h
-src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h
-src/main_tirtos.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h
+src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/gates/GateSwi.h
+src/main_tirtos.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Types.h
+src/main_tirtos.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/IInstance.h
+src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/gates/package/package.defs.h
+src/main_tirtos.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Assert.h
+src/main_tirtos.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/IGateProvider.h
+src/main_tirtos.obj: ../src/audio.h
+src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h
 
 ../src/main_tirtos.c:
 
@@ -361,11 +369,17 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/Board.h:
 
 ../src/p100.h:
 
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h:
+
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/Timer.h:
+
+syscfg/ti_drivers_config.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/BIOS.h:
 
@@ -577,9 +591,19 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Q
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Swi.h:
 
-syscfg/ti_drivers_config.h:
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/gates/GateSwi.h:
 
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h:
+C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Types.h:
 
-C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h:
+C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/IInstance.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/gates/package/package.defs.h:
+
+C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Assert.h:
+
+C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/IGateProvider.h:
+
+../src/audio.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h:
 

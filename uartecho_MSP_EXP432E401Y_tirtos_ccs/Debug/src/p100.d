@@ -18,6 +18,8 @@ src/p100.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/std
 src/p100.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdarg.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h
+src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h
+src/p100.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h
 src/p100.obj: syscfg/ti_drivers_config.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/hal/Hwi.h
@@ -232,7 +234,13 @@ src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/package/Task_SupportProxy.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Queue.h
 src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Swi.h
-src/p100.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h
+src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/gates/GateSwi.h
+src/p100.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Types.h
+src/p100.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/IInstance.h
+src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/gates/package/package.defs.h
+src/p100.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Assert.h
+src/p100.obj: C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/IGateProvider.h
+src/p100.obj: ../src/audio.h
 src/p100.obj: ../src/systeminfo.h
 src/p100.obj: ../src/tasks.h
 src/p100.obj: ../src/callback.h
@@ -275,6 +283,10 @@ C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdarg.h:
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/UART.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h:
+
+C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h:
 
 syscfg/ti_drivers_config.h:
 
@@ -704,7 +716,19 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Q
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/knl/Swi.h:
 
-C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h:
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/gates/GateSwi.h:
+
+C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Types.h:
+
+C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/IInstance.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti/sysbios/gates/package/package.defs.h:
+
+C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/Assert.h:
+
+C:/ti/ccs1280/xdctools_3_62_01_16_core/packages/xdc/runtime/IGateProvider.h:
+
+../src/audio.h:
 
 ../src/systeminfo.h:
 
