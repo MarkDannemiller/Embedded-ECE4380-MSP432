@@ -8,5 +8,5 @@ org.eclipse.launchbar.core.descriptorType.default\:MSP432E401Y.ccxml/activeLaunc
 org.eclipse.launchbar.core.descriptorType.default\:MSP432E401Y.ccxml/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
 org.eclipse.launchbar.core.descriptorType.default\:p100_MSP_EXP432E401Y_tirtos_ccs/activeLaunchMode=run
 org.eclipse.launchbar.core.descriptorType.default\:p100_MSP_EXP432E401Y_tirtos_ccs/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local
-org.eclipse.launchbar.core.descriptorType.default\:uartecho_MSP_EXP432E401Y_tirtos_ccs/activeLaunchMode=run
+org.eclipse.launchbar.core.descriptorType.default\:uartecho_MSP_EXP432E401Y_tirtos_ccs/activeLaunchMode=debug
 org.eclipse.launchbar.core.descriptorType.default\:uartecho_MSP_EXP432E401Y_tirtos_ccs/activeLaunchTarget=org.eclipse.launchbar.core.launchTargetType.local\:Local

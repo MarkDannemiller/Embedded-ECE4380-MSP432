@@ -34,18 +34,6 @@ extern "C" {
 
 
 /*
- *  ======== ADC ========
- */
-
-/* PE1 */
-extern const uint_least8_t          CONFIG_ADC_0_CONST;
-#define CONFIG_ADC_0                0
-/* PE2 */
-extern const uint_least8_t          CONFIG_ADC_1_CONST;
-#define CONFIG_ADC_1                1
-
-
-/*
  *  ======== ADCBuf ========
  */
 
@@ -56,7 +44,7 @@ extern const uint_least8_t          CONFIG_ADCBUF_0_CONST;
  * ======== ADCBuf Channels ========
  */
 
-/* PE3 */
+/* PD5 */
 extern const uint_least8_t          ADCBUF_CHANNEL_0_CONST;
 #define ADCBUF_CHANNEL_0            0
 

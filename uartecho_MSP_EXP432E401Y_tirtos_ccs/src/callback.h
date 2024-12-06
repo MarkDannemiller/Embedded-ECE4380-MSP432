@@ -23,4 +23,6 @@ void sw1SWI(UArg arg0, UArg arg1);
 void sw2Callback_fxn(uint_least8_t index);
 void sw2SWI(UArg arg0, UArg arg1);
 
+void ADCBufCallback(ADCBuf_Handle handle, ADCBuf_Conversion *conversion, void *buffer, uint32_t channel, int_fast16_t status);
+
 #endif  // CALLBACK_H

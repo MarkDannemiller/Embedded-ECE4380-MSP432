@@ -188,6 +188,7 @@ src/callback.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.h
 src/callback.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h
 src/callback.obj: ../src/audio.h
 src/callback.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h
+src/callback.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h
 src/callback.obj: ../src/callback.h
 
 ../src/callback.c:
@@ -565,6 +566,8 @@ C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h:
 ../src/audio.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h:
 
 ../src/callback.h:
 

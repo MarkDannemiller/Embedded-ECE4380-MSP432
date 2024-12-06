@@ -28,26 +28,25 @@ void timer0Callback_fxn(Timer_Handle handle, int_fast16_t status) {
 
 // Timer0 SWI Handler
 void timer0SWI(UArg arg0, UArg arg1) {
-    // Generate sine sample if lutDelta is set
-    uint16_t gateKey = GateSwi_enter(gateSwi0);
-    if (glo.audioController.lutDelta > 0.0) {
-        generateSineSample();  // Generate a sine wave sample periodically
-    }
-    GateSwi_leave(gateSwi0, gateKey);
+    // The sine generation logic should be tied to the callback payload now
+    // If using callback0 for -sine or -audio, we no longer directly call generateSineSample() here.
+    // Instead, -sine will be triggered by execute_payload().
 
-    gateKey = GateSwi_enter(gateSwi2);
-    if (callbacks[0].count != 0) {
-        AddPayload(callbacks[0].payload);
+    if (callbacks[0].count != 0 && callbacks[0].payload[0] != '\0') {
+        // Immediately execute the callback payload
+        execute_payload(callbacks[0].payload);
 
+        uint16_t gateKey = GateSwi_enter(gateSwi2);
         if (callbacks[0].count > 0) {
             callbacks[0].count--;
             if (callbacks[0].count == 0) {
                 callbacks[0].payload[0] = '\0';  // Clear payload when count reaches zero
             }
         }
+        GateSwi_leave(gateSwi2, gateKey);
     }
-    GateSwi_leave(gateSwi2, gateKey);
 }
+
 
 // SW1 GPIO Callback Function
 void sw1Callback_fxn(uint_least8_t index) {
@@ -91,7 +90,25 @@ void sw2SWI(UArg arg0, UArg arg1) {
     GateSwi_leave(gateSwi2, gateKey);
 }
 
+void ADCBufCallback(ADCBuf_Handle handle, ADCBuf_Conversion *conversion, void *buffer, uint32_t channel, int_fast16_t status) {
+    // Verify the buffer is either RX_Ping or RX_Pong
+    if (buffer != glo.audioController.adcBufControl.RX_Ping && buffer != glo.audioController.adcBufControl.RX_Pong) {
+        // If we got some unknown buffer
+        // AddError(STREAM_ERR, "Unknown ADC Buffer"); // if AddError is implemented
+        while(1);
+        AddProgramMessage("Error: Unknown ADC buffer in ADCBufCallback.\r\n");  // TODO implement error
+        return;
+    }
 
+    // Mark which buffer completed
+    glo.audioController.adcBufControl.RX_Completed = buffer;
+    // Post semaphore so ADCStream task can handle the data
+    Semaphore_post(glo.bios.ADCSemaphore);
+}
+
+
+
+// Code to be implemented
 // void ADCBufCallback(ADCBuf_Handle handle, ADCBuf_Conversion *conversion, void *buffer, uint32_t channel, int_fast16_t status){
 //     if(buffer != global.ADCBufCtrl.RX_Ping && buffer != global.ADCBufCtrl.RX_Pong){
 //         Swi_post(global.Bios.ADCSWI);

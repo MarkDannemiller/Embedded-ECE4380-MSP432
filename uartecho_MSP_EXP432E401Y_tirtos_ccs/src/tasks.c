@@ -263,6 +263,51 @@ void uart1ReadTask(UArg arg0, UArg arg1) {
     }
 }
 
+
+void ADCStream() {
+    uint16_t *source;
+    // A safe buffer size: header + binary data
+    // Each sample is 2 bytes * 128 = 256 bytes + overhead
+    char longload[512]; 
+    int32_t dest_choice;
+    int32_t hdrlen;
+
+    while (1) {
+        // Wait until ADCBuf has new data
+        Semaphore_pend(glo.bios.ADCSemaphore, BIOS_WAIT_FOREVER);
+
+        if (glo.audioController.adcBufControl.RX_Completed == glo.audioController.adcBufControl.RX_Ping) {
+            source = glo.audioController.adcBufControl.RX_Completed;
+            dest_choice = 0;
+            glo.audioController.adcBufControl.ping_count++;
+        } else if (glo.audioController.adcBufControl.RX_Completed == glo.audioController.adcBufControl.RX_Pong) {
+            source = glo.audioController.adcBufControl.RX_Completed;
+            dest_choice = 1;
+            glo.audioController.adcBufControl.pong_count++;
+        } else {
+            AddProgramMessage("Error: ADC RX unknown buffer in ADCStream.\r\n");
+            continue;
+        }
+
+
+        // Construct the message: "-voice dest_choice 128  " followed by binary data
+        sprintf(longload, "-voice %d 128  ", dest_choice);
+        hdrlen = (int32_t)(strlen(longload) + 1); 
+        memcpy(&longload[hdrlen], source, sizeof(uint16_t)*DATABLOCKSIZE);
+
+        // Now we have a buffer that resembles the format:
+        // "-voice <dest_choice> <bufflen>  <binary_data...>"
+        // We can call ParseVoice directly:
+        ParseVoice(longload);
+
+        // If networking is needed:
+        // If global.Regs.Reg[REG_DIAL1] != 0, we could do ParseNetUDP with "-netudp ... -voice"
+        // similarly, just build a message and call the parsing function directly.
+    }
+}
+
+
+// Code to be implemented
 // void ADCStream() {
 //     uint16_t *source;
 //     char longload[sizeof(uint16_t)*DATABLOCKSIZE+MsgQueueMsgLen];

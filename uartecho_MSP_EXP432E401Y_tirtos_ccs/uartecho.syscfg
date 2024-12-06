@@ -8,9 +8,6 @@
 /**
  * Import the modules used in this configuration.
  */
-const ADC     = scripting.addModule("/ti/drivers/ADC", {}, false);
-const ADC1    = ADC.addInstance();
-const ADC2    = ADC.addInstance();
 const ADCBuf  = scripting.addModule("/ti/drivers/ADCBuf", {}, false);
 const ADCBuf1 = ADCBuf.addInstance();
 const GPIO    = scripting.addModule("/ti/drivers/GPIO");
@@ -35,12 +32,7 @@ const UART2   = UART.addInstance();
 /**
  * Write custom configuration values to the imported modules.
  */
-ADC1.$name = "CONFIG_ADC_0";
-
-ADC2.$name = "CONFIG_ADC_1";
-
 ADCBuf1.$name                              = "CONFIG_ADCBUF_0";
-ADCBuf1.interruptPriority                  = "1";
 ADCBuf1.sequencer0.$name                   = "ti_drivers_adcbuf_ADCBufSeqMSP432E40";
 ADCBuf1.sequencer0.channel0.$name          = "ADCBUF_CHANNEL_0";
 ADCBuf1.sequencer0.channel0.adcPin.$assign = "expansion.38";
@@ -99,10 +91,6 @@ UART2.uart.$assign = "UART7";
  * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
  * re-solve from scratch.
  */
-ADC1.adc.$suggestSolution                      = "ADC1";
-ADC1.adc.adcPin.$suggestSolution               = "boosterpack.25";
-ADC2.adc.$suggestSolution                      = "ADC1";
-ADC2.adc.adcPin.$suggestSolution               = "boosterpack.26";
 ADCBuf1.timer.$suggestSolution                 = "Timer2";
 ADCBuf1.adc.$suggestSolution                   = "ADC0";
 ADCBuf1.sequencer0.dmaChannel.$suggestSolution = "UDMA_CH14";

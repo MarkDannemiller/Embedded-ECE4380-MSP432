@@ -7,10 +7,34 @@
 
 
 #define SINE_TABLE_SIZE 256
-#define ADCBUFFERSIZE 128
+#define DATABLOCKSIZE 128
+#define DATADELAY 8
+#define TXBUFCOUNT 2
 
 // Sine table provided
 extern const uint16_t SINETABLE[SINE_TABLE_SIZE+1];
+
+// For receiving data from the BOOSTXL-AUDIO Board
+typedef struct ADCBufControl{
+    ADCBuf_Conversion conversion;
+    uint16_t *RX_Completed;
+    uint32_t converting;
+    uint32_t ping_count;
+    uint32_t pong_count;
+    uint16_t RX_Ping[DATABLOCKSIZE];
+    uint16_t RX_Pong[DATABLOCKSIZE];
+} ADCBufControl;
+
+// For transmitting data to the BOOSTXL-AUDIO Board using -sine command
+typedef struct TXBufControl{
+    uint16_t *TX_Completed;
+    int32_t  TX_index;
+    int32_t  TX_correction;
+    uint32_t TX_delay;
+    uint32_t TX_sample_count;
+    uint16_t TX_Ping[DATABLOCKSIZE];
+    uint16_t TX_Pong[DATABLOCKSIZE];
+} TXBufControl;
 
 // Structure to hold audio control variables and SPI handle
 typedef struct {
@@ -24,10 +48,9 @@ typedef struct {
 
     ADCBuf_Params adcBufParams;
     ADCBuf_Handle adcBuf;
-    ADCBuf_Conversion adcConversion;
 
-    uint16_t rx_Ping[ADCBUFFERSIZE];
-    uint16_t rx_Pong[ADCBUFFERSIZE];
+    ADCBufControl adcBufControl;            // ADC buffer control structure
+    TXBufControl txBufControl[TXBUFCOUNT];  // TX buffer control structures
 } AudioController;
 
 // Function declarations

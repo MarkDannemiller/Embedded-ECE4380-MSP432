@@ -118,6 +118,7 @@ void init_globals() {
     glo.bios.UARTWriteSem = UARTWriteSem;
     glo.bios.PayloadSem = PayloadSem;
     glo.bios.TickerSem = TickerSem;
+    glo.bios.ADCSemaphore = ADCSemaphore;
 
     glo.bios.Timer0_swi = Timer0_swi;
     glo.bios.SW1_swi = SW1_swi;
@@ -426,6 +427,9 @@ void emergency_stop() {
     Semaphore_reset(glo.bios.UARTWriteSem, 0);  // Reset the semaphore count (no messages to write)
     GateSwi_leave(gateSwi3, gateKey);
 
+    execute_payload("-sine 0");
+    execute_payload("-stream 0");
+
     // Re-enable interrupts
     Hwi_restore(hwi_key);
     Swi_restore(swi_key);
@@ -500,6 +504,72 @@ double parseDouble(const char *str, bool *success) {
     *success = true;
     return result;
 }
+
+/* NextSubString moves a pointer to the next substring in a string */
+char* NextSubString(char *msg, bool Print){
+    char *index;
+
+    if(msg == NULL){
+        return NULL;
+    }
+    index = strchr(msg, ' ');
+    if(!index){
+        return NULL;
+    }
+    if(!Print){
+        while(*index == ' ' && *index != '0' && *index != '1'){
+            index++;
+        }
+//        while(*index == ' '){
+//            index++;
+//        }
+    } else {
+        if(*index == ' '){
+            index++;
+        }
+    }
+    if(!*index){
+        return NULL;
+    }
+    return index;
+}
+
+
+// my_strtok_r.c
+
+#include <string.h>
+
+// Custom reentrant strtok implementation
+char *strtok_r(char *str, const char *delim, char **saveptr) {
+    char *start;
+    char *end;
+
+    if (str != NULL) {
+        start = str;
+    } else {
+        start = *saveptr;
+    }
+
+    // Skip leading delimiters
+    start += strspn(start, delim);
+    if (*start == '\0') {
+        *saveptr = start;
+        return NULL;
+    }
+
+    // Find end of token
+    end = start + strcspn(start, delim);
+    if (*end == '\0') {
+        *saveptr = end;
+        return start;
+    }
+
+    // Terminate token and set saveptr
+    *end = '\0';
+    *saveptr = end + 1;
+    return start;
+}
+
 
 
 
@@ -846,66 +916,76 @@ void AddPayload(char *payload) {
 void execute_payload(char *msg) {
     // Copy the original message buffer to preserve its contents
     char msgBufferCopy[BUFFER_SIZE];
+    char *saveptr;
     strncpy(msgBufferCopy, msg, BUFFER_SIZE);
+    msgBufferCopy[BUFFER_SIZE - 1] = '\0';
 
-    // Start tokenizing the input message
-    char *token = strtok(msgBufferCopy, " \t\r\n");
-    char *p;  // Declare p at the beginning of the block
+    char *token = strtok_r(msgBufferCopy, " \t\r\n", &saveptr);
+    if (token == NULL) return;
 
-    // Convert token to lowercase for case-insensitive comparison
+    char *p;
     for (p = token; *p; ++p) {
-        *p = tolower(*p);
+        *p = tolower((unsigned char)*p);
     }
-
     //=========================================================================
     // Check for commmand
     if (strcmp(token,           "-about") == 0) {
-        CMD_about();
+        CMD_about(&saveptr);
+    }
+    else if (strcmp(token,      "-audio") == 0) {
+        CMD_audio(&saveptr);
     }
     else if (strcmp(token,      "-callback") == 0) {
-        CMD_callback();
+        CMD_callback(&saveptr);
     }
     else if (strcmp(token,      "-error") == 0) {
-        CMD_error();
+        CMD_error(&saveptr);
     }
     else if (strcmp(token,      "-gpio") == 0) {
-        CMD_gpio();
+        CMD_gpio(&saveptr);
     }
     else if (strcmp(token,      "-help") == 0) {
-        CMD_help();
+        CMD_help(&saveptr);
     }
     else if (strcmp(token,      "-if") == 0) {
-        CMD_if();
+        CMD_if(&saveptr);
     }
     else if (strcmp(token,      "-memr") == 0) {
-        CMD_memr();
+        CMD_memr(&saveptr);
     }
     else if (strcmp(token,      "-print") == 0) {
-        CMD_print();
+        CMD_print(&saveptr);
     }
     else if (strcmp(token,      "-reg") == 0) {
-        CMD_reg();
+        CMD_reg(&saveptr);
     }
     else if (strcmp(token,      "-rem") == 0) {
-        CMD_rem();
+        CMD_rem(&saveptr);
     }
     else if (strcmp(token,      "-script") == 0) {
-        CMD_script();
+        CMD_script(&saveptr);
+    }
+    else if(strcmp(token,       "-stream") == 0) {
+        CMD_stream(&saveptr);
     }
     else if(strcmp(token,       "-sine") == 0) {
-        CMD_sine();
+        CMD_sine(&saveptr);
     }
     else if (strcmp(token,      "-ticker") == 0) {
-        CMD_ticker();
+        CMD_ticker(&saveptr);
     }
     else if (strcmp(token,      "-timer") == 0) {
-        CMD_timer();
+        CMD_timer(&saveptr);
     }
     else if (strcmp(token,      "-uart") == 0) {
-        CMD_uart();
+        CMD_uart(&saveptr);
     }
+    // -voice has been voted off the island for not following the rules
+    // else if (strcmp(token,      "-voice") == 0) {
+    //     ParseVoice(&saveptr);
+    // }
     else if(strcmp(token,       "-sus") == 0) {
-        CMD_sus();
+        CMD_sus(&saveptr);
     }
     else {
         AddProgramMessage(raiseError(ERR_UNKNOWN_COMMAND));
@@ -920,7 +1000,7 @@ void execute_payload(char *msg) {
 //================================================
 
 // Function to print about information
-void CMD_about() {
+void CMD_about(char **saveptr) {
     static char aboutMessage[MAX_MESSAGE_SIZE];  // Adjust size as needed
     sprintf(aboutMessage,
             "==================================== About =====================================\r\n"
@@ -934,9 +1014,61 @@ void CMD_about() {
     AddProgramMessage(aboutMessage);
 }
 
-void CMD_callback() {
+// This function is called periodically by callback0 (-callback 0 -1 -audio) at 125us.
+// It sends one audio sample out via SPI by mixing samples from TX buffers.
+void CMD_audio(char **saveptr) {
+    (void)saveptr; // no arguments expected
+    SPI_Transaction spiTransaction;
+    bool transferOK;
+    uint16_t outval = 0;
+    int i;
+
+    // Based on the example code logic from AudioParse():
+    // Iterate over TXBufCtrl structures:
+    for (i = 0; i < TXBUFCOUNT; i++) {
+        if (glo.audioController.txBufControl[i].TX_Completed != NULL) {
+            if (glo.audioController.txBufControl[i].TX_index >= 0) {
+                // Respect TX_delay: if delay >0, decrement and return
+                if (glo.audioController.txBufControl[i].TX_delay > 0) {
+                    glo.audioController.txBufControl[i].TX_delay--;
+                    return; // no SPI transfer this round
+                }
+
+                // Add the sample
+                outval += glo.audioController.txBufControl[i].TX_Completed[glo.audioController.txBufControl[i].TX_index++];
+
+                // Apply correction if any
+                glo.audioController.txBufControl[i].TX_index += glo.audioController.txBufControl[i].TX_correction;
+                glo.audioController.txBufControl[i].TX_correction = 0;
+
+                // Wrap around if end of block reached
+                if (glo.audioController.txBufControl[i].TX_index >= DATABLOCKSIZE) {
+                    glo.audioController.txBufControl[i].TX_index = 0;
+                    // Switch between Ping/Pong
+                    if (glo.audioController.txBufControl[i].TX_Completed == glo.audioController.txBufControl[i].TX_Ping) {
+                        glo.audioController.txBufControl[i].TX_Completed = glo.audioController.txBufControl[i].TX_Pong;
+                    } else {
+                        glo.audioController.txBufControl[i].TX_Completed = glo.audioController.txBufControl[i].TX_Ping;
+                    }
+                }
+            }
+        }
+    }
+
+    // Now transfer 'outval' via SPI
+    spiTransaction.count = 1;
+    spiTransaction.txBuf = (void *)&outval;
+    spiTransaction.rxBuf = NULL;
+
+    transferOK = SPI_transfer(glo.audioController.audioSPI, &spiTransaction);
+    if (!transferOK) {
+        while(1);
+    }
+}
+
+void CMD_callback(char **saveptr) {
     // Parse index
-    char *index_token = strtok(NULL, " \t\r\n");
+    char *index_token = strtok_r(NULL, " \t\r\n", saveptr);
     uint16_t gateKey;
 
     if (!index_token) {
@@ -952,7 +1084,7 @@ void CMD_callback() {
     }
 
     // Parse count
-    char *count_token = strtok(NULL, " \t\r\n");
+    char *count_token = strtok_r(NULL, " \t\r\n", saveptr);
     int count = -1;
     if (count_token) {
         count = atoi(count_token);
@@ -968,7 +1100,7 @@ void CMD_callback() {
     }
 
     // The rest is the payload
-    char *payload_start = strtok(NULL, "\r\n");
+    char *payload_start = strtok_r(NULL, "\r\n", saveptr);
     if (!payload_start) {
         AddProgramMessage(raiseError(ERR_MISSING_PAYLOAD));
         return;
@@ -989,7 +1121,7 @@ void CMD_callback() {
     AddProgramMessage(msg);
 }
 
-void CMD_error() {
+void CMD_error(char **saveptr) {
     char str[BUFFER_SIZE];
     int i;
 
@@ -1002,10 +1134,10 @@ void CMD_error() {
     }
 }
 
-void CMD_gpio() {
+void CMD_gpio(char **saveptr) {
 
     // Next parameter should be the pin number
-    char *pin_token = strtok(NULL, " \t\r\n");
+    char *pin_token = strtok_r(NULL, " \t\r\n", saveptr);
     char *p; // For lowercase operation
     char *pin_ptr;
     uint32_t pin_num;
@@ -1031,7 +1163,7 @@ void CMD_gpio() {
     }
 
     // Next parameter should be the pin operation
-    char *op_token = strtok(NULL, " \t\r\n");
+    char *op_token = strtok_r(NULL, " \t\r\n", saveptr);
 
     // Convert token to lowercase for case-insensitive comparison
     for (p = op_token; *p; ++p) {
@@ -1040,7 +1172,7 @@ void CMD_gpio() {
 
     // "w" = write and needs to collect the state
     if(strcmp(op_token, "w") == 0) {
-        char *state_token = strtok(NULL, " \t\r\n");
+        char *state_token = strtok_r(NULL, " \t\r\n", saveptr);
         // Convert token to lowercase for case-insensitive comparison
         for (p = state_token; *p; ++p) {
             *p = tolower(*p);
@@ -1073,10 +1205,10 @@ void CMD_gpio() {
 }
 
 // Function to print help information
-void CMD_help() {
+void CMD_help(char **saveptr) {
     const char *helpMessage;
     // If second token exists, then check for a custom help message
-    char *cmd_arg_token = strtok(NULL, " \t\r\n");
+    char *cmd_arg_token = strtok_r(NULL, " \t\r\n", saveptr);
 
     const char *help_prefix = "===================================== Help =====================================\r\n";
 
@@ -1248,7 +1380,7 @@ void CMD_help() {
             "| Description: Plays a frequency using the BOOST-XL Audio board.\r\n"
             "| Example usage: \"-sine 1000\" -> Plays a 1000 Hz sine wave.\r\n"
             "| Example usage: \"-sine 0\" -> Stops the sine wave.\r\n";
-            "| Example usage: \"-sine\" -> Displays the current frequency.\r\n";
+            "| Example usage: \"-sine s\" -> Displays the current frequency.\r\n";
             "| Note: The sine wave will play until stopped.\r\n";
     }
     else if (strcmp(cmd_arg_token,      "stop") == 0 || strcmp(cmd_arg_token,           "-stop") == 0) {
@@ -1344,9 +1476,9 @@ void CMD_help() {
     AddProgramMessage(helpMessage);
 }
 
-void CMD_if() {
+void CMD_if(char **saveptr) {
     // Parse the condition (A COND B) or A COND B, where COND is >, =, or <
-    char *condition_part = strtok(NULL, "?");
+    char *condition_part = strtok_r(NULL, "?", saveptr);
     if (!condition_part) {
         //AddProgramMessage("Error: Invalid syntax for -if command.\r\n");  // TODO: Add to errors
         AddProgramMessage(raiseError(ERR_INVALID_IF_SYNTAX));
@@ -1370,15 +1502,15 @@ void CMD_if() {
     }
 
     // Parse DESTT and DESTF
-    char *dest_part = strtok(NULL, "");
+    char *dest_part = strtok_r(NULL, "", saveptr);
     if (!dest_part) {
         //AddProgramMessage("Error: Missing destinations in -if command.\r\n");  // TODO: Add to errors
         AddProgramMessage(raiseError(ERR_MISSING_DESTINATION));
         return;
     }
 
-    char *destT = strtok(dest_part, ":");
-    char *destF = strtok(NULL, "");
+    char *destT = strtok_r(dest_part, ":", saveptr);
+    char *destF = strtok_r(NULL, "", saveptr);
 
     // Trim leading and trailing whitespaces
     trim(destT);
@@ -1421,7 +1553,7 @@ void CMD_if() {
 
 
 // Prints the contents of a given memory address
-void CMD_memr() {
+void CMD_memr(char **saveptr) {
 
     int32_t val;
     char msg[BUFFER_SIZE];
@@ -1429,7 +1561,7 @@ void CMD_memr() {
     uint32_t memorig;
 
     // Get the next token in args (should be a hex value)
-    char *addr_token = strtok(NULL, " \t\r\n");
+    char *addr_token = strtok_r(NULL, " \t\r\n", saveptr);
     char *addr_ptr;
 
     if(!addr_token)
@@ -1484,8 +1616,8 @@ ERROR38:
 }
 
 /// @brief Prints the message after the first token, which should be "-print"
-void CMD_print() {
-    char *msg_token = strtok(NULL, "\r\n");
+void CMD_print(char **saveptr) {
+    char *msg_token = strtok_r(NULL, "\r\n", saveptr);
 
     if(msg_token) {
         //UART_write_safe(msg_token, strlen(msg_token));
@@ -1495,9 +1627,9 @@ void CMD_print() {
 }
 
 /// @brief Function to perform operation of specified register
-void CMD_reg() {
+void CMD_reg(char **saveptr) {
     // Get the operation token
-    char *op_token = strtok(NULL, " \t\r\n");
+    char *op_token = strtok_r(NULL, " \t\r\n", saveptr);
 
     // If no operation token is provided, print all registers
     if (!op_token) {
@@ -1512,8 +1644,8 @@ void CMD_reg() {
     }
 
     // Initialize argument tokens
-    char *arg1_token = strtok(NULL, " \t\r\n");
-    char *arg2_token = strtok(NULL, " \t\r\n");
+    char *arg1_token = strtok_r(NULL, " \t\r\n", saveptr);
+    char *arg2_token = strtok_r(NULL, " \t\r\n", saveptr);
 
     // Handle operations that require one operand
     if (strcmp(op_token, "inc") == 0 ||
@@ -1589,15 +1721,15 @@ void CMD_reg() {
     }
 }
 
-void CMD_rem() {
+void CMD_rem(char **saveptr) {
     // Do nothing or provide acknowledgment
     // For now, we can do nothing
 }
 
-void CMD_script() {
-    char *arg1 = strtok(NULL, " \t\r\n");       // Line number or NULL
-    char *arg2 = strtok(NULL, " \t\r\n");       // 'w', 'x', 'c', or NULL
-    char *rest_of_line = strtok(NULL, "\r\n");  // The rest of the command
+void CMD_script(char **saveptr) {
+    char *arg1 = strtok_r(NULL, " \t\r\n", saveptr);       // Line number or NULL
+    char *arg2 = strtok_r(NULL, " \t\r\n", saveptr);       // 'w', 'x', 'c', or NULL
+    char *rest_of_line = strtok_r(NULL, "\r\n", saveptr);  // The rest of the command
 
     if (!arg1) {
         // No arguments: Display all script lines
@@ -1651,87 +1783,85 @@ void CMD_script() {
     }
 }
 
-void CMD_sine() {
-    char *freq_token = strtok(NULL, " \t\r\n");  // Frequency token in Hz, try 261.63 for middle C
+void CMD_sine(char **saveptr) {
+    char *freq_token = strtok_r(NULL, " \t\r\n", saveptr);  // Frequency token in Hz, try 261.63 for middle C
     char msg[BUFFER_SIZE];
 
-    // Check if Timer0 is running
-    uint16_t gateKey = GateSwi_enter(gateSwi0); // Timer and audioController share the same gateSwi
-    // if (glo.Timer0Period == 0) {
-    //     AddProgramMessage("Error: Timer0 is not running. Start Timer0 before generating a sine wave.\r\n");
-    //     GateSwi_leave(gateSwi0, gateKey);
-    //     return;
-    // }
-    if(glo.Timer0Period != 125) {
-        Timer_stop(glo.Timer0);
-        glo.Timer0Period = 125;
-        Timer_setPeriod(glo.Timer0, Timer_PERIOD_US, 125);
-        int32_t status = Timer_start(glo.Timer0);
-        AddProgramMessage("Timer0 restarted with 125 us period.\r\n");
-    }
-
-    // No frequency provided, display the current frequency
-    if (!freq_token) {
+    // Special case: Display the current frequency
+    if (freq_token && strcmp(freq_token, "s") == 0) {
         if (glo.audioController.lutDelta == 0.0) {
             AddProgramMessage("Sine wave generation is not active.\r\n");
         } else {
             sprintf(msg, "Current sine wave frequency is %.2f Hz.\r\n", glo.audioController.setFreq);
             AddProgramMessage(msg);
         }
-        GateSwi_leave(gateSwi0, gateKey);
-        return;
     }
+    else if(freq_token) {
+        // Parse the frequency token
+        bool success;
+        glo.audioController.setFreq = parseDouble(freq_token, &success);
+        if (!success) {
+            AddProgramMessage("Error: Invalid frequency input.\r\n");
+            return;
+        }
 
-    // Add these debug prints before parseDouble call
-    // sprintf(msg, "freq_token: '%s'\n", freq_token);  // Print with quotes to see any whitespace
-    // AddProgramMessage(msg);
-    // sprintf(msg, "freq_token length: %zu\n", strlen(freq_token));
-    // AddProgramMessage(msg);
+        // Stop the sine wave if the frequency is 0
+        if (glo.audioController.setFreq <= 0)
+        {
+            // Stop sine generation
+            execute_payload("-callback 0 0");
+            execute_payload("-timer 0");
+            glo.audioController.lutDelta = 0.0;
+            glo.audioController.setFreq = 0.0;
+            AddProgramMessage("Sine wave generation stopped.\r\n");
+            return;
+        } else {
+            // Set up callback for infinite -sine calls
+            // Also set glo.audioController.lutDelta using freq and period
+        
 
-    // Parse the frequency token
-    bool success;
-    glo.audioController.setFreq = parseDouble(freq_token, &success);
-    if (!success) {
-        AddProgramMessage("Error: Invalid frequency input.\r\n");
-        GateSwi_leave(gateSwi0, gateKey);
-        return;
+            // Calculate lutDelta
+            // lutDelta = freq * SINE_TABLE_SIZE * Timer0Period / 1,000,000
+            // Timer0Period is in microseconds
+            glo.audioController.lutDelta = (glo.audioController.setFreq * (double)SINE_TABLE_SIZE * (125 / 1000000.0));
+            sprintf(msg, "lutDelta: %.2f, Timer0Period: %u us\r\n", glo.audioController.lutDelta, glo.Timer0Period);
+            AddProgramMessage(msg);
+
+            // Check for Nyquist violation
+            if (glo.audioController.lutDelta >= (double)(SINE_TABLE_SIZE / 2)) {
+                glo.audioController.lutDelta = 0.0;
+                AddProgramMessage("Nyquist violation. Sine wave generation stopped.\r\n");
+                return;
+            }
+
+            char cbCommand[64];
+            snprintf(cbCommand, sizeof(cbCommand), "-callback 0 -1 -sine");
+            execute_payload(cbCommand); // sets callback0 payload to "-sine"
+            if(glo.Timer0Period != 125) {
+                execute_payload("-timer 125");
+                AddProgramMessage("Timer0 restarted with 125 us period.\r\n");
+            }
+            
+            // Provide feedback to the user
+            sprintf(msg, "Sine wave generation started with frequency %.2f Hz.\r\n", glo.audioController.setFreq);
+            AddProgramMessage(msg);
+        }
+    } 
+    else {
+        // No arguments means this is called by the callback
+        if (glo.audioController.lutDelta > 0.0) {
+            generateSineSample();
+        } else {
+            // If no delta, do nothing or print message
+        }
     }
-
-    // Stop the sine wave if the frequency is 0
-    if (glo.audioController.setFreq <= 0) {
-        glo.audioController.lutDelta = 0.0;
-        glo.audioController.setFreq = 0.0;
-        AddProgramMessage("Sine wave generation stopped.\r\n");
-        GateSwi_leave(gateSwi0, gateKey);
-        return;
-    }
-
-    // Calculate lutDelta
-    // lutDelta = freq * SINE_TABLE_SIZE * Timer0Period / 1,000,000
-    // Timer0Period is in microseconds
-    glo.audioController.lutDelta = glo.audioController.setFreq * (double)SINE_TABLE_SIZE * (double)glo.Timer0Period / 1000000.0;
-    sprintf(msg, "lutDelta: %.2f, Timer0Period: %u us\r\n", glo.audioController.lutDelta, glo.Timer0Period);
-    AddProgramMessage(msg);
-
-    // Check for Nyquist violation
-    if (glo.audioController.lutDelta >= (double)(SINE_TABLE_SIZE / 2)) {
-        glo.audioController.lutDelta = 0.0;
-        AddProgramMessage("Nyquist violation. Sine wave generation stopped.\r\n");
-        GateSwi_leave(gateSwi0, gateKey);
-        return;
-    }
-
-    // Provide feedback to the user
-    sprintf(msg, "Sine wave generation started with frequency %.2f Hz.\r\n", glo.audioController.setFreq);
-    AddProgramMessage(msg);
-    GateSwi_leave(gateSwi0, gateKey);
 }
 
 
 /// @brief Command function to parse and set up a ticker
-void CMD_ticker() {
+void CMD_ticker(char **saveptr) {
     // Parse index
-    char *index_token = strtok(NULL, " \t\r\n");
+    char *index_token = strtok_r(NULL, " \t\r\n", saveptr);
 
     if (!index_token) {
         // No index provided, display all tickers
@@ -1768,7 +1898,7 @@ void CMD_ticker() {
     }
 
     // Parse initial delay
-    char *delay_token = strtok(NULL, " \t\r\n");
+    char *delay_token = strtok_r(NULL, " \t\r\n", saveptr);
     uint32_t initialDelay = 0;
     if (delay_token) {
         initialDelay = strtoul(delay_token, NULL, 10);
@@ -1778,7 +1908,7 @@ void CMD_ticker() {
     }
 
     // Parse period
-    char *period_token = strtok(NULL, " \t\r\n");
+    char *period_token = strtok_r(NULL, " \t\r\n", saveptr);
     uint32_t period = 0;
     if (period_token) {
         period = strtoul(period_token, NULL, 10);
@@ -1788,7 +1918,7 @@ void CMD_ticker() {
     }
 
     // Parse count
-    char *count_token = strtok(NULL, " \t\r\n");
+    char *count_token = strtok_r(NULL, " \t\r\n", saveptr);
     int32_t count = -1;
     if (count_token) {
         count = atoi(count_token);
@@ -1798,7 +1928,7 @@ void CMD_ticker() {
     }
 
     // The rest is the payload
-    char *payload_start = strtok(NULL, "\r\n");
+    char *payload_start = strtok_r(NULL, "\r\n", saveptr);
     if (!payload_start) {
         AddProgramMessage(raiseError(ERR_MISSING_PAYLOAD));
         return;
@@ -1821,9 +1951,9 @@ void CMD_ticker() {
 }
 
 /// @brief Command function to parse and set up a timer
-void CMD_timer() {
+void CMD_timer(char **saveptr) {
     // Next parameter should be the period in microseconds
-    char *val_token = strtok(NULL, " \t\r\n");
+    char *val_token = strtok_r(NULL, " \t\r\n", saveptr);
     char output_msg[BUFFER_SIZE];
     uint32_t gateKey;
 
@@ -1879,9 +2009,9 @@ void CMD_timer() {
 /**
  * @brief Command function to send a payload over UART 1
  */
-void CMD_uart() {
+void CMD_uart(char **saveptr) {
     // Get the rest of the line as the payload
-    char *payload = strtok(NULL, "\r\n");
+    char *payload = strtok_r(NULL, "\r\n", saveptr);
     if (!payload) {
         //AddProgramMessage("Error: No payload provided for -uart command.\r\n");  // TODO: Add to errors
         AddProgramMessage(raiseError(ERR_MISSING_PAYLOAD));
@@ -1903,7 +2033,224 @@ void CMD_uart() {
     AddProgramMessage("Payload sent over UART 1.\r\n");
 }
 
+// Format: "-voice dest_choice 128  \0sample0 sample1 ... sample127"
+// Copies the given 128 samples into the correct TX buffers and applies correction logic.
+// Cannot be parsed like the others due to null terminators in the samples.
+// 
+
+// Assume NextSubString(char *msg, bool Print) is defined similarly to the example code.
+// It returns the start of the next token in 'msg' or NULL if none.
+// 'Print' could be a flag indicating debugging prints.
+// This code assumes that NextSubString navigates through the given buffer without inserting null terminators.
+
+void ParseVoice(char *ch) {
+    int32_t dest_choice;
+    int32_t bufflen;
+    int32_t TX01;
+    int32_t current;
+    uint16_t *dest_buffer;
+
+    static int32_t last[2] = {-2, -2};
+    static int32_t lastlast[2] = {-4, -4};
+
+    // Retrieve dest_choice
+    char *StrBuffPTR = NextSubString(ch, true);
+    if (!StrBuffPTR) {
+        AddProgramMessage("Error: Missing dest_choice for -voice.\r\n");
+        return;
+    }
+    dest_choice = atoi(StrBuffPTR);
+
+    // Retrieve bufflen
+    StrBuffPTR = NextSubString(StrBuffPTR, true);
+    if (!StrBuffPTR) {
+        AddProgramMessage("Error: Missing bufflen for -voice.\r\n");
+        return;
+    }
+    bufflen = atoi(StrBuffPTR);
+
+    if (bufflen != DATABLOCKSIZE) {
+        AddProgramMessage("Error: Blocksize Error in -voice command.\r\n");
+        return;
+    }
+
+    // As in the example code, advance the pointer a few times:
+    // This is to skip over the spaces or control characters before the binary data starts
+    StrBuffPTR++; 
+    StrBuffPTR++;
+    StrBuffPTR++;
+    StrBuffPTR++;
+    StrBuffPTR++;
+    StrBuffPTR++;
+
+    // Now StrBuffPTR should point to the start of the binary data
+    // Identify the correct TX buffer based on dest_choice
+    if (dest_choice == 0) {
+        TX01 = 0;
+        dest_buffer = glo.audioController.txBufControl[TX01].TX_Ping;
+    } else if (dest_choice == 1) {
+        TX01 = 0;
+        dest_buffer = glo.audioController.txBufControl[TX01].TX_Pong;
+    } else if (dest_choice == 2) {
+        TX01 = 1;
+        dest_buffer = glo.audioController.txBufControl[TX01].TX_Ping;
+    } else if (dest_choice == 3) {
+        TX01 = 1;
+        dest_buffer = glo.audioController.txBufControl[TX01].TX_Pong;
+    } else {
+        AddProgramMessage("Error: Destination Choice Error in -voice.\r\n");
+        return;
+    }
+
+    // Copy the binary samples into the chosen buffer
+    memcpy(dest_buffer, StrBuffPTR, sizeof(uint16_t)*DATABLOCKSIZE);
+
+    // If first time, set TX_Completed and TX_index
+    if (glo.audioController.txBufControl[TX01].TX_Completed == NULL) {
+        glo.audioController.txBufControl[TX01].TX_Completed = dest_buffer;
+        glo.audioController.txBufControl[TX01].TX_index = 0;
+    }
+
+    // Apply correction logic from example code
+    current = glo.audioController.txBufControl[TX01].TX_index;
+    if (last[TX01] != current && lastlast[TX01] != current) {
+        lastlast[TX01] = last[TX01];
+        last[TX01] = current;
+        if (current >= DATABLOCKSIZE - DATADELAY + 4) {
+            glo.audioController.txBufControl[TX01].TX_correction = -1;
+        } else if (current <= DATABLOCKSIZE - DATADELAY - 4) {
+            glo.audioController.txBufControl[TX01].TX_correction = +1;
+        }
+    }
+}
+
+
+void CMD_stream(char **saveptr) {
+    char *arg = strtok_r(NULL, " \t\r\n", saveptr);
+    if (!arg) {
+        AddProgramMessage("Usage: -stream <0|1|2>\r\n");
+        return;
+    }
+
+    int val = atoi(arg);
+    if (val == 0) {
+        // Stop sine (if running)
+        execute_payload("-sine 0");
+
+        // Clear callback0 (so no -audio or -sine is being called)
+        execute_payload("-callback 0 0");
+
+        // Stop the timers
+        execute_payload("-timer 0");
+
+        // Stop streaming if currently active
+        if (glo.audioController.adcBufControl.converting == 2) {
+            // Cancel ADC conversion
+            if (ADCBuf_convertCancel(glo.audioController.adcBuf) != ADCBuf_STATUS_SUCCESS) {
+                AddProgramMessage("Error: ADCBuf convertCancel failed.\r\n");  // TODO: Add to errors
+            }
+            glo.audioController.adcBufControl.converting = 0;
+
+            // Clear buffers
+            glo.audioController.adcBufControl.RX_Completed = NULL;
+            int i;
+            for (i = 0; i < TXBUFCOUNT; i++) {
+                glo.audioController.txBufControl[i].TX_Completed = NULL;
+                glo.audioController.txBufControl[i].TX_index = -1;
+            }
+
+            AddProgramMessage("Streaming stopped.\r\n");
+        } else {
+            AddProgramMessage("Stream not running.\r\n");
+        }
+
+    } else if (val == 1) {
+        // Start streaming process: set everything up but do NOT call ADCBuf_convert() yet.
+        if (glo.audioController.adcBufControl.converting == 2) {
+            AddProgramMessage("Stream already running.\r\n");
+            return;
+        }
+
+        // Enable audio amp and mic
+        digitalWrite(4, 0); // PK5 low = enable audio amp
+        digitalWrite(5, 1); // PD4 high = enable mic
+
+        // Set callback0 to -audio continuously at 125us
+        execute_payload("-callback 0 -1 -audio");
+
+        // Timer0 at 125us for audio
+        execute_payload("-timer 125");
+
+        // Clear audio buffers
+        int i, j;
+        for (i = 0; i < DATABLOCKSIZE; i++) {
+            glo.audioController.adcBufControl.RX_Ping[i] = 0;
+            glo.audioController.adcBufControl.RX_Pong[i] = 0;
+        }
+        for (i = 0; i < TXBUFCOUNT; i++) {
+            for (j = 0; j < DATABLOCKSIZE; j++) {
+                glo.audioController.txBufControl[i].TX_Ping[j] = 0;
+                glo.audioController.txBufControl[i].TX_Pong[j] = 0;
+            }
+            glo.audioController.txBufControl[i].TX_Completed = NULL;
+            glo.audioController.txBufControl[i].TX_index = -1;
+            glo.audioController.txBufControl[i].TX_delay = DATADELAY;
+            glo.audioController.txBufControl[i].TX_correction = 0;
+        }
+
+        // Set converting = 1 but don't start ADC yet
+        glo.audioController.adcBufControl.converting = 1;
+
+        // Now schedule a ticker after 500ms (50 * 10ms) to call "-stream 2"
+        // This delay gives time for everything to stabilize before ADCBuf_convert()
+        execute_payload("-ticker 15 50 0 1 -stream 2");
+
+        AddProgramMessage("Streaming preparation started. Waiting 500ms before starting ADC...\r\n");
+
+    } else if (val == 2) {
+        // This call is triggered by the ticker after 500ms, not by user directly.
+        // Now we attempt to start the ADC conversion
+        if (glo.audioController.adcBufControl.converting != 1) {
+            AddProgramMessage("Error: Invalid state for starting ADC (not in state 1).\r\n"); // TODO add errors
+            return;
+        }
+
+        // Setup ADC conversion parameters again just to ensure correctness
+        // glo.audioController.adcBufControl.conversion.adcChannel = ADCBUF_CHANNEL_0;
+        // glo.audioController.adcBufControl.conversion.arg = NULL;
+        // glo.audioController.adcBufControl.conversion.sampleBuffer = glo.audioController.adcBufControl.RX_Ping;
+        // glo.audioController.adcBufControl.conversion.sampleBufferTwo = glo.audioController.adcBufControl.RX_Pong;
+        // glo.audioController.adcBufControl.conversion.samplesRequestedCount = DATABLOCKSIZE;
+
+        // Attempt ADCBuf conversion
+        if (ADCBuf_convert(glo.audioController.adcBuf, &glo.audioController.adcBufControl.conversion, 1) != ADCBuf_STATUS_SUCCESS) {
+            AddProgramMessage("Error: Failed to start ADC conversion.\r\n");  // TODO: Add to errors
+            return;
+        }
+
+        // If successful, set state to converting=2
+        glo.audioController.adcBufControl.converting = 2;
+        glo.audioController.adcBufControl.RX_Completed = NULL;
+
+        // Re-initialize TX buffer states if needed (already done previously, but safe to ensure)
+        int i;
+        for (i = 0; i < TXBUFCOUNT; i++) {
+            glo.audioController.txBufControl[i].TX_Completed = NULL;
+            glo.audioController.txBufControl[i].TX_index = -1;
+            glo.audioController.txBufControl[i].TX_delay = DATADELAY;
+            glo.audioController.txBufControl[i].TX_correction = 0;
+        }
+
+        AddProgramMessage("ADC streaming started. Now capturing audio.\r\n");
+
+    } else {
+        AddProgramMessage("Invalid parameter for -stream. Use 0 or 1.\r\n");
+    }
+}
+
+
+
 // Currently does not work, these need to be converted to ASCII-128 art
-void CMD_sus() {
+void CMD_sus(char **saveptr) {
     // add among us graphic
 }

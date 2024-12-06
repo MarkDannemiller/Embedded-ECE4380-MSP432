@@ -9,6 +9,7 @@
 #include "audio.h"
 #include <ti/drivers/SPI.h>
 #include "p100.h"  // Assuming glo and other global variables are declared here
+#include "callback.h"
 
 const uint16_t SINETABLE[SINE_TABLE_SIZE+1] = {
  8192, 8393, 8594, 8795, 8995, 9195, 9394, 9593,
@@ -68,6 +69,8 @@ void initAudio() {
     // Additional DAC initialization
     digitalWrite(4, LOW);   // Set PK5 LOW to enable audio amplifier on BOOSTXL-AUDIO
     digitalWrite(5, HIGH);  // Set PD4 LOW to enable microphone on BOOSTXL-AUDIO
+
+    initADCBuf();
 }
 
 void initADCBuf(){
@@ -76,7 +79,7 @@ void initADCBuf(){
     glo.audioController.adcBufParams.returnMode = ADCBuf_RETURN_MODE_CALLBACK;
     glo.audioController.adcBufParams.recurrenceMode = ADCBuf_RECURRENCE_MODE_CONTINUOUS;
 
-    glo.audioController.adcBufParams.callbackFxn = adcBufCallback;
+    glo.audioController.adcBufParams.callbackFxn = ADCBufCallback;
     glo.audioController.adcBufParams.samplingFrequency = 8000;
     glo.audioController.adcBuf = ADCBuf_open(CONFIG_ADCBUF_0, &glo.audioController.adcBufParams);
     if (glo.audioController.adcBuf == NULL) {
@@ -84,9 +87,11 @@ void initADCBuf(){
         while(1);
     }
 
-    glo.audioController.adcConversion.adcChannel = ADCBUF_CHANNEL_0;
-    glo.audioController.adcConversion.arg = NULL;
-    glo.audioController.adcConversion.sampleBuffer = glo.audioController.
+    glo.audioController.adcBufControl.conversion.adcChannel = ADCBUF_CHANNEL_0;
+    glo.audioController.adcBufControl.conversion.arg = NULL;
+    glo.audioController.adcBufControl.conversion.sampleBuffer = glo.audioController.adcBufControl.RX_Ping;
+    glo.audioController.adcBufControl.conversion.sampleBufferTwo = glo.audioController.adcBufControl.RX_Pong;
+    glo.audioController.adcBufControl.conversion.samplesRequestedCount = DATABLOCKSIZE;
 }
 
 // Generate sine sample and send to DAC
@@ -140,56 +145,3 @@ void generateSineSample() {
         glo.audioController.lutPosition -= (double) SINE_TABLE_SIZE;
     }
 }
-
-// void sine(char buffer) {
-//     uint32_t freq;
-//     double l_weight, u_weight;
-//     uint32_t l_index, u_index;
-//     double answer;
-//     uint16_t outval;
-//     SPI_Transaction spiTrans;
-//     bool transferCheck;
-//     char outBuffer[MSG_SIZE];
-
-//     if(global.timer0.period == 0) { addPayload("-print Timer 0 is off"); return; }
-//     if(buffer && buffer[0] != 0 && global.timer0.period > 0) {
-//         if(isdigit(buffer) == 0) {
-//             sprintf(outBuffer, "-print message %s missing required digits", buffer);
-//             throwError(3, outBuffer);
-//         }
-//         freq = atoi(buffer);
-//         global.lutController.lutDelta = (double)freq * (double)LUT_SIZE * (double)global.timer0.period / 1000000.;
-//     }
-//     if(global.lutController.lutDelta >= LUT_SIZE / 2) {
-//         global.lutController.lutDelta = 0.;
-//         addPayload("-print Nyquist violation");
-//         timer("0");
-//         return;
-//     }
-//     if(global.lutController.lutDelta <= 0) {
-//         global.lutController.lutDelta = 0.;
-//         if(global.timer0.period > 0) {
-//             timer("0");
-//             callback("0 0");
-//         }
-//         addPayload("-print Timer 0 is off");
-//         return;
-//     }
-//     if(buffer) return;
-//     l_index = (uint32_t) global.lutController.lutPosition;
-//     u_index = l_index + 1;
-//     u_weight = global.lutController.lutPosition - (double) l_index;
-//     l_weight = 1. - u_weight;
-//     answer = (double) global.lutController.sinlut14[l_index] * l_weight + (double) global.lutController.sinlut14[u_index] * u_weight;
-//     outval = round(answer);
-
-//     spiTrans.count = 1;
-//     spiTrans.txBuf = (void ) &outval;
-//     spiTrans.rxBuf = (void) NULL;
-
-//     transferCheck = SPI_transfer(global.spi, &spiTrans);
-//     if (!transferCheck) while(1);
-
-//     global.lutController.lutPosition += global.lutController.lutDelta;
-//     while(global.lutController.lutPosition >= (double) LUT_SIZE) global.lutController.lutPosition -= (double) LUT_SIZE;
-// }

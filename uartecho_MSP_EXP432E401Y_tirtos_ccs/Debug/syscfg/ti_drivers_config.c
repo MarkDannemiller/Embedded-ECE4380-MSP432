@@ -19,64 +19,6 @@
 
 
 /*
- *  =============================== ADC ===============================
- */
-
-#include <ti/drivers/ADC.h>
-#include <ti/drivers/adc/ADCMSP432E4.h>
-#include <ti/devices/msp432e4/driverlib/adc.h>
-
-#define CONFIG_ADC_COUNT 2
-
-/*
- *  ======== ADCMSP432E4Objects ========
- */
-ADCMSP432E4_Object ADCMSP432E4Objects[CONFIG_ADC_COUNT];
-
-/*
- *  ======== ADCMSP432E4HWAttrs ========
- */
-const ADCMSP432E4_HWAttrsV1 ADCMSP432E4HWAttrs[CONFIG_ADC_COUNT] = {
-    /* CONFIG_ADC_0 */
-    {
-        .adcPin = ADCMSP432E4_PE_1_A2,
-        .refVoltage = ADCMSP432E4_VREF_INTERNAL,
-        .adcModule = ADCMSP432E4_MOD1,
-        .adcSeq = ADCMSP432E4_SEQ0
-    },
-    /* CONFIG_ADC_1 */
-    {
-        .adcPin = ADCMSP432E4_PE_2_A1,
-        .refVoltage = ADCMSP432E4_VREF_INTERNAL,
-        .adcModule = ADCMSP432E4_MOD1,
-        .adcSeq = ADCMSP432E4_SEQ0
-    },
-};
-
-/*
- *  ======== ADC_config ========
- */
-const ADC_Config ADC_config[CONFIG_ADC_COUNT] = {
-    /* CONFIG_ADC_0 */
-    {
-        .fxnTablePtr = &ADCMSP432E4_fxnTable,
-        .object = &ADCMSP432E4Objects[CONFIG_ADC_0],
-        .hwAttrs = &ADCMSP432E4HWAttrs[CONFIG_ADC_0]
-    },
-    /* CONFIG_ADC_1 */
-    {
-        .fxnTablePtr = &ADCMSP432E4_fxnTable,
-        .object = &ADCMSP432E4Objects[CONFIG_ADC_1],
-        .hwAttrs = &ADCMSP432E4HWAttrs[CONFIG_ADC_1]
-    },
-};
-
-const uint_least8_t CONFIG_ADC_0_CONST = CONFIG_ADC_0;
-const uint_least8_t CONFIG_ADC_1_CONST = CONFIG_ADC_1;
-const uint_least8_t ADC_count = CONFIG_ADC_COUNT;
-
-
-/*
  *  =============================== ADCBuf ===============================
  */
 
@@ -98,7 +40,7 @@ ADCBufMSP432E4_Object adcbufMSP432E4Objects[CONFIG_ADCBUF_COUNT];
 ADCBufMSP432E4_Channels adcBuf0MSP432E4Channels[] = {
     /* ADCBUF_CHANNEL_0 */
     {
-        .adcPin = ADCBufMSP432E4_PE_3_A0,
+        .adcPin = ADCBufMSP432E4_PD_5_A6,
         .adcSequence = ADCBufMSP432E4_Seq_0,
         .adcInputMode = ADCBufMSP432E4_SINGLE_ENDED,
         .adcDifferentialPin = ADCBufMSP432E4_PIN_NONE,

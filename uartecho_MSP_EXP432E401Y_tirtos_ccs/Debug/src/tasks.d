@@ -188,6 +188,7 @@ src/tasks.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.h
 src/tasks.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h
 src/tasks.obj: ../src/audio.h
 src/tasks.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h
+src/tasks.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h
 src/tasks.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Memory.h
 src/tasks.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/package/Memory_HeapProxy.h
 src/tasks.obj: ../src/script.h
@@ -567,6 +568,8 @@ C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h:
 ../src/audio.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h:
 
 C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Memory.h:
 

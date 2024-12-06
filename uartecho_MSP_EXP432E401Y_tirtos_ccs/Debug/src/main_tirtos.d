@@ -202,6 +202,7 @@ src/main_tirtos.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.
 src/main_tirtos.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h
 src/main_tirtos.obj: ../src/audio.h
 src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h
+src/main_tirtos.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h
 
 ../src/main_tirtos.c:
 
@@ -606,4 +607,6 @@ C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h:
 ../src/audio.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/SPI.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h:
 

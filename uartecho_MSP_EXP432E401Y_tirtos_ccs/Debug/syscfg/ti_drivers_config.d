@@ -14,9 +14,13 @@ syscfg/ti_drivers_config.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7
 syscfg/ti_drivers_config.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/sys/_stdint.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h
 syscfg/ti_drivers_config.obj: syscfg/ti_drivers_config.h
-syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADC.h
+syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h
+syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/adcbuf/ADCBufMSP432E4.h
 syscfg/ti_drivers_config.obj: C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h
-syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/adc/ADCMSP432E4.h
+syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dpl/HwiP.h
+syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dpl/SemaphoreP.h
+syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dma/UDMAMSP432E4.h
+syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/driverlib/adc.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/inc/msp432.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/inc/msp432e401y.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include/core_cm4.h
@@ -25,12 +29,6 @@ syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/th
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include/cmsis_ccs.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include/mpu_armv7.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/inc/system_msp432e401y.h
-syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/driverlib/adc.h
-syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h
-syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/adcbuf/ADCBufMSP432E4.h
-syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dpl/HwiP.h
-syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dpl/SemaphoreP.h
-syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dma/UDMAMSP432E4.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/driverlib/interrupt.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/driverlib/udma.h
 syscfg/ti_drivers_config.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/GPIO.h
@@ -80,11 +78,19 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/DeviceFamily.h:
 
 syscfg/ti_drivers_config.h:
 
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADC.h:
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/adcbuf/ADCBufMSP432E4.h:
 
 C:/ti/ccs1280/ccs/tools/compiler/ti-cgt-arm_20.2.7.LTS/include/stdbool.h:
 
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/adc/ADCMSP432E4.h:
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dpl/HwiP.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dpl/SemaphoreP.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dma/UDMAMSP432E4.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/driverlib/adc.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/inc/msp432.h:
 
@@ -101,18 +107,6 @@ C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include/cmsis_
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/third_party/CMSIS/Include/mpu_armv7.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/inc/system_msp432e401y.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/driverlib/adc.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/adcbuf/ADCBufMSP432E4.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dpl/HwiP.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dpl/SemaphoreP.h:
-
-C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/dma/UDMAMSP432E4.h:
 
 C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/devices/msp432e4/driverlib/interrupt.h:
 

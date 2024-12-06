@@ -241,6 +241,7 @@ src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/kernel/tirtos/packages/ti
 src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.h
 src/p100.obj: C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h
 src/p100.obj: ../src/audio.h
+src/p100.obj: C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h
 src/p100.obj: ../src/systeminfo.h
 src/p100.obj: ../src/tasks.h
 src/p100.obj: ../src/callback.h
@@ -729,6 +730,8 @@ C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/Assert.h:
 C:/ti/xdctools_3_61_01_25_core/packages/xdc/runtime/IGateProvider.h:
 
 ../src/audio.h:
+
+C:/ti/simplelink_msp432e4_sdk_4_20_00_12/source/ti/drivers/ADCBuf.h:
 
 ../src/systeminfo.h:
 

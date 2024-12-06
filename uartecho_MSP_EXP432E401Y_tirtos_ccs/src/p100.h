@@ -46,6 +46,7 @@ extern Task_Handle TickerProcessor;
 extern Semaphore_Handle UARTWriteSem;
 extern Semaphore_Handle PayloadSem;
 extern Semaphore_Handle TickerSem;
+extern Semaphore_Handle ADCSemaphore;
 
 extern Queue_Handle PayloadQueue;
 extern Queue_Handle OutMsgQueue;
@@ -85,6 +86,7 @@ typedef struct {
     Semaphore_Handle UARTWriteSem;           // Created statically in release.cfg
 
     Semaphore_Handle TickerSem;
+    Semaphore_Handle ADCSemaphore;
 
     Swi_Handle Timer0_swi;
     Swi_Handle SW1_swi;
@@ -191,6 +193,8 @@ char *memory_strdup(const char *src);                   // Duplicate a string in
 int isPrintable(char ch);                               // ASCII printable characters
 bool isNumeric(const char *str);                        // Check if a string is numeric.
 double parseDouble(const char *str, bool *success);     // Parse a double from a string
+char *strtok_r(char *str, const char *delim, char **saveptr);  // Custom reentrant strtok implementation
+char* NextSubString(char *msg, bool Print);
 
 //================================================
 // Drivers
@@ -246,28 +250,23 @@ void reset_buffer_uart1();
 void AddPayload(char *payload);  // Should this use gates to block swi? Nuter does with his AddPayload() function
 void execute_payload(char *msg);
 
-void CMD_about();       // Print about / system info
-void CMD_callback();    // Configure a callback for timer or GPIO events
-void CMD_error();       // Display count of each error type
-void CMD_gpio();        // Read/Write/Toggle inputed GPIO pin
-void CMD_help();        // Print help info about all/specific command(s)
-void CMD_if();          // Conditional execution of payload
-void CMD_memr();        // Display contents of memory address
-void CMD_print();       // Print inputed string
-void CMD_reg();         // Perform register operations
-void CMD_rem();         // Add comments or remarks in scripts
-void CMD_script();      // Handle operations related to loading and executing scripts
-void CMD_sine();        // Generate a sine wave sample or set the frequency for continuous generation with sample rate based on timer0 period
-void CMD_timer();       // Sets the periodic timer0 period
-void CMD_ticker();      // Configures ticker and payload
-void CMD_uart();        // Send payload to UART1
-void CMD_sus();         // The imposter is sus
-
-
-// TODO these prints and tie into commands when no args are given
-// void print_timer_info();
-// void print_ticker_info();
-// void print_callback_info();
-
+void CMD_about(char **saveptr);       // Print about / system info
+void CMD_audio(char **saveptr);       // Generate audio sample and send to DAC over SPI
+void CMD_callback(char **saveptr);    // Configure a callback for timer or GPIO events
+void CMD_error(char **saveptr);       // Display count of each error type
+void CMD_gpio(char **saveptr);        // Read/Write/Toggle inputed GPIO pin
+void CMD_help(char **saveptr);        // Print help info about all/specific command(s)
+void CMD_if(char **saveptr);          // Conditional execution of payload
+void CMD_memr(char **saveptr);        // Display contents of memory address
+void CMD_print(char **saveptr);       // Print inputed string
+void CMD_reg(char **saveptr);         // Perform register operations
+void CMD_rem(char **saveptr);         // Add comments or remarks in scripts
+void CMD_script(char **saveptr);      // Handle operations related to loading and executing scripts
+void CMD_sine(char **saveptr);        // Generate a sine wave sample or set the frequency for continuous generation with sample rate based on timer0 period
+void CMD_timer(char **saveptr);       // Sets the periodic timer0 period
+void CMD_ticker(char **saveptr);      // Configures ticker and payload
+void CMD_uart(char **saveptr);        // Send payload to UART1
+void ParseVoice(char *ch);       // Copies the given 128 samples into the correct TX buffers and applies correction logic.
+void CMD_sus(char **saveptr);         // The imposter is sus
 
 #endif  // End of include guard
