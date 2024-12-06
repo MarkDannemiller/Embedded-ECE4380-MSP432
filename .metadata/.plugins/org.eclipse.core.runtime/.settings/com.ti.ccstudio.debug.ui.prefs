@@ -1,4 +1,5 @@
-MODULES_MRU_PATH=C\:\\Users\\priva\\OneDrive - Texas Tech University\\Documents\\ccs_workspace\\uartecho_MSP_EXP432E401Y_tirtos_ccs\\Debug\\uartecho_MSP_EXP432E401Y_tirtos_ccs.out
+MODULES_MRU_PATH=C\:\\Users\\priva\\OneDrive - Texas Tech University\\Documents\\ccs_workspace\\udpecho_MSP_EXP432E401Y_tirtos_ccs\\Debug\\udpecho_MSP_EXP432E401Y_tirtos_ccs.out
+MODULES_MRU_PATH.1=C\:\\Users\\priva\\OneDrive - Texas Tech University\\Documents\\ccs_workspace\\uartecho_MSP_EXP432E401Y_tirtos_ccs\\Debug\\uartecho_MSP_EXP432E401Y_tirtos_ccs.out
 eclipse.preferences.version=1
 symbolAutoCompleteHistory<seperator>org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser<seperator>Texas\ Instruments\ XDS110\ USB\ Debug\ Probe\\CORTEX_M4_0=0
 useAnnotationsPrefPage=true
